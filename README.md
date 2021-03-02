@@ -1,20 +1,20 @@
-# c2020
+# c2021
 
 ## 基本操作流程
 
-1. 从 [https://github.com/luckymark/c2020](https://github.com/luckymark/c2020) fork 到你自己的 github 中
-2. 创建本地仓库：(如果用机房的电脑，则建议 clone 到 U 盘，便于携带)
+1. 从 [https://github.com/luckymark/c2021](https://github.com/luckymark/c2021) fork 到你自己的 github 中
+2. 创建本地仓库：(**如果用机房的电脑，则建议 clone 到 U 盘，便于携带**)
 
    ```
-   git clone https://github.com/ **YourGithubAccount** /c2020
-   cd c2020
+   git clone https://github.com/ **YourGithubAccount** /c2021
+   cd c2021
    ls
 
    git config user.name=???
    git config user.email=???
 
    git remote -v
-   git remote add upstream https://github.com/luckymark/c2020
+   git remote add upstream https://github.com/luckymark/c2021
    ```
 
 3. 修改、提交代码：
@@ -26,7 +26,7 @@
    git push
    ```
 
-4. 从 https://github.com/luckymark/c2020 获取更新
+4. 从 https://github.com/luckymark/c2021 获取更新
 
    ```
    git fetch upstream
@@ -39,7 +39,7 @@
 
 5. 请求老师 review 代码的方法：在 github 网页上发起一个 PR（pull request）即可
 
-## [作业](https://github.com/luckymark/c2020/tree/master/practices)
+## [作业](https://github.com/luckymark/c2021/tree/master/practices)
 
 1. level0 可选，用于还不够熟练的同学练手（嫌题目太少的同学，那就刷刷咱[神技大学的 OJ](http://acm.uestc.edu.cn/#/)吧，从低到高地刷哈）
 2. level1 必做，课堂＋课后练习
@@ -52,6 +52,8 @@
 - 推荐JetBrains的[CLion](https://www.jetbrains.com/clion/) 申请免费的License点[这里](https://www.jetbrains.com/community/education/)
 
 ### C语言参考：
+
+- [c语言资料大全](https://github.com/jobbole/awesome-c-cn)
 
 - [Linux C编程一站式学习](http://akaedu.github.io/book/index.html)  （把书读厚）
 
