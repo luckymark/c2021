@@ -4,6 +4,9 @@
     "*.wpy": "vue",
     "*.wxml": "html",
     "*.wxss": "css",
-    "iostream": "cpp"
+    "iostream": "cpp",
+    "initializer_list": "cpp",
+    "xutility": "cpp",
+    "cmath": "cpp"
   }
 }
