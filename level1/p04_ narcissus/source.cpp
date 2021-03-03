@@ -2,16 +2,12 @@
 #include<math.h>
 #include<stdio.h>
 using namespace std;
-bool judge(int n) {
-	bool ex = true;
-	if (n < 2)return false;
-	for (int i = 2; i <= sqrt(n); i++) {
-		if (n % i == 0) ex = false;
-	}
-	return ex; 
+bool judge(int n){
+  if(pow(n/100,3)+pow(n/10%10,3)+pow(n%10,3)==n)return true;
+  return false;
 }
 int main() {
-  cout <<(5+4)/(1-1.0/6-1.0/12-1.0/7-1.0/2)-4 <<endl;
+  for(int i=100;i<=999;i++)if(judge(i))cout<<i<<endl;
   system("pause");
 	return 0;
 }
