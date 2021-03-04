@@ -176,6 +176,7 @@ inline void Init(){
 		scanf("%d",&Puzzles[i].grade);
 	}
 	fclose(stdin);
+	system("mode con cols=60 lines=40");
 }
 
 inline void Update(){
