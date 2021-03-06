@@ -9,7 +9,7 @@ using namespace std;
 #define ll long long
 
 const int N=19;
-const int INF=1e7;
+const int INF=1e8;
 const int Limit=20;
 int Board[N][N];
 //-1: unused
@@ -36,6 +36,8 @@ int GetDirection(){
                 case 80:return 3;
                 case 's':return 3;
                 case 13:return 4;
+                case ' ':return 4;
+                case 'g':return 5;
                 case 27:exit(0);
             }
         }
@@ -144,7 +146,7 @@ inline int Risk(bool Color,int x,int y){
             ++len;
         }
         if(len>=5)return INF;
-        if(len==4&&!cnt)return INF-1;
+        if(len==4&&!cnt)return INF/10;
         else if(cnt==2)Sum+=(len!=1);
         else Sum+=pow(10,len-cnt);
     }
@@ -158,7 +160,7 @@ pair<pair<int,int>,int> dfs(int dep,bool Color,int MaxLimit){
             if(~Board[i][j])continue;
             int Rating=Risk(Color,i,j);
             if(Rating==INF)return {{i,j},INF};
-            if(dep&&Rating==INF-1){
+            if(dep&&Rating==INF/10){
                 if(dfs(0,Color^1,INF).second!=INF){
                     return {{i,j},INF};
                 }
@@ -196,7 +198,7 @@ inline void PrintPlayer(const string &s,const double &x){
     printf("\t%.4lfs\n",x);
 }
 
-inline void Computer(const bool &Color){
+inline bool Computer(const bool &Color){
     clock_t start=clock();
     printf("Step %d\n",Step);
     PrintPlayer("★ "+Name[Color],Time[Color]);
@@ -205,6 +207,7 @@ inline void Computer(const bool &Color){
         auto tmp=dfs(3,Color,INF);
         x=tmp.first.first;
         y=tmp.first.second;
+        if(tmp.second<=-INF/2)return 1;
     }
     else if(Step==1){
         while(1){
@@ -222,11 +225,13 @@ inline void Computer(const bool &Color){
     clock_t end=clock();
     Time[Color]=(double)(end-start)/CLOCKS_PER_SEC;
     Print();
+    return 0;
 }
 
-inline void Player(int Color){
+inline bool Player(int Color){
     clock_t start=clock();
     while(1){
+        Print();
         printf("Step %d\n",Step);
         PrintPlayer("★ "+Name[Color],Time[Color]);
         PrintPlayer("☆ "+Name[Color^1],Time[Color^1]);
@@ -238,14 +243,15 @@ inline void Player(int Color){
             clock_t end=clock();
             Time[Color]=(double)(end-start)/CLOCKS_PER_SEC;
             Print();
-            return;
+            return 0;
         }
+        if(d==5)return 1;
         int nx=x+dx[d];
         int ny=y+dy[d];
         if(nx<0||nx>=N||ny<0||ny>=N)continue;
         x=nx,y=ny;
-        Print();
     }
+    return 0;
 }
 
 inline void PlayerVSPlayer(){
@@ -256,7 +262,10 @@ inline void PlayerVSPlayer(){
     Step=0;
     Print();
     while(1){
-        Player(0);
+        if(Player(0)){
+            puts("Player 1 (black) give up!");
+            break;
+        }
         if(Check()){
             puts("Player 1 (black) win!");
             break;
@@ -265,7 +274,10 @@ inline void PlayerVSPlayer(){
             puts("Tie!");
             break;
         }
-        Player(1);
+        if(Player(1)){
+            puts("Player 2 (white) give up!");
+            break;
+        }
         if(Check()){
             puts("Player 2 (white) win!");
             break;
@@ -286,20 +298,52 @@ inline void PlayerVSComputer(){
     x=y=N/2;
     Step=0;
     Print();
-    while(1){
-        Color?Computer(0):Player(0);
-        if(Check()){
-            puts(Color?"You lose!":"You win!");
-            break;
+    if(Color){
+        while(1){
+            if(Computer(0)){
+                puts("Computer gives up! You win!");
+                break;
+            }
+            if(Check()){
+                puts("You lose!");
+                break;
+            }
+            if(Step==N*N){
+                puts("Tie!");
+                break;
+            }
+            if(Player(1)){
+                puts("You give up! You lose!");
+                break;
+            }
+            if(Check()){
+                puts("You win!");
+                break;
+            }
         }
-        if(Step==N*N){
-            puts("Tie!");
-            break;
-        }
-        Color?Player(1):Computer(1);
-        if(Check()){
-            puts(Color?"You win!":"You lose!");
-            break;
+    }
+    else {
+        while(1){
+            if(Player(0)){
+                puts("You give up! You lose!");
+                break;
+            }
+            if(Check()){
+                puts("You win!");
+                break;
+            }
+            if(Step==N*N){
+                puts("Tie!");
+                break;
+            }
+            if(Computer(1)){
+                puts("Computer gives up! You win!");
+                break;
+            }
+            if(Check()){
+                puts("You lose!");
+                break;
+            }
         }
     }
 }
@@ -312,7 +356,10 @@ inline void ComputerVSComputer(){
     Step=0;
     Print();
     while(1){
-        Computer(0);
+        if(Computer(0)){
+            puts("Computer 1 (black) give up!");
+            break;
+        }
         if(Check()){
             puts("Computer 1 (black) wins!");
             break;
@@ -321,7 +368,10 @@ inline void ComputerVSComputer(){
             puts("Tie!");
             break;
         }
-        Computer(1);
+        if(Computer(1)){
+            puts("Computer 2 (white) give up!");
+            break;
+        }
         if(Check()){
             puts("Computer 2 (white) wins!");
             break;
@@ -330,27 +380,35 @@ inline void ComputerVSComputer(){
 }
 
 inline void Game(){
-    srand(time(0));
-    system("mode con cols=50 lines=25");
-    while(1){
-        system("cls");
-        puts("Please choose a game mode");
-        puts("Press [ 1 ] for the Player Vs Player Mode");
-        puts("Press [ 2 ] for the Player Vs Computer Mode");
-        puts("Press [ 3 ] for the Computer Vs Computer Mode");
-        puts("Press [ ESC ] anytime to exit");
-        switch(GetChoice1()){
-            case 1:PlayerVSPlayer();break;
-            case 2:PlayerVSComputer();break;
-            case 3:ComputerVSComputer();break;
-        }
-        system("pause");
+    system("cls");
+    puts("Please choose a game mode");
+    puts("Press [ 1 ] for the Player Vs Player Mode");
+    puts("Press [ 2 ] for the Player Vs Computer Mode");
+    puts("Press [ 3 ] for the Computer Vs Computer Mode");
+    puts("Press [ ESC ] anytime to exit");
+    switch(GetChoice1()){
+        case 1:PlayerVSPlayer();break;
+        case 2:PlayerVSComputer();break;
+        case 3:ComputerVSComputer();break;
     }
+    system("pause");
+}
+
+inline void Menu(){
+    srand(time(0));
+    system("mode con cols=60 lines=30");
+    system("cls");
+    puts("Welcome to the Wuziqi game!");
+    puts("Press Arrow Key or [ W ], [ A ], [ S ], [ D ] to move");
+    puts("Press [ Enter or Space ] to confirm");
+    puts("Press [ G ] to give up");
+    system("pause");
+    while(1)Game();
 }
 
 int main(){
     // freopen(".in","r",stdin);
     // freopen(".out","w",stdout);
-    Game();
+    Menu();
     return 0;
 }
