@@ -1,6 +1,7 @@
 {
     "version": "0.2.0",
     "configurations": [
+      
         {//这个大括号里是我们的‘调试(Debug)’配置
             "name": "Debug", // 配置名称
             "type": "cppdbg", // 配置类型，cppdbg对应cpptools提供的调试功能；可以认为此处只能是cppdbg

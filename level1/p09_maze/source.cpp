@@ -59,10 +59,10 @@ int main(){
   print(Maze);
   //键盘控制
   while(1)
-    if(kbhit()){
+    if(_kbhit()){
       Sleep(200);
       system("cls");
-      move(getch(),loster,Maze);
+      move(_getch(),loster,Maze);
       print(Maze);
       if (loster.y==endx&&loster.x==L-2){
         system("cls");
