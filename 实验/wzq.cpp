@@ -84,8 +84,8 @@ inline void Print(){
     for(int i=0;i<N;++i){
         for(int j=0;j<N;++j){
             if(x==i&&y==j)printf("\033[44m");
-            if(~Board[i][j])printf(Board[i][j]?"\033[37m¡ñ\033[30m":"¡ñ");
-            else printf("£«");
+            if(~Board[i][j])printf(Board[i][j]?"\033[37mâ—\033[30m":"â—");
+            else printf("ï¼‹");
             if(x==i&&y==j)printf("\033[43m");
         }
         putchar('\n');
@@ -167,7 +167,7 @@ pair<pair<int,int>,int> dfs(int dep,bool Color,int MaxLimit){
             Points.push_back({Rating,{i,j}});
         }
     }
-    sort(Points.begin(),Points.end());
+    sort(Points.begin(),Points.end(),greater<pair<int,pair<int,int> > >());
     int x=-1,y=-1;
     int Max=-1e9;
     for(auto P:Points){
@@ -199,10 +199,10 @@ inline void PrintPlayer(const string &s,const double &x){
 inline void Computer(const bool &Color){
     clock_t start=clock();
     printf("Step %d\n",Step);
-    PrintPlayer("¡ï "+Name[Color],Time[Color]);
-    PrintPlayer("¡î "+Name[Color^1],Time[Color^1]);
+    PrintPlayer("â˜… "+Name[Color],Time[Color]);
+    PrintPlayer("â˜† "+Name[Color^1],Time[Color^1]);
     if(Step>=2){
-        auto tmp=dfs(2,Color,INF);
+        auto tmp=dfs(3,Color,INF);
         x=tmp.first.first;
         y=tmp.first.second;
     }
@@ -228,8 +228,8 @@ inline void Player(int Color){
     clock_t start=clock();
     while(1){
         printf("Step %d\n",Step);
-        PrintPlayer("¡ï "+Name[Color],Time[Color]);
-        PrintPlayer("¡î "+Name[Color^1],Time[Color^1]);
+        PrintPlayer("â˜… "+Name[Color],Time[Color]);
+        PrintPlayer("â˜† "+Name[Color^1],Time[Color^1]);
         int d=GetDirection();
         if(d==4){
             if(~Board[x][y])continue;
