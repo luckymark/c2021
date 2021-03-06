@@ -52,3 +52,6 @@ Generated\ Files/
 *.pidb
 *.svclog
 *.scc
+
+#vscode
+.vscode/
