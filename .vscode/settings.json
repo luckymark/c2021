@@ -8,6 +8,7 @@
     "initializer_list": "cpp",
     "xutility": "cpp",
     "cmath": "cpp",
-    "xstring": "cpp"
+    "xstring": "cpp",
+    "xlocnum": "cpp"
   }
 }
