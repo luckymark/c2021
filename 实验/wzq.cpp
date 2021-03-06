@@ -10,7 +10,7 @@ using namespace std;
 
 const int N=19;
 const int INF=1e7;
-
+const int Limit=20;
 int Board[N][N];
 //-1: unused
 // 0: black 
@@ -143,55 +143,66 @@ inline int Risk(bool Color,int x,int y){
             if(Board[nx][ny]==-1||i==5)break;
             ++len;
         }
-        if(len>=5)return INF+1;
-        if(len==4&&!cnt)return INF;
+        if(len>=5)return INF;
+        if(len==4&&!cnt)return INF-1;
         else if(cnt==2)Sum+=(len!=1);
         else Sum+=pow(10,len-cnt);
     }
     return Sum;
 }
 
-pair<pair<int,int>,int> dfs(int dep,bool Color){
-    int x=-1,y=-1;
-    int Max=-1e9,Rating;
+pair<pair<int,int>,int> dfs(int dep,bool Color,int MaxLimit){
+    vector<pair<int,pair<int,int> > >Points;
     for(int i=0;i<N;++i){
         for(int j=0;j<N;++j){
             if(~Board[i][j])continue;
-            Rating=Risk(Color,i,j);
-            if(Rating==INF+1)return {{i,j},Rating};
-            else if(Rating==INF){
-                if(dep){
-                    if(dfs(0,Color^1).second!=INF+1){
-                        return {{i,j},Rating+1};
-                    }
+            int Rating=Risk(Color,i,j);
+            if(Rating==INF)return {{i,j},INF};
+            if(dep&&Rating==INF-1){
+                if(dfs(0,Color^1,INF).second!=INF){
+                    return {{i,j},INF};
                 }
-                else return {{i,j},Rating};
-            } 
-            if(dep){
-                Board[i][j]=Color;
-                Rating-=dfs(dep-1,Color^1).second;
-                Board[i][j]=-1;
+                Rating=-INF;
             }
-            if(Rating>Max)x=i,y=j,Max=Rating;
+            Points.push_back({Rating,{i,j}});
         }
+    }
+    sort(Points.begin(),Points.end());
+    int x=-1,y=-1;
+    int Max=-1e9;
+    for(auto P:Points){
+        int i=P.second.first;
+        int j=P.second.second;
+        int Rating=P.first;
+        if(dep){
+                Board[i][j]=Color;
+                Rating-=dfs(dep-1,Color^1,Rating-Max).second;
+                Rating=min(Rating,INF);
+                Rating=max(Rating,-INF);
+                Board[i][j]=-1;
+        } 
+        if(Rating>Max)x=i,y=j,Max=Rating;
+        if(Max>=MaxLimit)return {{x,y},Max};
     }
     return {{x,y},Max};
 }
 
 string Name[2];
+double Time[2];
 
-inline void PrintString(const string &s){
+inline void PrintPlayer(const string &s,const double &x){
     int n=s.length();
     for(int i=0;i<n;++i)putchar(s[i]);
-    putchar('\n');
+    printf("\t%.4lfs\n",x);
 }
 
 inline void Computer(const bool &Color){
+    clock_t start=clock();
     printf("Step %d\n",Step);
-    PrintString("¡ï "+Name[Color]);
-    PrintString("¡î "+Name[Color^1]);
+    PrintPlayer("¡ï "+Name[Color],Time[Color]);
+    PrintPlayer("¡î "+Name[Color^1],Time[Color^1]);
     if(Step>=2){
-        auto tmp=dfs(2,Color);
+        auto tmp=dfs(2,Color,INF);
         x=tmp.first.first;
         y=tmp.first.second;
     }
@@ -208,19 +219,24 @@ inline void Computer(const bool &Color){
     }
     Board[x][y]=Color;
     ++Step;
+    clock_t end=clock();
+    Time[Color]=(double)(end-start)/CLOCKS_PER_SEC;
     Print();
 }
 
 inline void Player(int Color){
+    clock_t start=clock();
     while(1){
         printf("Step %d\n",Step);
-        PrintString("¡ï "+Name[Color]);
-        PrintString("¡î "+Name[Color^1]);
+        PrintPlayer("¡ï "+Name[Color],Time[Color]);
+        PrintPlayer("¡î "+Name[Color^1],Time[Color^1]);
         int d=GetDirection();
         if(d==4){
             if(~Board[x][y])continue;
             Board[x][y]=Color;
             ++Step;
+            clock_t end=clock();
+            Time[Color]=(double)(end-start)/CLOCKS_PER_SEC;
             Print();
             return;
         }
@@ -297,7 +313,6 @@ inline void ComputerVSComputer(){
     Print();
     while(1){
         Computer(0);
-        Sleep(000);
         if(Check()){
             puts("Computer 1 (black) wins!");
             break;
@@ -307,7 +322,6 @@ inline void ComputerVSComputer(){
             break;
         }
         Computer(1);
-        Sleep(000);
         if(Check()){
             puts("Computer 2 (white) wins!");
             break;
@@ -337,13 +351,6 @@ inline void Game(){
 int main(){
     // freopen(".in","r",stdin);
     // freopen(".out","w",stdout);
-    // while(1)printf("%d\n",KeyToValue());
-    // for(int i=0;i<N;++i){
-    //     for(int j=0;j<N;++j){
-    //         Board[i][j]=rand()%3;
-    //     }
-    // }
-    // print();
     Game();
     return 0;
 }
