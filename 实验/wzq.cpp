@@ -10,7 +10,7 @@ using namespace std;
 
 const int N=19;
 const int INF=1e8;
-const int Limit=20;
+const int CountLimit=35;
 int Board[N][N];
 //-1: unused
 // 0: black 
@@ -153,40 +153,41 @@ inline int Risk(bool Color,int x,int y){
     return Sum;
 }
 
-pair<pair<int,int>,int> dfs(int dep,bool Color,int MaxLimit){
-    vector<pair<int,pair<int,int> > >Points;
+pair<int,pair<int,int> > dfs(int dep,bool Color,int MaxLimit){
+    vector<pair<pair<int,int>,pair<int,int> > >Points;
     for(int i=0;i<N;++i){
         for(int j=0;j<N;++j){
             if(~Board[i][j])continue;
             int Rating=Risk(Color,i,j);
-            if(Rating==INF)return {{i,j},INF};
+            if(Rating==INF)return {INF,{i,j}};
             if(dep&&Rating==INF/10){
-                if(dfs(0,Color^1,INF).second!=INF){
-                    return {{i,j},INF};
+                if(dfs(0,Color^1,INF).first!=INF){
+                    return {INF,{i,j}};
                 }
                 Rating=-INF;
             }
-            Points.push_back({Rating,{i,j}});
+            Points.push_back({{Rating+Risk(Color^1,i,j),Rating},{i,j}});
         }
     }
-    sort(Points.begin(),Points.end(),greater<pair<int,pair<int,int> > >());
+    sort(Points.begin(),Points.end(),greater<pair<pair<int,int>,pair<int,int> > >());
+    if(Points.size()>CountLimit)Points.resize(CountLimit);
     int x=-1,y=-1;
     int Max=-1e9;
     for(auto P:Points){
         int i=P.second.first;
         int j=P.second.second;
-        int Rating=P.first;
+        int Rating=P.first.second;
         if(dep){
                 Board[i][j]=Color;
-                Rating-=dfs(dep-1,Color^1,Rating-Max).second;
+                Rating-=dfs(dep-1,Color^1,Rating-Max).first;
                 Rating=min(Rating,INF);
                 Rating=max(Rating,-INF);
                 Board[i][j]=-1;
         } 
         if(Rating>Max)x=i,y=j,Max=Rating;
-        if(Max>=MaxLimit)return {{x,y},Max};
+        if(Max>=MaxLimit)return {Max,{x,y}};
     }
-    return {{x,y},Max};
+    return {Max,{x,y}};
 }
 
 string Name[2];
@@ -204,10 +205,10 @@ inline bool Computer(const bool &Color){
     PrintPlayer("★ "+Name[Color],Time[Color]);
     PrintPlayer("☆ "+Name[Color^1],Time[Color^1]);
     if(Step>=2){
-        auto tmp=dfs(3,Color,INF);
-        x=tmp.first.first;
-        y=tmp.first.second;
-        if(tmp.second<=-INF/2)return 1;
+        auto tmp=dfs(5,Color,INF);
+        x=tmp.second.first;
+        y=tmp.second.second;
+        if(tmp.first<=-INF/2)return 1;
     }
     else if(Step==1){
         while(1){
