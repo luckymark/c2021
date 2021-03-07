@@ -7,11 +7,14 @@ using namespace std;
 #define gc c=getchar()
 #define r(x) read(x)
 #define ll long long
+#define ull unsigned long long
 
 const int N=19;
 const int INF=1e8;
-const int CountLimit=35;
+const int CountLimit=40;
+const int DeepLimit=5;
 int Board[N][N];
+ull Hash[N][N];
 //-1: unused
 // 0: black 
 // 1: white 
@@ -153,16 +156,22 @@ inline int Risk(bool Color,int x,int y){
     return Sum;
 }
 
-pair<int,pair<int,int> > dfs(int dep,bool Color,int MaxLimit){
+unordered_map<ull,pair<int,pair<int,int> > >F;
+
+pair<int,pair<int,int> > dfs(int dep,bool Color,int MaxLimit,ull state){
+    if(F.count(state))return F[state];
     vector<pair<pair<int,int>,pair<int,int> > >Points;
     for(int i=0;i<N;++i){
         for(int j=0;j<N;++j){
             if(~Board[i][j])continue;
             int Rating=Risk(Color,i,j);
-            if(Rating==INF)return {INF,{i,j}};
+            if(Rating==INF)return F[state]={INF,{i,j}};
             if(dep&&Rating==INF/10){
-                if(dfs(0,Color^1,INF).first!=INF){
-                    return {INF,{i,j}};
+                Board[i][j]=Color;
+                int tmp=dfs(0,Color^1,INF,state^Hash[i][j]).first;
+                Board[i][j]=-1;
+                if(tmp!=INF){
+                    return F[state]={INF,{i,j}};
                 }
                 Rating=-INF;
             }
@@ -179,15 +188,17 @@ pair<int,pair<int,int> > dfs(int dep,bool Color,int MaxLimit){
         int Rating=P.first.second;
         if(dep){
                 Board[i][j]=Color;
-                Rating-=dfs(dep-1,Color^1,Rating-Max).first;
+                Rating-=dfs(dep-1,Color^1,Rating-Max,state^Hash[i][j]).first;
                 Rating=min(Rating,INF);
                 Rating=max(Rating,-INF);
                 Board[i][j]=-1;
         } 
         if(Rating>Max)x=i,y=j,Max=Rating;
-        if(Max>=MaxLimit)return {Max,{x,y}};
+        if(Max>=MaxLimit){
+            return F[state]={Max,{x,y}};
+        }
     }
-    return {Max,{x,y}};
+    return F[state]={Max,{x,y}};
 }
 
 string Name[2];
@@ -205,7 +216,8 @@ inline bool Computer(const bool &Color){
     PrintPlayer("★ "+Name[Color],Time[Color]);
     PrintPlayer("☆ "+Name[Color^1],Time[Color^1]);
     if(Step>=2){
-        auto tmp=dfs(5,Color,INF);
+        F.clear();
+        auto tmp=dfs(DeepLimit,Color,INF,0);
         x=tmp.second.first;
         y=tmp.second.second;
         if(tmp.first<=-INF/2)return 1;
@@ -396,7 +408,6 @@ inline void Game(){
 }
 
 inline void Menu(){
-    srand(time(0));
     system("mode con cols=60 lines=30");
     system("cls");
     puts("Welcome to the Wuziqi game!");
@@ -404,6 +415,15 @@ inline void Menu(){
     puts("Press [ Enter or Space ] to confirm");
     puts("Press [ G ] to give up");
     system("pause");
+    srand(time(0));
+    for(int i=0;i<N;++i){
+        for(int j=0;j<N;++j){
+            for(int k=0;k<5;++k){
+                Hash[i][j]<<=15;
+                Hash[i][j]|=rand();
+            }
+        }
+    }
     while(1)Game();
 }
 
