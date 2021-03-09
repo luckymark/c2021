@@ -6,12 +6,18 @@
 using namespace std;
 
 int main(){
-	int fth,sn;
-	for(int i=28;i<=300;i+=28){
-		fth=i;
-		sn=fth-fth*11/28-9;
-		if(fth==sn*2){
-			cout<<i;
+	int n;
+	bool pr=1;
+	cin>>n;
+	for(int i=2;i<=sqrt(double(n));i++){
+		if(n%i==0){
+			pr=0;
 		}
+	}
+	if ((pr)&&(n!=1)){
+		cout<<"Yes";
+	}
+	else{
+		cout<<"No";
 	}
 }

@@ -6,18 +6,32 @@
 using namespace std;
 
 int main(){
-	int n;
-	bool pr=1;
-	cin>>n;
-	for(int i=2;i<=sqrt(double(n));i++){
-		if(n%i==0){
-			pr=0;
+	char s[1000];
+	int l=20;//?¨ª?¨¨¡ê? 
+	int v=5;//?¨´?¨¨¡ê? 
+	int a,i;
+	bool t=1;
+	cin>>s;
+	a=strlen(s);
+	system("cls");//???¨¢¡ê?
+	i=0;
+	while(1){
+	    for(int j=1;j<=i/v;j++){
+	    	printf(" ");
 		}
-	}
-	if ((pr)&&(n!=1)){
-		cout<<"Yes";
-	}
-	else{
-		cout<<"No";
+		printf("%s",s);
+		if(t){
+			i++;
+		}	
+		else{
+			i--;
+		}
+		if(i>=(l-a)*v){
+			t=1-t;
+		}
+		else if(i<=0){
+			t=1-t;
+		}
+		system("cls");
 	}
 }
