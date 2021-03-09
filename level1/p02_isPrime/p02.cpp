@@ -22,6 +22,7 @@ int main(){
 		printf("The input is wrong.");
 	}
 	else if(n==1||(n%2==0&&n!=2)){
+		//1和大于2的偶数不是素数 
 		printf("%lld isn't prime.",n);
 	}
 	else{
