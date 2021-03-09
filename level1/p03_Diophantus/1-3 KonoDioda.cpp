@@ -6,12 +6,13 @@
 using namespace std;
 
 int main(){
-	int fth,sn;
-	for(int i=28;i<=300;i+=28){
-		fth=i;
-		sn=fth-fth*11/28-9;
-		if(fth==sn*2){
-			cout<<i;
+	int a,b,c;
+	for(int i=100;i<=999;i++){
+		a=i/100;
+		b=(i/10)%10;
+		c=i%10;
+		if(pow(a,3)+pow(b,3)+pow(c,3)==i){
+			cout<<i<<endl;
 		}
 	}
 }
