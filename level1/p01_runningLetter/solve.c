@@ -4,6 +4,12 @@
 // #define LENGTH 10
 #define MAX 100
 
+void HideCursor()  //隐藏光标
+{
+    CONSOLE_CURSOR_INFO cursor_info = { 1, 0 };
+    SetConsoleCursorInfo( GetStdHandle( STD_OUTPUT_HANDLE ), &cursor_info );
+}
+
 int spaces( int num, int length )
 {
     int required;
