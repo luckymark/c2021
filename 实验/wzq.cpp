@@ -16,7 +16,7 @@ const int DeepLimit=5;
 const int CountLimit2=1;
 const int DeepLimit2=3;
 int Board[N][N];
-ull Hash[N][N];
+ull Hash[2][N][N];
 //-1: unused
 // 0: black 
 // 1: white 
@@ -171,7 +171,7 @@ pair<int,pair<int,int> > dfs2(int dep,bool Color,int MaxLimit,ull state){
             if(Rating==INF)return F[state]={INF,{i,j}};
             if(dep&&Rating==INF/10){
                 Board[i][j]=Color;
-                int tmp=dfs2(0,Color^1,INF,state^Hash[i][j]).first;
+                int tmp=dfs2(0,Color^1,INF,state^Hash[Color][i][j]).first;
                 Board[i][j]=-1;
                 if(tmp!=INF){
                     return F[state]={INF,{i,j}};
@@ -191,7 +191,7 @@ pair<int,pair<int,int> > dfs2(int dep,bool Color,int MaxLimit,ull state){
         int Rating=P.first.second;
         if(dep){
                 Board[i][j]=Color;
-                Rating-=dfs2(dep-1,Color^1,Rating-Max,state^Hash[i][j]).first;
+                Rating-=dfs2(dep-1,Color^1,Rating-Max,state^Hash[Color][i][j]).first;
                 Rating=min(Rating,INF);
                 Rating=max(Rating,-INF);
                 Board[i][j]=-1;
@@ -214,7 +214,7 @@ pair<int,pair<int,int> > dfs(int dep,bool Color,int MaxLimit,ull state){
             if(Rating==INF)return F[state]={INF,{i,j}};
             if(dep&&Rating==INF/10){
                 Board[i][j]=Color;
-                int tmp=dfs(0,Color^1,INF,state^Hash[i][j]).first;
+                int tmp=dfs(0,Color^1,INF,state^Hash[Color][i][j]).first;
                 Board[i][j]=-1;
                 if(tmp!=INF){
                     return F[state]={INF,{i,j}};
@@ -225,7 +225,7 @@ pair<int,pair<int,int> > dfs(int dep,bool Color,int MaxLimit,ull state){
         }
     }
     sort(Points.begin(),Points.end(),greater<pair<pair<int,int>,pair<int,int> > >());
-    if(Points.size()>dep*10+10)Points.resize(dep*10+10);
+    if(Points.size()>dep*5+25)Points.resize(dep*5+25);
     int x=-1,y=-1;
     int Max=-1e9;
     for(auto P:Points){
@@ -234,7 +234,7 @@ pair<int,pair<int,int> > dfs(int dep,bool Color,int MaxLimit,ull state){
         int Rating=P.first.second;
         if(dep){
             Board[i][j]=Color;
-            Rating-=dfs(dep-1,Color^1,Rating-Max,state^Hash[i][j]).first;
+            Rating-=dfs(dep-1,Color^1,Rating-Max,state^Hash[Color][i][j]).first;
             Rating=min(Rating,INF);
             Rating=max(Rating,-INF);
             Board[i][j]=-1;
@@ -478,8 +478,10 @@ inline void Menu(){
     for(int i=0;i<N;++i){
         for(int j=0;j<N;++j){
             for(int k=0;k<5;++k){
-                Hash[i][j]<<=15;
-                Hash[i][j]|=rand();
+                Hash[0][i][j]<<=15;
+                Hash[1][i][j]<<=15;
+                Hash[0][i][j]|=rand();
+                Hash[1][i][j]|=rand();
             }
         }
     }
