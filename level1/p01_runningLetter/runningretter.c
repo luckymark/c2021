@@ -7,7 +7,6 @@ int main()
     GetConsoleScreenBufferInfo(GetStdHandle(STD_INPUT_HANDLE), &cw);
     int x = 1, y, i;
     int m = cw.srWindow.Left - cw.srWindow.Right; //没能成功
-    //int m = cw.dwMaximumWindowSize.X;
     char s[Namelen];
     scanf("%s", s);
     while (1)
