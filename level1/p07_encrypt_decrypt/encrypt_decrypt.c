@@ -14,16 +14,22 @@ void decrypt(string * str);
 void showStr(string * str);
 int main(int argc, char const *argv[])
 {
-    string str;
-    get_str(&str);
-    printf("original:\t");
-    showStr(&str);
-    encrypt(&str);
-    printf("encrypted:\t");
-    showStr(&str);
-    decrypt(&str);
-    printf("decrypted:\t");
-    showStr(&str);
+    printf("Please enter the letters:\n");
+    string * str = (string *)malloc(sizeof(string));
+    get_str(str);
+    char ch;
+    printf("Enter 'e' to encrypt it, 'd' to decrypt it and 'q' to quit.\n");
+    while (ch = getchar()) {
+        if (ch == 'q') break;
+        else if (ch == 'e') encrypt(str);
+        else if (ch == 'd') decrypt(str);
+        else if (ch == '\n') continue;
+        else {
+            printf("Invalid input!\n");
+            continue;
+        }
+        showStr(str);
+    }
     return 0;
 }
 void showStr(string * str) {
