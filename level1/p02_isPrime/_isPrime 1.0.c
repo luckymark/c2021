@@ -10,11 +10,11 @@ int main()
     else if (a % 6 != 1 && a % 6 != 5)
         puts("no");
     else
-        for (i = 3; i <= (int)sqrt(double(a)); i = i + 2)
+        for (i = 3; i <= (int)sqrt(double(a)) + 1; i = i + 2)
         {
             if (a % i == 0)
                 printf("no");
-            else if (i = (int)sqrt(double(a)))
+            else if (i > (int)sqrt(double(a)))
                 printf("yes");
         }
 
