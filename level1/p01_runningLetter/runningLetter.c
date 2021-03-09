@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 void main() {
     int n = 0;
-    char value = 1;//valueÎª1Ê±ÏòÓÒÒÆ¶¯£¬·ñÔòÏò×óÒÆ¶¯ 
+    const int right_border = 105, left_border = 0;
+    char value = 1;//valueä¸º1æ—¶å‘å³ç§»åŠ¨ï¼Œå¦åˆ™å‘å·¦ç§»åŠ¨ 
     while (1) {
         if (value) {
             for (int i = 0; i < n; i++) {
@@ -11,8 +13,8 @@ void main() {
             }
             printf("Running Word");
             n++;
-            system("cls");//ÇåÆÁ 
-            if (n == 105) {
+            system("cls");//æ¸…å± 
+            if (n == right_border) {
                 value = 0;
             }
         }
@@ -23,7 +25,7 @@ void main() {
             printf("Running Word");
             n--;
             system("cls");
-            if (n == 0) {
+            if (n == left_border) {
                 value = 1;
             }
         }
