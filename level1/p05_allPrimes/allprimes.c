@@ -11,12 +11,15 @@ int main()
         if (a % 6 != 1 && a % 6 != 5)
             continue;
         b = (int)sqrt(double(a));
-        for (i = 3; i <= b; i = i + 2)
+        for (i = 3; i <= b + 1; i = i + 1)
         {
             if (a % i == 0)
                 break;
-            else if (i == b)
+            else if (i > b)
+            {
                 printf("%d ", a);
+                break;
+            }
         }
     }
     printf("\n Time used=%.2fs", (double)clock() / CLOCKS_PER_SEC);
