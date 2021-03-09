@@ -12,6 +12,7 @@ int main(){
 	int color = 0;
 	HANDLE  hConsole;
 	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	//color handle
 	system("title zly yyds!!!");
 	while(1){
 		for(int i=0;i<x;i++){
