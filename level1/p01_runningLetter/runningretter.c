@@ -21,5 +21,3 @@ int main()
     }
     return 0;
 }
-/*CONSOLE_SCREEN_BUFFER_INFO cw;
-GetConsoleScreenBufferInfo(GetStdHandle(STD_INPUT_HANDLE), &cw);*/
