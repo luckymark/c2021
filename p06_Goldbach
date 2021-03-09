@@ -23,6 +23,7 @@ void dfs(int x,int s)
 int main()
 {
 	cin>>n;
-	dfs(0,0);
+	if(n<=5 || n>100) cout<<"error"<<endl;
+	else dfs(0,0);
 	return 0;
 }
