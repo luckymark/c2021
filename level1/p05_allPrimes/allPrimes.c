@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<time.h>
+#include<math.h>
 #include<Windows.h>
  
 int main(){
@@ -14,7 +15,7 @@ int main(){
 
  	for(i=3;i<=1000;i++){
  		isPrime=1;
- 		for(j=0;j<count;j++){
+ 		for(j=0;PrimesTable[j]<=(int)sqrt(i);j++){
  			if(i%(PrimesTable[j])==0){
  				isPrime=0;
  				break;
