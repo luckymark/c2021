@@ -1,5 +1,5 @@
 #include <stdio.h>
-//¶ª·¬Í¼ÎÊÌâ 
+//ä¸¢ç•ªå›¾é—®é¢˜
 int main(){
 	float x;
 	for(x=1;x<200;x++){
