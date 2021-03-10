@@ -3,29 +3,35 @@
 using namespace std;
 int main()
 {
+	system("title RunningLetter");
 	char a;
 	int j;
 	cout<<"Enter the desired character:";
 	cin>>a;
 	system("cls");
+	HANDLE hOut;
+    CONSOLE_SCREEN_BUFFER_INFO scr;
+    hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    GetConsoleScreenBufferInfo(hOut, &scr);
+	int I=scr.dwSize.X; 
 	while(1)
 	{
-		for(int i=0;i<=20;i++)
+		for(int i=0;i<I;i++)
 		{
 			j=i;
 			while(j--)
 			cout<<" ";
 			cout<<a;
-			Sleep(100);
+			Sleep(10);
 			system("cls");
 		}
-		for(int i=19;i;i--)
+		for(int i=I-2;i;i--)
 		{
 			j=i;
 			while(j--)
 			cout<<" ";
 			cout<<a;
-			Sleep(100);
+			Sleep(10);
 			system("cls");
 		}
 	}
