@@ -27,7 +27,7 @@ int main()
 		}
 		n+=2;		
 	}
-	printf("If there is no error,Goldbach conjecture has been proved."); 
+	printf("If there is no error,Goldbach conjecture has been proved.")
 	return 0;	
 	
 }
