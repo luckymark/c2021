@@ -12,6 +12,7 @@ SET *Change(SET *Q)
     Q->x = Q->y;
     Q->y = Q->z;
     Q->z = n;
+    return Q;
 }
 SET *Hanoi(int m, SET *P)
 {
