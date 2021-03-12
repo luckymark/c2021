@@ -1,0 +1,24 @@
+#pragma once
+
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include <conio.h>
+#include <Windows.h>
+
+#define getkey() _getch()
+
+typedef struct {
+	int id;
+	COORD size;
+	char *map;
+	COORD pos;
+} LEVEL;
+
+#define COLOR_VOID  0
+#define COLOR_TEXT (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY)
+#define COLOR_WALL (BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE)
+#define COLOR_BLOCK (BACKGROUND_RED | BACKGROUND_GREEN | FOREGROUND_GREEN | FOREGROUND_BLUE)
+#define COLOR_TARGET (FOREGROUND_GREEN | FOREGROUND_INTENSITY)
+#define COLOR_BUMP (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY)
+#define COLOR_DANGER (FOREGROUND_RED | FOREGROUND_INTENSITY)
