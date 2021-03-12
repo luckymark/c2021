@@ -6,7 +6,7 @@ int prime[1001],cnt;
 clock_t t1,t2;
 int main() 
 {
-	system("title All Primes");
+	system("title AllPrimes");
 	LARGE_INTEGER cpuFreq;
 	LARGE_INTEGER startTime;
 	LARGE_INTEGER endTime;
