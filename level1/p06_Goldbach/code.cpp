@@ -31,7 +31,7 @@ void Solve(int n)
 }
 int main()
 {
-	system("title Goldbach");
+	system("title Goldbach Verification");
 	PrmCalc();
 	for(int i=6;i<=100;i++)
 	Solve(i);
