@@ -20,11 +20,14 @@ int main() {
         if (ch == 'q') break;//退出
         else if (ch == 'n') printf("%d",next5());//下一个5
         else if (ch == 'c') {//创建
-            printf("Please enter several numbers(enter non-numeric to end input)(such as 1 5 2 e):\n");
+            printf("Please enter several numbers:\n");
             init();
-            while (scanf("%d",&num)) {
+            do {
+                scanf("%d",&num);
                 add(num);
             }
+            while (getchar() != '\n');
+            printf("We create:\n");
             show();
         }
         else if (ch == 'r') {
