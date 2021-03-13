@@ -20,3 +20,14 @@ console控制台相关：https://www.cnblogs.com/flowingwind/p/8159035.html
   有关补码、原码、反码：https://www.cnblogs.com/dongao/p/11538424.html
   
 }
+
+记录一些已写的函数：
+需要头文件<string>
+其中s为打开文件的类型
+FILE *getfile(string s)
+{
+  cout << "please put in the path" << endl;
+  string path;
+  cin >> path;
+  return fopen(path.c_str(), s.c_str());
+}
