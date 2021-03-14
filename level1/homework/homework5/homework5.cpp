@@ -1,4 +1,5 @@
 ﻿#include<stdio.h>
+#include<math.h>
 #include<time.h>
 
 int main()
@@ -12,7 +13,7 @@ int main()
 	{
 		i = 3;
 		isPrime = 1;
-		while (i < n / 3)
+		while (i <= sqrt(n))
 		{
 			if (n % i == 0)
 			{
