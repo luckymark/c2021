@@ -1,3 +1,6 @@
+#ignore bin#
+/bin/
+
 .DS_Store
 *.o
 *.a
