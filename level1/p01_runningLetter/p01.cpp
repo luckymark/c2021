@@ -4,9 +4,12 @@
 #include<windows.h>
 
 int main(){
-	system("mode con cols=80 lines=5");
+	int h=80,w=5;
+	char chCmd[32];
+	sprintf(chCmd,"mode con cols=%d lines=%d",h,w);
+	system(chCmd);
 	char ch[30]="cls txdy!!!";
-	int d=80-strlen(ch),x=0,t=0;
+	int d=h-strlen(ch),x=0,t=0;
 	//printf("%d",c);
 	while(true){
 		for(int i=0;i<t;i++){
