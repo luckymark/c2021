@@ -1,30 +1,41 @@
-// 功能要求：
-// 打印出所有3位水仙花数
-// 水仙花数：n位数的每个数位的n次方之和等于该n位数本身
-
-// 例如：153=1^3+5^3+3^3
-// 153 --> 1,5,3
 #include <stdio.h>
+// #include <iostream>
+int pows( int n, int m )
+{
+    int i;
+    int j = n;
+    for ( i = 0; i < m - 1; i++ ) {
+        n = n * j;
+    }
+    return n;
+}
+// using namespace std;
 int main()
 {
-    int ge, shi, bai;
-    for ( ge = 0; ge < 10; ge++ ) {
-        for ( shi = 0; shi < 10; shi++ ) {
-            for ( bai = 0; bai < 10; bai++ ) {
-                int result = ge * ge * ge + shi * shi * shi + bai * bai * bai;
-                if ( result < 1000 && result >= 100 ) {
-                    printf( "%d\n", result );
-                }
+    int      digits      = 3;  //在这里修改位数
+    long int lowerlimit  = 1;
+    long int higherlimit = 1;  //定义上下限
+    int      i;
+    for ( i = 0; i < digits - 1; i++ ) {
+        lowerlimit *= 10;
+    }
+    // lowerlimit *= ( long int )pow( 10.0, digits );
+    higherlimit = lowerlimit * 10;
+
+    long int j = lowerlimit;
+    for ( ; j <= higherlimit; j++ ) {
+        //分离
+        long int sum = 0;
+        long int m   = j;
+        do {
+            sum += ( long int )pows( m % 10, digits );
+            m = m / 10;
+            if ( sum > j ) {
+                break;
             }
+        } while ( m );
+        if ( sum == j ) {  //如果符合条件
+            printf( "%ld ", j );
         }
     }
 }
-/*
-1 1 1
-1 1 9
-1 2 1
-1 2 9
-
-
-
-*/
