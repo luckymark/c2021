@@ -1,0 +1,9 @@
+git clone https://github.com/mendicant07/c2021
+cd c2021
+ls
+
+git config user.name=mendicant07
+git config user.email=1608646546@qq.com
+
+git remote -v
+git remote add upstream https://github.com/luckymark/c2021
