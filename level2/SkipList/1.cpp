@@ -13,7 +13,6 @@ inline void read(T &x){
 	while(isdigit(c)){x=x*10+c-'0';gc;}x*=k;
 }
 
-const int K=4;
 const int Limit=20;
 const int N=1e5+7;
 const int INF=(1ll<<31)-1;
@@ -31,7 +30,10 @@ int tot,S,T;
 
 inline int NewNode(const int &k,const int &v){
 	++tot;
-	A[tot].Level=rand()%Limit;
+	for(int i=1;i<Limit;++i){
+		if(rand()&1)A[tot].Level++;
+		else break;
+	}
 	A[tot].Key=k;
 	A[tot].Val=v;
 	return tot;
@@ -45,10 +47,11 @@ inline void build(){
 	for(int i=0;i<Limit;++i)A[S].Next[i]=T;
 }
 
-inline int find(const int &k){
+int find(int k){
+	++k;
 	int x=S;
 	int Level=Limit-1;
-	while(Level){
+	while(~Level){
 		while(A[A[x].Next[Level]].Key<=k){
 			x=A[x].Next[Level];
 		}
@@ -58,10 +61,11 @@ inline int find(const int &k){
 	return -1;
 }
 
-inline void insert(const int &k,const int &v){
+void insert(int k,const int &v){
+	++k;
 	int x=S;
 	int Level=Limit-1;
-	while(Level){
+	while(~Level){
 		while(A[A[x].Next[Level]].Key<=k){
 			x=A[x].Next[Level];
 		}
@@ -70,9 +74,9 @@ inline void insert(const int &k,const int &v){
 	if(A[x].Key==k)A[x].Val=v;
 	else {
 		int y=NewNode(k,v);
-		int x=S;
-		int Level=Limit-1;
-		while(Level){
+		x=S;
+		Level=Limit-1;
+		while(~Level){
 			while(A[A[x].Next[Level]].Key<=k){
 				x=A[x].Next[Level];
 			}
@@ -85,17 +89,28 @@ inline void insert(const int &k,const int &v){
 	}
 }
 
+pair<bool,pair<int,int> >Data[N<<1];
+const int M=1e5;
+int vis[N];
+
+inline void gen(){
+	srand(time(0));
+	memset(vis,-1,sizeof(vis));
+	for(int i=0;i<M;++i)Data[i]={0,{i,rand()}};
+	for(int i=0;i<M;++i)Data[M+i]={1,Data[rand()%M].second};
+	random_shuffle(Data,Data+(M<<1));
+}
+
 int main(){
 	// freopen(".in","r",stdin);
 	// freopen(".out","w",stdout);
 	build();
-	while(1){
-		int k,v;
-		switch(getchar()){
-			case 'f':r(k);printf("%d\n",find(k));break;
-			case 'i':r(k);r(v);insert(k,v);break;
-			default :break;
-		}
+	gen();
+	for(int i=0;i<(M<<1);++i){
+		bool opt=Data[i].first;
+		int k=Data[i].second.first;
+		int v=Data[i].second.second;
+		opt?assert(find(k)==(vis[k]|v)):(vis[k]=0,insert(k,v));
 	}
 	return 0;
 }
