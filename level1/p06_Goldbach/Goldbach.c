@@ -14,8 +14,6 @@ int Primer(int x)
             else if (i > (int)sqrt(double(x)))
                 return 1;
         }
-    else
-        return 0;
 }
 void Goldbach(int y)
 {
@@ -32,8 +30,6 @@ void Goldbach(int y)
                 else
                     continue;
         }
-        else
-            continue;
 }
 int main()
 {
