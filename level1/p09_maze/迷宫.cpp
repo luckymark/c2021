@@ -10,8 +10,8 @@ char cursorCharRead()
 	CONSOLE_SCREEN_BUFFER_INFO csbiInfo;
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	GetConsoleScreenBufferInfo(hConsole, &csbiInfo);
-	COORD pos = csbiInfo.dwCursorPosition; //set pos to current cursor location
-	TCHAR strFromConsole[1];    //need space to only one char
+	COORD pos = csbiInfo.dwCursorPosition;
+	TCHAR strFromConsole[1];
 	DWORD dwChars;
 	ReadConsoleOutputCharacter(hConsole,strFromConsole,1,pos,&dwChars); 
 	char c = strFromConsole[0];
