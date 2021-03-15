@@ -20,7 +20,7 @@ char cursorCharRead()
 
 int main()
 {
-	printf("*******************o*********************\n");
+	printf("******************* *********************\n");
 	printf("*           *   *   *       *     *   * *\n");
 	printf("* * ******* * * * * ***** * * ***** * * *\n");
 	printf("* *     *   * * * *     * *       * * * *\n");
@@ -95,5 +95,5 @@ int main()
 	w.X = 0;
 	w.Y = 41;
 	SetConsoleCursorPosition(hOut, w);
-	printf("成功通关！");
+	printf("鎴愬姛閫氬叧");
 }
