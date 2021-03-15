@@ -90,7 +90,7 @@ inline const LL Decode(LL c)
 
 int main()
 {
-    //freopen("in.txt", "r", stdin);
+    freopen("in.txt", "r", stdin);
     srand(time(NULL));
     init();
     string s, k;

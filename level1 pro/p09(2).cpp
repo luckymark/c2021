@@ -5,7 +5,12 @@
 #include <ctime>
 #include <windows.h>
 using namespace std;
-const int size = 41;
+const int size = 41, Dead = 1000;
+
+//Hah hah, I've not figured out how
+//to deal with the bug, that in some circumstances the route will be blocked;
+//and it's actually Dead loop >_<
+
 int _map[105][105], belong[105][105];
 
 inline int _hash(int x, int y)

@@ -1,1 +1,21 @@
-abcdefghijklmnopqrstuvwxyz
+apple
+  number:81
+  price:44
+orange
+  number:33
+  price:22
+pear
+  number:44
+  price:12
+banana
+  number:108
+  price:32
+gaoxiang
+  number:800
+  price:1
+liuyangcen
+  number:1
+  price:100000000
+caoyongqi
+  number:1000
+  price:1
