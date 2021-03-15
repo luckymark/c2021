@@ -40,15 +40,14 @@ inline int NewNode(const int &k,const int &v){
 }
 
 inline void build(){
-	S=NewNode(0,0);
+	S=NewNode(-1,0);
 	T=NewNode(INF,0);
 	A[S].Level=Limit-1;
 	A[T].Level=Limit-1;
 	for(int i=0;i<Limit;++i)A[S].Next[i]=T;
 }
 
-int find(int k){
-	++k;
+int find(const int &k){
 	int x=S;
 	int Level=Limit-1;
 	while(~Level){
@@ -61,8 +60,7 @@ int find(int k){
 	return -1;
 }
 
-void insert(int k,const int &v){
-	++k;
+void insert(const int &k,const int &v){
 	int x=S;
 	int Level=Limit-1;
 	while(~Level){
