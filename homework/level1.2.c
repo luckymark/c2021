@@ -8,8 +8,8 @@ int main()
 		if (0==n%i)break;
 	}
 	if (i == n)
-		printf("%d是素数", n);
+		printf(" %d 是素数 ", n);
 	else
-		printf("%d不是素数", n);
+		printf(" %d 不是素数 ", n);
 	return 0;
 }
