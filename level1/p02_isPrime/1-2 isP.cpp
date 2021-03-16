@@ -2,8 +2,7 @@
 #include<cstdio>
 #include<math.h>
 #include<stdlib.h>
-#include<string.h> 
-using namespace std;
+#include<string.h>
 
 int main(){
 	int n;
