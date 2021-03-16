@@ -3,7 +3,7 @@
 #include <time.h>
 #include <string.h>
 //constants
-enum{ N = 1000 , sleep_time = 50};
+enum{ N = 1000 , SLEEP_TIME = 50};
 char space[N];
 int i;
 //func
@@ -40,7 +40,7 @@ int main(int argc, char const *argv[])
 
                     DrawLine(width);
         /*Sleep a while, let the user watch.*/
-        Sleep(sleep_time);
+        Sleep(SLEEP_TIME);
     }
     return 0;
 }

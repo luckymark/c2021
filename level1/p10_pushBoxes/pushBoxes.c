@@ -2,6 +2,7 @@
 #include <conio.h>
 #include <string.h>
 #include <stdlib.h>
+#define CHECK
 enum {MapNum = 10,MaxNum = 100, WinNum = 4};
 enum {Space, Wall, Box, Dest, BoxOverDest, P, LineBreak, BoxInDest, PInDest};
 int *** maps = NULL;
@@ -9,17 +10,11 @@ char ch;
 int Steps = 0, quitflag = 0;
 int i, j;
 int cur_map = 0;
-struct map
+struct point
 {
     int row;
     int col;
-}mapInfo[MapNum];
-struct player
-{
-    int row;
-    int col;
-}player;
-// void swap(char *a,char *b);
+}player, mapInfo[MapNum];
 void Move(int n_r,int n_c);
 int NotOut(int rr, int cc);
 int char2int(char c);
@@ -163,14 +158,12 @@ int char2int(char c) {
     else if (c == '\n') return LineBreak;
 } 
 char int2char(int t) {
-    if (t == P) return '*';
+    if (t == P || t == PInDest) return '*';
     else if (t == Space) return ' ';
     else if (t == Wall) return 'O';
-    else if (t == Box) return '#';
+    else if (t == Box || t == BoxInDest) return '#';
     else if (t == Dest) return '$';
     else if (t == LineBreak) return '\n';
-    else if (t == BoxInDest) return '#';
-    else if (t == PInDest) return '*';
 }
 int victory() {
     for (i = 0; i < mapInfo[cur_map].row; ++ i) {
@@ -190,55 +183,50 @@ void restart() {
     Update();
 }
 void Move(int n_r,int n_c) {
-    //前方空地
-        if (NotOut(n_r,n_c) && maps[cur_map][n_r][n_c] == Space) {
+    if (!NotOut(n_r,n_c)) return;
+        //前方空地
+        if (maps[cur_map][n_r][n_c] == Space) {
             maps[cur_map][n_r][n_c] = P;
-            
             maps[cur_map][player.row][player.col] = maps[cur_map][player.row][player.col] == PInDest ? Dest : Space;
             player.row = n_r, player.col = n_c;
         }
         //前方归位点
-        if (NotOut(n_r,n_c) && maps[cur_map][n_r][n_c] == Dest) {
+        if (maps[cur_map][n_r][n_c] == Dest) {
             maps[cur_map][n_r][n_c] = PInDest;
             maps[cur_map][player.row][player.col] = maps[cur_map][player.row][player.col] == PInDest ? Dest : Space;
             player.row = n_r, player.col = n_c;
         }
         //前方归位箱
-        if (NotOut(n_r,n_c) && maps[cur_map][n_r][n_c] == BoxInDest) {
-            int b_n_r = n_r + n_r - player.row;
-            int b_n_c = n_c + n_c - player.col;
-            //箱子前方空地
-            if (NotOut(b_n_r,b_n_c) && maps[cur_map][b_n_r][b_n_c] == Space) {
-                maps[cur_map][n_r][n_c] = PInDest;
-                maps[cur_map][b_n_r][b_n_c] = Box;
-                maps[cur_map][player.row][player.col] = maps[cur_map][player.row][player.col] == PInDest ? Dest : Space;
-                player.row = n_r, player.col = n_c;
-            }
-            //箱子前方归位点
-            else if (NotOut(b_n_r,b_n_c) && maps[cur_map][b_n_r][b_n_c] == Dest) {
-                maps[cur_map][n_r][n_c] = PInDest;
-                maps[cur_map][b_n_r][b_n_c] = BoxInDest;
-                maps[cur_map][player.row][player.col] = maps[cur_map][player.row][player.col] == PInDest ? Dest : Space;
-                player.row = n_r, player.col = n_c;
-            }
+        if (maps[cur_map][n_r][n_c] == BoxInDest) {
+            pushBox(BoxInDest,n_r,n_c);
         }
         //前方箱子
-        if (NotOut(n_r,n_c) && maps[cur_map][n_r][n_c] == Box) {
-            int b_n_r = n_r + n_r - player.row;
-            int b_n_c = n_c + n_c - player.col;
+        if (maps[cur_map][n_r][n_c] == Box) {
+            pushBox(Box,n_r,n_c);
+        }
+}
+void pushBox(int BoxNowState, int n_r, int n_c) {
+    int b_n_r = n_r + n_r - player.row;
+    int b_n_c = n_c + n_c - player.col;
+            if (!NotOut(b_n_r,b_n_c)) return;
             //箱子前方空地
-            if (NotOut(b_n_r,b_n_c) && maps[cur_map][b_n_r][b_n_c] == Space) {
-                maps[cur_map][n_r][n_c] = P;
+            if (maps[cur_map][b_n_r][b_n_c] == Space) {
+                if (BoxNowState == BoxInDest)
+                    maps[cur_map][n_r][n_c] = PInDest;
+                else if (BoxNowState == Box)
+                    maps[cur_map][n_r][n_c] = P;
                 maps[cur_map][b_n_r][b_n_c] = Box;
                 maps[cur_map][player.row][player.col] = maps[cur_map][player.row][player.col] == PInDest ? Dest : Space;
                 player.row = n_r, player.col = n_c;
             }
             //箱子前方归位点
-            else if (NotOut(b_n_r,b_n_c) && maps[cur_map][b_n_r][b_n_c] == Dest) {
-                maps[cur_map][n_r][n_c] = P;
+            else if (maps[cur_map][b_n_r][b_n_c] == Dest) {
+                if (BoxNowState == BoxInDest)
+                    maps[cur_map][n_r][n_c] = PInDest;
+                else if (BoxNowState == Box)
+                    maps[cur_map][n_r][n_c] = P;
                 maps[cur_map][b_n_r][b_n_c] = BoxInDest;
                 maps[cur_map][player.row][player.col] = maps[cur_map][player.row][player.col] == PInDest ? Dest : Space;
                 player.row = n_r, player.col = n_c;
             }
-        }
 }

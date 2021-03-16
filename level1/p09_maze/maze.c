@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <windows.h>
+#define CHECK(r,c) r >= 0 && r < Height && c >= 0 && c < Width
 int c_r, c_c, ch, i, j,quitflag;
 enum {Width = 50, Height = 25};
 char out[(Width+1) * (Height+1)];
@@ -31,7 +32,9 @@ int main() {
             interact();
         }
         victory();
-        if (quitflag) break;
+        if (quitflag) {
+            break;
+        }
     }
     printf("\nThanks for playing.");
     return 0;
@@ -39,9 +42,16 @@ int main() {
 void init() {
     srand((unsigned)time(0));
     c_r = c_c = 0;
-    if (!set) set = (int *)malloc(Height * Width * sizeof(int));
-    for (i = 0; i < Height * Width; ++ i) set[i] = i;
-    if (!map) map = (int **)malloc(Height * sizeof(int *));
+    if (!set) {
+        set = (int *)malloc(Height * Width * sizeof(int));
+    }
+    for (i = 0; i < Height * Width; ++ i) {
+        set[i] = i;
+    }
+    if (!map) {
+        map = (int **)malloc(Height * sizeof(int *));
+    }
+
     for (i = 0; i < Height; ++ i) {
         map[i] = (int *)malloc(Width * sizeof(int));
     }
@@ -59,7 +69,7 @@ void dig() {
         int cnt = 0;
         for (i = 0; i < 4; ++ i) {
             int nr = r + dir[i][0], nc = c + dir[i][1];
-            if (nr >= 0 && nr < Height && nc >= 0 && nc < Width && !map[nr][nc]) {
+            if (CHECK(nr,nc) && !map[nr][nc]) {
                 cnt ++;
             }
         }
@@ -68,7 +78,7 @@ void dig() {
             int i;
             for (i = 0; i < 4; ++ i) {
                 int nr = r + dir[i][0], nc = c + dir[i][1];
-                if (nr >= 0 && nr < Height && nc >= 0 && nc < Width && !map[nr][nc]) {
+                if (CHECK(nr,nc) && !map[nr][nc]) {
                     int p_1 = find(r * Width + c);
                     int p_2 = find(nr * Width + nc);
                     set[p_2] = p_1;
@@ -84,10 +94,18 @@ void showMap(int ** map) {
 
         for (j = 0; j < Width; ++ j)
         {
-            if (i == c_r && j == c_c) out[cnt++] = '*';
-            else if (i == Height - 1 && j == Width - 1) out[cnt++] = '$';
-            else if (map[i][j]) out[cnt++] = 'O';
-            else out[cnt++] = ' ';
+            if (i == c_r && j == c_c) {
+                out[cnt++] = '*';
+            } 
+            else if (i == Height - 1 && j == Width - 1) {
+                out[cnt++] = '$';
+            }
+            else if (map[i][j]) {
+                out[cnt++] = 'O';
+            }
+            else {
+                out[cnt++] = ' ';
+            }
         }
         out[cnt++] = '\n';
     }
@@ -100,27 +118,26 @@ int find(int x) {
 }
 void interact() {
     if (_kbhit()) {
-
-    ch = _getch();
-    int n_r = c_r, n_c = c_c;
-    if (ch == 75 || ch == 97) {
-        n_c -= 1;
+        ch = _getch();
+        int n_r = c_r, n_c = c_c;
+        if (ch == 75 || ch == 97) {
+            n_c -= 1;
+        }
+        if (ch == 72 || ch == 119) {
+            n_r -= 1;
+        }
+        if (ch == 77 || ch == 100) {
+            n_c += 1;
+        }
+        if (ch == 80 || ch == 115) {
+            n_r += 1;
+        }
+        if (CHECK(n_r,n_c) && !map[n_r][n_c]) {
+            c_r = n_r, c_c = n_c;
+        }
+        system("cls");
+        showMap(map);
     }
-    if (ch == 72 || ch == 119) {
-        n_r -= 1;
-    }
-    if (ch == 77 || ch == 100) {
-        n_c += 1;
-    }
-    if (ch == 80 || ch == 115) {
-        n_r += 1;
-    }
-    if (n_r >= 0 && n_r < Height && n_c >= 0 && n_c < Width && !map[n_r][n_c]) {
-        c_r = n_r, c_c = n_c;
-    }
-    system("cls");
-    showMap(map);
-}
 }
 void victory() {
     quitflag = 0;
@@ -133,7 +150,8 @@ void victory() {
                 quitflag = 1;
                 break;
             }
-            else if (ch == 114) break;
+            else if (ch == 114) 
+                break;
             system("cls");
             printf("You win!\nEnter q to quit and r to restart.");
         }
