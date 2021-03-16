@@ -1,4 +1,4 @@
-#include <stdio.h>
+ï»¿#include <stdio.h>
 int main()
 {
 	int n, i;
@@ -8,8 +8,8 @@ int main()
 		if (0==n%i)break;
 	}
 	if (i == n)
-		printf(" %d ÊÇËØÊı ", n);
+		printf(" %d æ˜¯ç´ æ•°", n);
 	else
-		printf(" %d ²»ÊÇËØÊı ", n);
+		printf(" %d ä¸æ˜¯ç´ æ•°", n);
 	return 0;
 }
