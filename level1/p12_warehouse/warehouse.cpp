@@ -24,7 +24,8 @@ int main() {
 }
 void init() {
     fileStore.open("ware.data", ios::in);
-    if (!fileStore.is_open()) return;
+    if (!fileStore.is_open())
+        return;
     string productType;
     int productNumber;
     while (fileStore >> productType >> productNumber)
@@ -34,7 +35,8 @@ void init() {
 void update() {
     fileStore.open("ware.data", ios::out);
     for (map<string, int>::iterator i = store.begin(); i != store.end(); ++i)
-        if (i->second) fileStore << i->first << " " << i->second << "\n";
+        if (i->second)
+            fileStore << i->first << " " << i->second << "\n";
     fileStore.close();
 }
 void showMenu() {
@@ -48,12 +50,14 @@ void showStore() {
     printf("Here is the list of products\n");
     int maxStringLen = 0, maxNumberLen = 0;
     for (map<string, int>::iterator i = store.begin(); i != store.end(); ++i) {
-        if (!i->second) continue;
+        if (!i->second)
+            continue;
         maxStringLen = max((int)i->first.size(), maxStringLen);
         maxNumberLen = max(countWidth(i->second), maxNumberLen);
     }
     for (map<string, int>::iterator i = store.begin(); i != store.end(); ++i)
-        if (i->second) printf(format(maxStringLen, maxNumberLen), i->first.c_str(), i->second);
+        if (i->second)
+            printf(format(maxStringLen, maxNumberLen), i->first.c_str(), i->second);
 }
 void wait() {
     showMenu();

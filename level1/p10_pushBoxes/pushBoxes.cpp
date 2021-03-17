@@ -134,7 +134,8 @@ void Map::playInit(int &score, int historyScore) {
 }
 void Map::trymove(int &score, int direction) {
     int toX = playerX + moveh[direction], toY = playerY + movew[direction];
-    if (toX < 0 || toX >= height || toY < 0 || toY >= width) return;
+    if (toX < 0 || toX >= height || toY < 0 || toY >= width)
+        return;
     switch (playMap[toX][toY]) {
         case DES:;
         case ROAD:;
@@ -147,11 +148,15 @@ void Map::trymove(int &score, int direction) {
         case BOX:;
         case BOXINDES:;
             int ttX = toX + moveh[direction], ttY = toY + movew[direction];
-            if (ttX < 0 || ttX >= height || ttY < 0 || ttY >= width) return;
-            if (playMap[ttX][ttY] != ROAD && playMap[ttX][ttY] != DES) return;
+            if (ttX < 0 || ttX >= height || ttY < 0 || ttY >= width)
+                return;
+            if (playMap[ttX][ttY] != ROAD && playMap[ttX][ttY] != DES)
+                return;
             ++score;
-            if (playMap[toX][toY] == BOXINDES) ++TBD;
-            if (playMap[ttX][ttY] == DES) --TBD;
+            if (playMap[toX][toY] == BOXINDES)
+                ++TBD;
+            if (playMap[ttX][ttY] == DES)
+                --TBD;
             drawChar(ttX, ttY, playMap[ttX][ttY] += BOX);
             drawChar(toX, toY, playMap[toX][toY] -= BOX);
             drawChar(playerX, playerY, playMap[playerX][playerY] -= PLAYER);
@@ -173,7 +178,8 @@ bool Map::play(int &score, int historyScore) {
                     case 77: trymove(score, 2); break;
                     case 75: trymove(score, 3); break;
                 }
-                if (!TBD) return true;
+                if (!TBD)
+                    return true;
             }
             else if (kb == 27)
                 break;
@@ -215,7 +221,8 @@ void GameData::start() {
                     system("cls");
                     printf("you win with score:%d\n", Tscore);
                     printf("press any key return to the menu");
-                    if (Tscore < Scores[CurrentLevel] || !Scores[CurrentLevel]) Scores[CurrentLevel] = Tscore;
+                    if (Tscore < Scores[CurrentLevel] || !Scores[CurrentLevel])
+                        Scores[CurrentLevel] = Tscore;
                     _getch();
                 }
                 showInfo();
