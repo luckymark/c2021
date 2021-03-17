@@ -226,7 +226,7 @@ void GameData::start() {
     }
 }
 GameData::GameData() {
-    MapReader.open("C:\\Users\\light\\Documents\\Workfolder\\c2021\\level1\\p10_pushBoxes\\Maps.data", ios::in);
+    MapReader.open("Maps.data", ios::in);
     if (!MapReader.is_open()) {
         printf("Error:Mapdata not found");
         system("pause");
