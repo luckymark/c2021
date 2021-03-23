@@ -38,6 +38,11 @@ int main()
 	int key,n;
 	cin>>n>>key;
 	head=(linkedlist*)malloc(n*sizeof(linkedlist));
+	if(head==NULL)
+	{
+		cout<<"申请内存失败！"
+		return 0;
+	}
 	*head=(linkedlist){NULL,key};
 	for(int i=1;i<n;i++)
 	{
