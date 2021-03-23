@@ -1,0 +1,11 @@
+10 5 2 2
+XXXXX
+X.O.X
+X.#.X
+X...X
+X...X
+X...X
+X...X
+X...X
+X.@.X
+XXXXX
