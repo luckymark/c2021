@@ -48,22 +48,22 @@ int main()
 		Menu();
 	}
 	printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-    printf("|            ÒÑÍË³öÓÎÏ·           |\n");
-    printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+    	printf("|            å·²é€€å‡ºæ¸¸æˆ           |\n");
+    	printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 	
 } 
 void Menu()
 {
 	system("cls");
 	printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-	printf("|       »¶Ó­½øÈëÍÆÏä×ÓÓÎÏ·v0.5    |\n");
+	printf("|       æ¬¢è¿è¿›å…¥æ¨ç®±å­æ¸¸æˆv0.5    |\n");
 	printf("|                                 |\n");
-	printf("|           ÇëÑ¡Ôñ¹Ø¿¨            |\n");
-    printf("|          ÊäÈë¹Ø¿¨Êı×Ö           |\n");
-    printf("|          Ä¿Ç°:1 to 1            |\n");
-    printf("|                                 |\n");
-    printf("|           0£ºÍË³öÓÎÏ·           |\n");
-    printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+	printf("|           è¯·é€‰æ‹©å…³å¡            |\n");
+   	printf("|          è¾“å…¥å…³å¡æ•°å­—           |\n");
+   	printf("|          ç›®å‰:1 to 1            |\n");
+   	printf("|                                 |\n");
+    	printf("|           0ï¼šé€€å‡ºæ¸¸æˆ           |\n");
+    	printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 	return ;
 }
 void game_open(int x)
@@ -101,10 +101,8 @@ void Map_display()
 	for(int i=1;i<=n;++i)
 	printf("%s\n",game_map[i]);
 	printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-	printf("ÇëÊäÈëwasd½øĞĞÒÆ¶¯\n");
-	printf("ÊäÈëpÈÏÊä\n");
-	printf("ÊäÈën²é¿´ÅÅÃû\n");
-	printf("ÊäÈërÖØÖÃÅÅÃû\n");
+	printf("è¯·è¾“å…¥wasdè¿›è¡Œç§»åŠ¨\n");
+	printf("è¾“å…¥pè®¤è¾“\n");
 }
 void map_check()
 {
@@ -119,7 +117,7 @@ void plmove(int x)
 {
 	if(game_map[px+pmx[x]][py+pmy[x]]=='X')
 	{
-		printf("×²Ç½ÁË\n");
+		printf("æ’å¢™äº†\n");
 		return ;
 	}
 	if(game_map[px+pmx[x]][py+pmy[x]]=='#')
@@ -147,7 +145,7 @@ void box_move(int x)
 	if(game_map[tx][ty] == '.'||game_map[tx][ty] == '@') game_map[tx][ty] = '#' ;
 	else 
 	{
-		printf("Ïä×ÓÍÆ²»¶¯!!!\n");
+		printf("ç®±å­æ¨ä¸åŠ¨!!!\n");
 		return ;
 	}
 	pl_updata(x);
@@ -167,9 +165,7 @@ void game_work()
 			case 'w':plmove(2);break;
 			case 'd':plmove(3);break;
 			case 'p':keep_flag=0;break;
-			case 'n':rank_show();break;
-			case 'r':rank_reset();break;
-			default :printf("´íÎóÖ¸Áî!");
+			default :printf("é”™è¯¯æŒ‡ä»¤!");
 			
 		}
 		Sleep(500);
@@ -190,19 +186,19 @@ void game_over()
 	if(win_flag)
 	{
 		int pl_scour =10000-move_num*10;
-		printf("¹§Ï²£¬¹ı¹ØÁË£¡£¡£¡£¡\n");
-		printf("¹§Ï²£¬¹ı¹ØÁË£¡£¡£¡£¡\n");
-		printf("¹§Ï²£¬¹ı¹ØÁË£¡£¡£¡£¡\n"); 
-		printf("ÄúµÄµÃ·ÖÊÇ£º%d\n",pl_scour);
-		printf("ÄúµÄÃû×ÖÊÇ£º");
+		printf("æ­å–œï¼Œè¿‡å…³äº†ï¼ï¼ï¼ï¼\n");
+		printf("æ­å–œï¼Œè¿‡å…³äº†ï¼ï¼ï¼ï¼\n");
+		printf("æ­å–œï¼Œè¿‡å…³äº†ï¼ï¼ï¼ï¼\n"); 
+		printf("æ‚¨çš„å¾—åˆ†æ˜¯ï¼š%d\n",pl_scour);
+		printf("æ‚¨çš„åå­—æ˜¯ï¼š");
 		cin>>pl_now_name;
 		data_save(pl_scour);
 	}
 	else 
 	{
-		printf("±§Ç¸£¬ÄúÃ»ÄÜ¹ı¹Ø\n");
+		printf("æŠ±æ­‰ï¼Œæ‚¨æ²¡èƒ½è¿‡å…³\n");
 	}
-	printf("  #Çë°´»Ø³µ¼ü·µ»Ø²Ëµ¥#  \n");
+	printf("  #è¯·æŒ‰å›è½¦é”®è¿”å›èœå•#  \n");
 	morex=getchar();morex=getchar();
 }
 void data_save(int x)
@@ -233,7 +229,7 @@ void data_save(int x)
 	FILE *fpp=fopen(game_num_name.c_str(),"w");
 	for(int i=1;i<10;++i)
 	{
-		fprintf(fpp,"µÚ%dÃû£º%s %d\n",i,pl_name[i],pl_scour[i]);
+		fprintf(fpp,"ç¬¬%dåï¼š%s %d\n",i,pl_name[i],pl_scour[i]);
 	}
 	fclose(fpp);
 	return ;
