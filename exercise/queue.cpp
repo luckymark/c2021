@@ -63,27 +63,63 @@ int main(){
 #include<stdlib.h>
 using namespace std;
 
-typedef struct{
-    int g;
-    qq *n;
-}qq;
+typedef struct Qnode{
+    int data;
+    struct Qnode *n;
+}Qnode;
 
-qq* qinit(int n){
-    qq *p;
-    p=(qq*)malloc(n*sizeof(qq));
-    if(p==NULL){
-        printf("Wrong");
-        return;
-    }
+Qnode * qinit(){
+    Qnode *p=(Qnode*)malloc(sizeof(Qnode));
+    p->n=NULL;
     return p;
 }
 
+Qnode* qpush(Qnode *e,int b){
+    Qnode *p=(Qnode*)malloc(sizeof(Qnode));
+    p->n=NULL;
+    p->data=b;
+    e->n=p;
+    e=p;
+    return e;
+}
+
+Qnode* qpop(Qnode * h,Qnode * e){
+    if(h->n==NULL){
+        printf("The queue is empty");
+        return e;
+    }  
+    Qnode *p=h->n;
+    printf("%d\n",p->data);
+    h->n=p->n;
+    if(p->n==e->n){
+        h=e;
+    }
+    free(p);
+    return e;
+}
 int main(){
-    int n;
-    scanf("%d",&n);
-    qq *aq=qinit(n);
-    qq *h,*e;
-    h=e=aq;
-    
+    Qnode *h,*e,*q;
+    q=h=e=qinit();
+    int t;
+    do{
+        printf("input 1 to puah a num\n");
+        printf("input 2 to pop a num\n");
+        printf("input 3 to end\n");
+        scanf("%d",&t);
+        switch(t){
+            case 1:{
+                int indata;
+                scanf("%d",&indata);
+                e=qpush(e,indata);
+                break;
+            }
+            case 2:{
+                e=qpop(h,e);
+                break;
+            }
+        }
+        if(t==3)
+        break;    
+    }while(true);
     return 0;
 }
