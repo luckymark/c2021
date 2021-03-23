@@ -1,0 +1,70 @@
+#include<bits/stdc++.h>
+using namespace std;
+struct linkedlist
+{
+	linkedlist*next;
+	int key;
+};
+void insert(linkedlist*h,linkedlist*p)
+{
+	linkedlist*t=h;
+	while(1)
+	{
+		if(t->next==NULL)
+		{
+			t->next=p;
+			break;
+		} 
+		t=t->next;
+	}
+}
+void _delete(linkedlist*h)
+{
+	h=h->next;
+}
+void search(linkedlist*h,int k)
+{
+	linkedlist*t=h;
+	for(int i=0;t!=NULL;i++)
+	{
+		if(t->key==k)	cout<<i<<" ";
+		t=t->next;
+	}
+	cout<<-1<<endl;
+}
+int main()
+{
+	linkedlist*head;
+	int key,n;
+	cin>>n>>key;
+	head=(linkedlist*)malloc(n*sizeof(linkedlist));
+	*head=(linkedlist){NULL,key};
+	for(int i=1;i<n;i++)
+	{
+		cin>>key;
+		head[i]=(linkedlist){NULL,key};
+		insert(head,head+i);
+	}
+	linkedlist*t=head;
+	for(int i=0;i<n;i++)
+	{
+		cout<<t->key<<" ";
+		t=t->next;
+	}
+	cout<<endl;
+	head->next=NULL;
+	for(int i=1;i<n;i++)
+	{
+		head[i].next=head+i-1;
+	}
+	t=head+n-1;
+	for(int i=0;i<n;i++)
+	{
+		cout<<t->key<<" ";
+		t=t->next;
+	}
+	cout<<endl;
+	search(head+n-1,5);
+	free(head);
+	return 0;
+} 
