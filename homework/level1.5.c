@@ -4,11 +4,35 @@
 - i<sqrt(n)就可以结束了
 - 用数组记录质数，然后直接循环除质数就可以了，不用把所有的数循环一遍
 */
+
 #include <stdio.h>
 #include <time.h>
 #include <math.h>
+
+void isprime_1();
+void isprime_2();
+
+int main()
+{
+	clock_t start_t, finish_t;
+	double total_t;
+
+	start_t = clock();
+	isprime_1();
+	finish_t = clock();
+	total_t = (double)(finish_t - start_t) / CLOCKS_PER_SEC;
+	printf("\n质数数组法运行总时间是%f 秒\n", total_t);
+
+	start_t = clock();
+	isprime_2();
+	finish_t = clock();
+	total_t = (double)(finish_t - start_t) / CLOCKS_PER_SEC;
+	printf("\n直接循环取余程序运行总时间是%f 秒\n", total_t);
+	return 0;
+}
+
 void isprime_1()
-{   
+{
 	int x = 0, isprime, n = 3, a[1000] = { 2,0 };
 
 	while (n < 1000)
@@ -16,7 +40,7 @@ void isprime_1()
 		isprime = 1;
 		for (int i = 0;a[i] < sqrt(n);i++)
 		{
-			if (n % a[i] == 0)
+			if (n % a[i]==0)
 			{
 				isprime = 0;
 				break;
@@ -62,23 +86,4 @@ void isprime_2()
 			else printf("%d\t", i);
 		}
 	}
-}
-
-int main()
-{
-	clock_t start_t, finish_t;
-	double total_t;
-
-	start_t = clock();
-	isprime_1();
-	finish_t = clock();
-	total_t = (double)(finish_t - start_t) / CLOCKS_PER_SEC;
-	printf("\n质数数组法运行总时间是%f 秒\n", total_t);
-
-	start_t = clock();
-	isprime_2();
-	finish_t = clock();
-	total_t = (double)(finish_t - start_t) / CLOCKS_PER_SEC;
-	printf("\n直接循环取余程序运行总时间是%f 秒\n", total_t);
-	return 0;
 }
