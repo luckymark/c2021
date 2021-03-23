@@ -95,5 +95,5 @@ int main()
 	w.X = 0;
 	w.Y = 41;
 	SetConsoleCursorPosition(hOut, w);
-	printf("æˆåŠŸé€šå…³");
+	printf("¹§Ï²¹ı¹Ø£¡");
 }
