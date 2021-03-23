@@ -34,8 +34,8 @@ void print_map()
 struct Node //every node denotes a path
 {
     bool get_destination;
-    int step; //the steps the node run
-    int gene[512];
+    int step;            //the steps the node run
+    bool gene[512];      // denotes the gene
     inline void create() //create gene
     {
         for (int i = 0; i < len; i++)
@@ -123,6 +123,8 @@ struct Node //every node denotes a path
     }
     inline void variation() // make one of the gene be modified
     {
+        if (step == 0)
+            return; //This is a great bug!!!
         int var = rand() % (step * 2);
         gene[var] = gene[var] | 1;
     }
@@ -173,7 +175,7 @@ struct Node //every node denotes a path
             Sleep(500);
             if (posy == Size && posx == Size)
                 return;
-            Sleep(100);
+            Sleep(30);
         }
     }
 };
@@ -238,8 +240,6 @@ bool generate() // give birth to the next genertion
         Sleep(100);
         return true;
     }
-    if (times % 100 == 0)
-        n[1].show_path();
     for (int i = total_num; i >= total_num / 2 + 1; i--)
         n.pop_back();
     for (int i = 1; i <= total_num / 2; i++)
@@ -252,8 +252,6 @@ bool generate() // give birth to the next genertion
     {
         int k = rand() % n.size() + 1;
         n[k].variation(); //variate;
-        //int var = rand() % (n[k].step * 2);
-        //n[k].gene[var] = n[k].gene[var] | 1;
     }
     return false;
 }
