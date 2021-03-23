@@ -13,18 +13,17 @@ bool isPrime(int num)
 	return true;
 }
 
-
 int main()
 {
 	int n = 0;
 	scanf("%d", &n);
 	if (isPrime(n))
 	{
-		printf("%dÊÇËØÊı", n);
+		printf("%dæ˜¯ç´ æ•°", n);
 	}
 	else
 	{
-		printf("%d²»ÊÇËØÊı", n);
+		printf("%dä¸æ˜¯ç´ æ•°", n);
 	}
 
 }
