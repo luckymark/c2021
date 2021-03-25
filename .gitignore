@@ -1,6 +1,7 @@
 #ignore bin#
 /bin/
 /.vscode/
+/exercise/
 
 .DS_Store
 *.o
