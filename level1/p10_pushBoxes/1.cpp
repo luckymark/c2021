@@ -1,5 +1,4 @@
 //操作：上:w		下:s		左:a		右:d		
-//*是箱子应该移到的位置；@表示箱子
 #include<stdio.h>
 #include<windows.h>
 #include<conio.h>
@@ -200,5 +199,9 @@ void move(char b[], int row, int col)
 			}
 		}
 	}
+	FILE* fp;
+	fopen_s(&fp, "E:\\test\\score.txt", "a");
+	fprintf(fp, "your score of level %d is %d\n", level, score);
+	fclose(fp);
 	level++;
 }
