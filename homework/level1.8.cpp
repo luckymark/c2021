@@ -8,8 +8,6 @@ int main()
 	printf("please input the number of your disks:");
 	scanf("%d", &n);
 	move(n, 'A', 'B', 'C');
-
-
 }
 void move(int m, char a, char b, char c)//move函数的作用是把m块盘子移到目标柱 
 {
