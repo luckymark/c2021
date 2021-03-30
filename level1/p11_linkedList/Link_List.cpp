@@ -10,7 +10,8 @@ struct Node
 
 Node* Node_create()
 {
-	int n = 0;
+	printf("输入一个不是0的数开始链表建立（此数不会存在链表里），输入0结束链表结束\n");
+    int n = 0;
 	Node* head, * p1, * p2;
 	p1 = p2 = new Node;
     cin >> p1->date;
