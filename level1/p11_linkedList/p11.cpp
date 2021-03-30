@@ -42,7 +42,7 @@ int main(){
     //scanf("%d",&find);*/
     head=Linkinv(head->next,head);
     //printf("%p\n",head);
-    printf("%d\n",Linkfind(head,5)); 
+    printf("%d\n",Linkfind(head,5));
     //printf("%p\n",head);
     printf("%d\n",Linkfind(head,5));
     return 0;
