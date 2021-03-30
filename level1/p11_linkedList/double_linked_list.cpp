@@ -8,7 +8,7 @@ typedef struct Linklist{
 }Linklist;
 
 
-void Linkinit(int val,int i, Linklist *node){
+void link_init(int val,int i, Linklist *node){
     Linklist *p=(Linklist*)malloc(sizeof(Linklist));
     p->order=i;
     if(node->pre==NULL){
@@ -27,7 +27,7 @@ void Linkinit(int val,int i, Linklist *node){
     }
 }
 
-void Linkinsert(int ord,int valin, Linklist *node){
+void link_insert(int ord,int valin, Linklist *node){
     //printf("!!!!!!!!\n");
     Linklist *p=node->next;
     if(p==NULL){
@@ -56,7 +56,7 @@ void Linkinsert(int ord,int valin, Linklist *node){
     }
 }
 
-void Linkdelete(int valde, Linklist *node){
+void link_delete(int valde, Linklist *node){
     Linklist *p=node->next;
     if(p==NULL){
         printf("the list is empty\n");
@@ -77,7 +77,7 @@ void Linkdelete(int valde, Linklist *node){
     }
 }
 
-void Linkfind(int valfd, Linklist *node){
+void link_find(int valfd, Linklist *node){
     Linklist *p=node->next;
     if(p==NULL){
         printf("the list is empty\n");
@@ -92,7 +92,7 @@ void Linkfind(int valfd, Linklist *node){
     printf("the location of %d is %d",valfd,p->order);
 }
 
-void Linkshow(Linklist *node){
+void link_show(Linklist *node){
     Linklist *p=node->next;
     if(p==NULL){
         printf("the list is empty\n");
@@ -114,7 +114,7 @@ int main(){
     for(int i=1;i<=size;i++){
         int val;
         scanf("%d",&val);
-        Linkinit(val,i,node);
+        link_init(val,i,node);
     }
     puts("input 1 to insert");
     puts("input 2 to delete");
@@ -128,23 +128,23 @@ int main(){
         case 1:{
             int ord,valin;
             scanf("%d%d",&ord,&valin);
-            Linkinsert(ord,valin,node);
+            link_insert(ord,valin,node);
             break;
         }
         case 2:{
             int valde;
             scanf("%d",&valde);
-            Linkdelete(valde,node);
+            link_delete(valde,node);
             break;
         }
         case 3:{
             int valfd;
             scanf("%d",&valfd);
-            Linkfind(valfd,node);
+            link_find(valfd,node);
             break;
         }
         case 4:{
-            Linkshow(node);
+            link_show(node);
             break;
         }
         case 5:{
