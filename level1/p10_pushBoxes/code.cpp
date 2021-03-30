@@ -3,7 +3,7 @@
 #include<cstring>
 using namespace std;
 int cnt[3]={2,3,5},maze[16][16];
-int x,y=1,cur=1,scr=100000;
+int x,y=1,cur=1,scr[3]={100000,100000,100000},sc;
 string name;
 void readMap(int a)
 {
@@ -54,52 +54,52 @@ void Move()
             case 72:
 			{
 				if(!maze[y-1][x]&&y-1>=0)
-				y--,scr*=0.99;
+				y--,scr[sc]*=0.99;
 				else if(maze[y-1][x]==3&&y-2>=0)
 				{
 					if(maze[y-2][x]==2)
-					maze[y-1][x]=0,maze[y-2][x]=0,y--,scr*=0.99,cnt[cur-1]--;
+					maze[y-1][x]=0,maze[y-2][x]=0,y--,scr[sc]*=0.99,cnt[cur-1]--;
 					else if(!maze[y-2][x])
-					maze[y-2][x]=3,maze[y-1][x]=0,y--,scr*=0.99;
+					maze[y-2][x]=3,maze[y-1][x]=0,y--,scr[sc]*=0.99;
 				}
 				break;
 			}
             case 80:
             {
 				if(!maze[y+1][x]&&y+1<=15)
-				y++,scr*=0.99;
+				y++,scr[sc]*=0.99;
 				else if(maze[y+1][x]==3&&y+2>=0)
 				{
 					if(maze[y+2][x]==2)
-					maze[y+1][x]=0,maze[y+2][x]=0,y++,scr*=0.99,cnt[cur-1]--;
+					maze[y+1][x]=0,maze[y+2][x]=0,y++,scr[sc]*=0.99,cnt[cur-1]--;
 					else if(!maze[y+2][x])
-					maze[y+2][x]=3,maze[y+1][x]=0,y++,scr*=0.99;
+					maze[y+2][x]=3,maze[y+1][x]=0,y++,scr[sc]*=0.99;
 				}
 				break;
 			}
             case 75:
             {
 				if(!maze[y][x-1]&&x-1>=0)
-				x--,scr*=0.99;
+				x--,scr[sc]*=0.99;
 				else if(maze[y][x-1]==3&&x-2>=0)
 				{
 					if(maze[y][x-2]==2)
-					maze[y][x-1]=0,maze[y][x-2]=0,x--,scr*=0.99,cnt[cur-1]--;
+					maze[y][x-1]=0,maze[y][x-2]=0,x--,scr[sc]*=0.99,cnt[cur-1]--;
 					else if(!maze[y][x-2])
-					maze[y][x-2]=3,maze[y][x-1]=0,x--,scr*=0.99;
+					maze[y][x-2]=3,maze[y][x-1]=0,x--,scr[sc]*=0.99;
 				}
 				break;
 			}
             case 77:
             {
 				if(!maze[y][x+1]&&x+1<=15)
-				x++,scr*=0.99;
+				x++,scr[sc]*=0.99;
 				else if(maze[y][x+1]==3&&x+2>=0)
 				{
 					if(maze[y][x+2]==2)
-					maze[y][x+1]=0,maze[y][x+2]=0,x++,scr*=0.99,cnt[cur-1]--;
+					maze[y][x+1]=0,maze[y][x+2]=0,x++,scr[sc]*=0.99,cnt[cur-1]--;
 					else if(!maze[y][x+2])
-					maze[y][x+2]=3,maze[y][x+1]=0,x++,scr*=0.99;
+					maze[y][x+2]=3,maze[y][x+1]=0,x++,scr[sc]*=0.99;
 				}
 				break;
 			}
@@ -125,12 +125,13 @@ int main()
 		readMap(cur);
 		while(cnt[cur-1])
 		Move();
-		x=0,y=1,cur++;
+		x=0,y=1,cur++,sc++;
 	}
 	system("cls");
 	cout<<"You Win!"<<endl;
-	cout<<"Your score: "<<scr;
+	cout<<"Your score:"<<endl;
+	cout<<"Level1 Score: "<<scr[0]<<" Level2 Score: "<<scr[1]<<" Level3 Score: "<<scr[2];
 	freopen("score.txt","w",stdout);
-	cout<<"Name: "<<name<<" Score: "<<scr;
+	cout<<"Name: "<<name<<" Level1 Score: "<<scr[0]<<" Level2 Score: "<<scr[1]<<" Level3 Score: "<<scr[2];
 	return 0;
 }
