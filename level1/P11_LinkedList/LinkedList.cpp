@@ -75,27 +75,72 @@ int get(int i) {
 	return -1;
 }
 
+int size() {
+	int s = 0;
+	for (NODE *nod = head; nod != nullptr; nod = nod->next) {
+		s++;
+	}
+	return s;
+}
+
+int indexOf(int dat, int st) {
+	int j = 0;
+	for (NODE *nod = head; nod != nullptr; nod = nod->next, j++) {
+		if (j >= st && nod->data == dat)
+			return j;
+	}
+	return -1;
+}
+int indexOf(int dat) {
+	return indexOf(dat, 0);
+}
+
+void reverse() {
+	int s = size();
+	NODE **lst = (NODE**)malloc(sizeof(NODE*) * s);
+	int i = 0;
+	for (NODE *nod = head; nod != nullptr; nod = nod->next, i++) {
+		lst[s - i - 1] = nod;
+	}
+	for (i = 0; i < s; i++) {
+		NODE *nod = lst[i], *nxt = nod->next;
+		nod->next = nod->prev;
+		nod->prev = nxt;
+	}
+	NODE *nod = head;
+	head = tail;
+	tail = nod;
+}
+
 void trace() {
-	puts("T");
 	if (head == nullptr) {
-		puts("N Empty");
+		puts(" N Empty");
 		return;
 	}
 	int i = 0;
 	for (NODE *nod = head; nod != nullptr; nod = nod->next) {
-		printf("N%04d %d\n", i, nod->data);
+		printf(" N%04d %d\n", i, nod->data);
 		i++;
 	}
 }
 
 int main() {
-	push(2);
+	puts("INIT");
 	push(3);
-	insert(1);
-	insert(0);
+	push(4);
 	pop();
+	push(5);
+	insert(1);
+	insert(2);
 	shift();
-	printf("N %d %d\n", get(0), get(1));
+	puts("GET");
+	printf(" N* %d %d %d\n", get(0), get(1), get(2));
+	puts("REVERSE");
+	reverse();
+	puts("TRACE");
 	trace();
+	puts("FIND");
+	int i = indexOf(5);
+	printf(" L5 %d %d\n", i, indexOf(5, i + 1));
 	return 0;
 }
