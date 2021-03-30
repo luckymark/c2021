@@ -48,7 +48,7 @@ int main()
 		{
 			if(mp[i][j]==1) cout<<"  ";
 			else if(mp[i][j]==0) cout<<"口";
-			else if(mp[i][j]==2) cout<<"睿"; 
+			else if(mp[i][j]==2) cout<<"人"; 
 		}
 		cout<<endl; 
 	}
@@ -60,8 +60,7 @@ int main()
 		int y0=nod.ny;
 		if(x0==42 && y0==43)
 		{
-			cout<<"睿睿好棒我好爱！"<<endl;
-			cout<<"注:王睿是我老婆，望周知 ：-）"<<endl; 
+			cout<<"恭喜你，通关了！"<<endl;
 			system("pause"); 
 			break;
 		}
@@ -100,7 +99,7 @@ int main()
 				{
 					if(mp[i][j]==1) cout<<"  ";
 					else if(mp[i][j]==0) cout<<"口";
-					else if(mp[i][j]==2) cout<<"睿"; 
+					else if(mp[i][j]==2) cout<<"人"; 
 				}
 				cout<<endl; 
 			}
