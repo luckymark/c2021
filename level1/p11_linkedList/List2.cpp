@@ -27,6 +27,15 @@ struct List{
 		head -> next = tail;
 	}
 
+	inline void reverse(){
+		Node *ptr = head;
+		while(ptr != NULL){
+			swap(ptr -> prev, ptr -> next);
+			ptr = ptr -> prev;
+		}
+		swap(head, tail);
+	}
+
 	inline Node* push_back(const int &x){
 		Node *NewNode = (Node *)malloc(sizeof(Node));
 		assert(NewNode);
@@ -64,9 +73,10 @@ struct List{
 	}
 
 	inline Node* insert(const int &ID, const int &x){
+		if(ID <= 0)return NULL;
 		Node *ptr = head;
-		for(int i = 1; i < ID; ++i){
-			if(ptr -> next != tail){
+		for(int i = 0; i < ID; ++i){
+			if(ptr -> next){
 				ptr = ptr -> next;
 			}
 			else {
@@ -76,8 +86,11 @@ struct List{
 		Node *NewNode = (Node *)malloc(sizeof(Node));
 		assert(NewNode);
 		NewNode -> val = x;
-		NewNode -> next = ptr -> next;
-		return ptr -> next = NewNode;
+		ptr -> prev -> next = NewNode;
+		NewNode -> prev = ptr -> prev;
+		NewNode -> next = ptr;
+		ptr -> prev = NewNode;
+		return NewNode;
 	}
 
 	inline Node* find_next(Node *ptr, const int &x){
@@ -111,16 +124,18 @@ struct List{
 	}
 
 	inline void erase_val(const int &x){
-		Node *ptr = head;
-		while(ptr -> next != tail){
-			if(ptr -> next -> val == x){
-				erase(ptr -> next);
+		Node *ptr = head -> next;
+		while(ptr != tail){
+			Node *next = ptr -> next;
+			if(ptr -> val == x){
+				erase(ptr);
 			}
-			ptr = ptr -> next;
+			ptr = next;
 		}
 	}
 
 	inline void erase_ID(const int ID){
+		if(ID <= 0)return ;
 		Node *ptr = head;
 		for(int i = 0; i < ID; ++i){
 			if(ptr -> next != tail){
@@ -134,13 +149,14 @@ struct List{
 	}
 
 	inline void visit(){
-		Node *ptr = head;
-		while(ptr -> next != tail){
-			ptr = ptr -> next;
+		Node *ptr = head -> next;
+		while(ptr != tail){
 			printf("%d ",ptr -> val);
+			ptr = ptr -> next;
 		}
 		puts("");
 	}
+
 }List;
 
 int main(){
@@ -155,11 +171,14 @@ int main(){
 	List.visit();
 	List.push_back(1);
 	List.insert(2, 1);
+	List.insert(4, 2);
+	List.visit();
+	List.reverse();
 	List.visit();
 	List.pop_back();
 	List.pop_front();
 	List.visit();
-	List.erase_val(1);
+	List.erase_val(2);
 	List.visit();
 	return 0;
 }
