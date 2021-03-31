@@ -423,6 +423,17 @@ void right()
 int main()
 {
     read_map();
+    int sum = 0;
+    for(int i = 0;i<8;i++)
+    {
+    	for(int j = 0;j<8;j++)
+    	{
+    		if(4==map[i][j])
+    		{
+    			sum++;
+			}
+		}
+	}
     while(1)
     {
         system("cls");
@@ -436,7 +447,7 @@ int main()
                     num++;
             }
         }
-        if(4==num)
+        if(sum==num)
         {
             printf("游戏结束！，共走了%d步", step);
             break;
