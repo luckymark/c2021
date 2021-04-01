@@ -40,7 +40,7 @@ int main(){
 				printf("\n");
 			}	
 			
-	printf("\n#是箱子 x是小人\n请用上下左右游玩\n");
+	printf("\n#是箱子 x是小人\n请用上下左右游玩\nr键重开");
 	
 	
 	while(1){
@@ -52,28 +52,32 @@ int main(){
 			}else if (ch1==0xe0||ch1==0x00){
 			ch2=getch();
 			switch (ch2){
-				case 72:if(x-1==x1&&y==y1&&maze[x1-1][y1]!=1){
+				case 72:
+					if(x-1==x1&&y==y1&&maze[x1-1][y1]!=1){
 					x-=1;
 					x1-=1;	
 				}else if(maze[x-1][y]==0&&x-1!=x1|y!=y1){
 					x-=1;
 				}
 					break;//up
-				case 80:if(x+1==x1&&y==y1&&maze[x1+1][y1]!=1){
+				case 80:
+					if(x+1==x1&&y==y1&&maze[x1+1][y1]!=1){
 					x+=1;
 					x1+=1;	
 				}else if(maze[x+1][y]==0&&x+1!=x1|y!=y1){
 					x+=1;
 				}
 						break;//down
-				case 75:if(x==x1&&y-1==y1&&maze[x1][y1-1]!=1){
+				case 75:
+					if(x==x1&&y-1==y1&&maze[x1][y1-1]!=1){
 					y-=1;
 					y1-=1;	
 				}else if(maze[x][y-1]==0&&y-1!=y1|x!=x1){
 					y-=1;
 				}
 						break;//left
-				case 77:if(x==x1&&y+1==y1&&maze[x1][y1+1]!=1){
+				case 77:
+					if(x==x1&&y+1==y1&&maze[x1][y1+1]!=1){
 					y+=1;
 					y1+=1;	
 				}else if(maze[x][y+1]==0&&y+1!=y1|x!=x1){
