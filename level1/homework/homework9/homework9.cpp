@@ -5,8 +5,8 @@
 #include<conio.h>
 #include<time.h>
 #define random(x) (rand()%(x))
-#define Y 9
-#define X 13
+#define Y 28 //设置地图行数
+#define X 45 //设置地图列数
 
 int main()
 {
@@ -21,38 +21,80 @@ int main()
 	x[0][map + 1] = ' ';
 	x[1][map + 1] = ' ';
 	currentX = map+1;
-	startX = currentX;
+	startX = currentX;//记录开始坐标
 	while (1) {//随机生成地图
 		map = random(4);
 		switch (map) {
-		case 0:
-			if ((currentY > 1 && currentX > 0 && currentX < X
-				&& x[currentY - 1][currentX - 1] != ' '
-				&& x[currentY - 1][currentX + 1] != ' ')
-				|| x[currentY - 1][currentX] == ' ')
-				currentY--;
+		case 0://上
+			if (currentX > 0 && currentX < X) {
+				if (currentY > 2) {
+					if ((x[currentY - 2][currentX] != ' '
+						&& x[currentY - 1][currentX - 1] != ' '
+						&& x[currentY - 1][currentX + 1] != ' ')
+						|| x[currentY - 1][currentX] == ' ')
+						currentY--;
+				}
+				else if (currentY > 1) {
+					if ((x[currentY - 1][currentX - 1] != ' '
+						&& x[currentY - 1][currentX + 1] != ' ')
+						|| x[currentY - 1][currentX] == ' ')
+						currentY--;
+				}
+			}
 			break;
-		case 1:
-			if ((currentY < Y-1 && currentX > 0 && currentX < X
-				&& x[currentY + 1][currentX - 1] != ' '
-				&& x[currentY + 1][currentX + 1] != ' ')
-				|| x[currentY + 1][currentX] == ' '
-				|| currentY == 8)
-				currentY++;
+		case 1://下
+			if (currentX > 0 && currentX < X) {
+				if (currentY < Y - 2) {
+					if ((x[currentY + 2][currentX] != ' '
+						&& x[currentY + 1][currentX - 1] != ' '
+						&& x[currentY + 1][currentX + 1] != ' ')
+						|| x[currentY + 1][currentX] == ' ')
+						currentY++;
+				}
+				else if (currentY < Y - 1) {
+					if ((x[currentY + 1][currentX - 1] != ' '
+						&& x[currentY + 1][currentX + 1] != ' ')
+						|| x[currentY + 1][currentX] == ' ')
+						currentY++;
+				}
+				else if (currentY == Y - 1)//终点设置
+					currentY++;
+			}
 			break;
-		case 2:
-			if ((currentX > 1 && currentY > 0 && currentY < Y 
-				&& x[currentY - 1][currentX - 1] != ' '
-				&& x[currentY + 1][currentX - 1] != ' ')
-				|| x[currentY][currentX - 1] == ' ')
-				currentX--;
+		case 2://左
+			if (currentY > 0 && currentY < Y) {
+				if (currentX > 2) {
+					if ((x[currentY][currentX - 2] != ' '
+						&& x[currentY - 1][currentX - 1] != ' '
+						&& x[currentY + 1][currentX - 1] != ' ')
+						|| x[currentY][currentX - 1] == ' ')
+						currentX--;
+				}
+				else if (currentX > 1) {
+					if ((x[currentY - 1][currentX - 1] != ' '
+						&& x[currentY + 1][currentX - 1] != ' ')
+						|| x[currentY][currentX - 1] == ' ')
+						currentX--;
+				}
+			}
 			break;
-		case 3:
-			if ((currentX < X-1 && currentY > 0 && currentY < Y
-				&& x[currentY - 1][currentX + 1] != ' '
-				&& x[currentY + 1][currentX + 1] != ' ')
-				|| x[currentY][currentX + 1] == ' ')
-				currentX++;
+		case 3://右
+			if (currentY > 0 && currentY < Y) {
+				if (currentX < X - 2) {
+					if (
+						(x[currentY][currentX + 2] != ' '
+							&& x[currentY - 1][currentX + 1] != ' '
+							&& x[currentY + 1][currentX + 1] != ' ')
+						|| x[currentY][currentX + 1] == ' ')
+						currentX++;
+				}
+				else if (currentX < X - 1) {
+					if ((x[currentY - 1][currentX + 1] != ' '
+						&& x[currentY + 1][currentX + 1] != ' ')
+						|| x[currentY][currentX + 1] == ' ')
+						currentX++;
+				}
+			}
 			break;
 		}
 		x[currentY][currentX] = ' ';
@@ -62,7 +104,7 @@ int main()
 		}
 	}
 	currentY = 0;
-	endX = currentX;
+	endX = currentX;//记录终点坐标
 	currentX = startX;
 	while (1) {
 		system("cls");
