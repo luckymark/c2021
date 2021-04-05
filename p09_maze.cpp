@@ -1,3 +1,4 @@
+//此程序的地图是用深度优先搜素算法（dfs）随机生成的！
 #include<bits/stdc++.h>
 #include <conio.h>
 using namespace std;
