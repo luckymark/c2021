@@ -1,0 +1,16 @@
+2
+6 17 scores:34 
+XXXXXXXXXXXXXXXXX
+XXl    XPX   XXXX
+XX oXX X Xo  XXXX
+XXXPXX       XXXX
+XXXXXX      XXXXX
+XXXXXXXXXXXXXXXXX
+7 17 scores:14 
+XXXXXXXXXXXXXXXXX
+XXl    XPX      X
+XX oXX X Xo     X
+XX PXX          X
+X               X
+X               X
+XXXXXXXXXXXXXXXXX
