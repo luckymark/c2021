@@ -71,7 +71,7 @@ void reverse(void){
 		p1->next=p2;
 		p2->next=NULL;
 		head->next=p1;
-	}else{
+	}else{ 
 	p=p2;
 	p2=p1;
 	p1=p1->next;

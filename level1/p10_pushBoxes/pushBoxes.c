@@ -10,19 +10,30 @@
 
 int main(){
 	int step=0;
-	int x=1,y=1,i=0,j=0;
-	int x1=2,y1=2;
+	int x,y,i=0,j=0;
+	int x1,y1;
 	int ch1=0,ch2=0;
-	int maze[8][10]={   //【行】】【列】 
-		{1,1,1,1,1,1,1,1,2,1},
-		{1,0,1,0,0,0,0,1,0,1},
-		{1,0,0,0,0,0,1,0,0,1},
-		{1,0,0,1,1,0,0,1,0,1},
-		{1,0,0,0,0,0,0,0,0,1},
-		{1,0,1,0,1,1,0,1,0,1},
-		{1,0,0,0,0,0,0,0,0,1},
-		{1,1,1,1,1,1,1,1,1,1}};
-							
+	int maze[8][10];
+	char stage;
+	printf("Chose stage 1 or 2 or 3");
+	stage=getch();
+	system("cls");
+	switch(stage){
+	case '1':freopen("maze1.txt","r",stdin);break;
+	case '2':freopen("maze2.txt","r",stdin);break;
+	case '3':freopen("maze3.txt","r",stdin);break;
+	}
+	scanf("%d",&x);
+	scanf("%d",&y);
+	scanf("%d",&x1);
+	scanf("%d",&y1);
+	for(i=0;i<8;i++){
+		for(j=0;j<10;j++){
+			scanf("%d",&maze[i][j]);
+		}
+	}	
+	
+						
 	for(i=0;i<8;i++){
 				for(j=0;j<10;j++){
 					if(x==i&&y==j){
@@ -40,16 +51,17 @@ int main(){
 				printf("\n");
 			}	
 			
-	printf("\n#是箱子 x是小人\n请用上下左右游玩\nr键重开");
+	printf("\n#是箱子 x是小人\n请用上下左右游玩");
 	
 	
 	while(1){
 		
 			ch1=getch();
-			if(ch1=='r'){
-				x=1,y=1;
-				x1=2,y1=2;
-			}else if (ch1==0xe0||ch1==0x00){
+//			if(ch1=='r'){
+//				x=1,y=1;
+//				x1=2,y1=2;
+//			}else 
+	if (ch1==0xe0||ch1==0x00){
 			ch2=getch();
 			switch (ch2){
 				case 72:
