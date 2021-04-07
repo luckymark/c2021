@@ -4,6 +4,9 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+  "E:/C-VS/c2021/Experiment/FiveInARow/Board/Board.cpp" "E:/C-VS/c2021/Experiment/FiveInARow/cmake-build-debug/CMakeFiles/FiveInARow.dir/Board/Board.cpp.obj"
+  "E:/C-VS/c2021/Experiment/FiveInARow/Game/Game.cpp" "E:/C-VS/c2021/Experiment/FiveInARow/cmake-build-debug/CMakeFiles/FiveInARow.dir/Game/Game.cpp.obj"
+  "E:/C-VS/c2021/Experiment/FiveInARow/Interaction/Console.cpp" "E:/C-VS/c2021/Experiment/FiveInARow/cmake-build-debug/CMakeFiles/FiveInARow.dir/Interaction/Console.cpp.obj"
   "E:/C-VS/c2021/Experiment/FiveInARow/main.cpp" "E:/C-VS/c2021/Experiment/FiveInARow/cmake-build-debug/CMakeFiles/FiveInARow.dir/main.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")

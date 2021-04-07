@@ -142,6 +142,87 @@ FiveInARow/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\FiveInARow.dir\build.make CMakeFiles/FiveInARow.dir/build
 .PHONY : FiveInARow/fast
 
+Board/Board.obj: Board/Board.cpp.obj
+
+.PHONY : Board/Board.obj
+
+# target to build an object file
+Board/Board.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\FiveInARow.dir\build.make CMakeFiles/FiveInARow.dir/Board/Board.cpp.obj
+.PHONY : Board/Board.cpp.obj
+
+Board/Board.i: Board/Board.cpp.i
+
+.PHONY : Board/Board.i
+
+# target to preprocess a source file
+Board/Board.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\FiveInARow.dir\build.make CMakeFiles/FiveInARow.dir/Board/Board.cpp.i
+.PHONY : Board/Board.cpp.i
+
+Board/Board.s: Board/Board.cpp.s
+
+.PHONY : Board/Board.s
+
+# target to generate assembly for a file
+Board/Board.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\FiveInARow.dir\build.make CMakeFiles/FiveInARow.dir/Board/Board.cpp.s
+.PHONY : Board/Board.cpp.s
+
+Game/Game.obj: Game/Game.cpp.obj
+
+.PHONY : Game/Game.obj
+
+# target to build an object file
+Game/Game.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\FiveInARow.dir\build.make CMakeFiles/FiveInARow.dir/Game/Game.cpp.obj
+.PHONY : Game/Game.cpp.obj
+
+Game/Game.i: Game/Game.cpp.i
+
+.PHONY : Game/Game.i
+
+# target to preprocess a source file
+Game/Game.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\FiveInARow.dir\build.make CMakeFiles/FiveInARow.dir/Game/Game.cpp.i
+.PHONY : Game/Game.cpp.i
+
+Game/Game.s: Game/Game.cpp.s
+
+.PHONY : Game/Game.s
+
+# target to generate assembly for a file
+Game/Game.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\FiveInARow.dir\build.make CMakeFiles/FiveInARow.dir/Game/Game.cpp.s
+.PHONY : Game/Game.cpp.s
+
+Interaction/Console.obj: Interaction/Console.cpp.obj
+
+.PHONY : Interaction/Console.obj
+
+# target to build an object file
+Interaction/Console.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\FiveInARow.dir\build.make CMakeFiles/FiveInARow.dir/Interaction/Console.cpp.obj
+.PHONY : Interaction/Console.cpp.obj
+
+Interaction/Console.i: Interaction/Console.cpp.i
+
+.PHONY : Interaction/Console.i
+
+# target to preprocess a source file
+Interaction/Console.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\FiveInARow.dir\build.make CMakeFiles/FiveInARow.dir/Interaction/Console.cpp.i
+.PHONY : Interaction/Console.cpp.i
+
+Interaction/Console.s: Interaction/Console.cpp.s
+
+.PHONY : Interaction/Console.s
+
+# target to generate assembly for a file
+Interaction/Console.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\FiveInARow.dir\build.make CMakeFiles/FiveInARow.dir/Interaction/Console.cpp.s
+.PHONY : Interaction/Console.cpp.s
+
 main.obj: main.cpp.obj
 
 .PHONY : main.obj
@@ -178,6 +259,15 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... FiveInARow
+	@echo ... Board/Board.obj
+	@echo ... Board/Board.i
+	@echo ... Board/Board.s
+	@echo ... Game/Game.obj
+	@echo ... Game/Game.i
+	@echo ... Game/Game.s
+	@echo ... Interaction/Console.obj
+	@echo ... Interaction/Console.i
+	@echo ... Interaction/Console.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s

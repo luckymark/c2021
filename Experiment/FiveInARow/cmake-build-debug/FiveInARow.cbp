@@ -80,6 +80,24 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="E:/C-VS/c2021/Experiment/FiveInARow/Board/Board.cpp">
+			<Option target="FiveInARow"/>
+		</Unit>
+		<Unit filename="E:/C-VS/c2021/Experiment/FiveInARow/Board/Board.h">
+			<Option target="FiveInARow"/>
+		</Unit>
+		<Unit filename="E:/C-VS/c2021/Experiment/FiveInARow/Game/Game.cpp">
+			<Option target="FiveInARow"/>
+		</Unit>
+		<Unit filename="E:/C-VS/c2021/Experiment/FiveInARow/Game/Game.h">
+			<Option target="FiveInARow"/>
+		</Unit>
+		<Unit filename="E:/C-VS/c2021/Experiment/FiveInARow/Interaction/Console.cpp">
+			<Option target="FiveInARow"/>
+		</Unit>
+		<Unit filename="E:/C-VS/c2021/Experiment/FiveInARow/Interaction/Console.h">
+			<Option target="FiveInARow"/>
+		</Unit>
 		<Unit filename="E:/C-VS/c2021/Experiment/FiveInARow/main.cpp">
 			<Option target="FiveInARow"/>
 		</Unit>

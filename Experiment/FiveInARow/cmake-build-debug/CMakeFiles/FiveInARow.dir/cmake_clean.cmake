@@ -1,4 +1,7 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/FiveInARow.dir/Board/Board.cpp.obj"
+  "CMakeFiles/FiveInARow.dir/Game/Game.cpp.obj"
+  "CMakeFiles/FiveInARow.dir/Interaction/Console.cpp.obj"
   "CMakeFiles/FiveInARow.dir/main.cpp.obj"
   "FiveInARow.exe"
   "FiveInARow.exe.manifest"

@@ -93,12 +93,12 @@ clean: CMakeFiles/FiveInARow.dir/clean
 CMakeFiles/FiveInARow.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\FiveInARow.dir\build.make CMakeFiles/FiveInARow.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\FiveInARow.dir\build.make CMakeFiles/FiveInARow.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=E:\C-VS\c2021\Experiment\FiveInARow\cmake-build-debug\CMakeFiles --progress-num=1,2 "Built target FiveInARow"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=E:\C-VS\c2021\Experiment\FiveInARow\cmake-build-debug\CMakeFiles --progress-num=1,2,3,4,5 "Built target FiveInARow"
 .PHONY : CMakeFiles/FiveInARow.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/FiveInARow.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start E:\C-VS\c2021\Experiment\FiveInARow\cmake-build-debug\CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start E:\C-VS\c2021\Experiment\FiveInARow\cmake-build-debug\CMakeFiles 5
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/FiveInARow.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start E:\C-VS\c2021\Experiment\FiveInARow\cmake-build-debug\CMakeFiles 0
 .PHONY : CMakeFiles/FiveInARow.dir/rule
