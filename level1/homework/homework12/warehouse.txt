@@ -1,0 +1,6 @@
+WareHouse
+bookI 56
+bookII 70
+xxxx 10
+awfasdf 1
+text 20
