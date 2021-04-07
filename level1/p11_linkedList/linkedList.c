@@ -61,6 +61,7 @@ linklist *listopposite(linklist *Head, int num)
 }
 int checklist(linklist *Head, int num, int want)
 {
+
     linklist *Currentnode = Head;
     int checkornot;
     for (int i = 0; i < num; i++)
