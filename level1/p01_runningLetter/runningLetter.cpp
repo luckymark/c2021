@@ -25,9 +25,9 @@ void runningLetter() {
 
     while (true) {
         GetClientRect(hwnd, &rectW);  //每次刷新获取窗口大小
-        if (x + len == rectW.right / 8)
+        if (x + len >= rectW.right / 8)
             judge = true;
-        else if (x == 0)
+        else if (x <= 0)
             judge = false;
 
         pos.X = x;
