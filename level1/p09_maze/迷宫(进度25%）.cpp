@@ -1,7 +1,6 @@
 #include<iostream>
 #include<cstdio>
 #include<stdlib.h>
-#include<cstdlib>
 #include<windows.h>
 using namespace std;
 
@@ -17,8 +16,8 @@ typedef struct squr{
 };
 
 void print_maze(int n);
-int go_if(struct squr *now);
 void go_through(struct squr **begi);
+struct squr* go_back(struct squr **begi);
 
 int main(){
     char b;
@@ -26,9 +25,30 @@ int main(){
     print_maze(n);
 }
 
+struct squr* go_back(struct squr **begi){
+    bool up=(1-road[(*begi)->x][((*begi)->y)-2])&(((*begi)->y)-2>0);
+    bool down=(1-road[(*begi)->x][(*begi)->y+2])&(((*begi)->y)+2<n);
+    bool left=(1-road[((*begi)->x)-2][(*begi)->y])&(((*begi)->x)-2>0);
+    bool right=(1-road[((*begi)->x)+2][(*begi)->y])&(((*begi)->x)+2<n);
+    int num=0;
+    struct squr *p;
+    if(up)num++;
+    if(down)num++;
+    if(left)num++;
+    if(right)num++;
+    if(num==0){
+        p=(*begi)->former;
+        go_back(&p);
+    }
+    else{
+        return *begi;
+    }
+}
+
 void go_through(struct squr **begi){
     struct squr *go_to=(struct squr*)malloc(sizeof(struct squr));
     struct squr *p;
+    struct squr *again;
     bool up=(1-road[(*begi)->x][((*begi)->y)-2])&(((*begi)->y)-2>0);
     bool down=(1-road[(*begi)->x][(*begi)->y+2])&(((*begi)->y)+2<n);
     bool left=(1-road[((*begi)->x)-2][(*begi)->y])&(((*begi)->x)-2>0);
@@ -111,22 +131,14 @@ void go_through(struct squr **begi){
         }
     }
     else{
-
+        if(finish<int((n/2))*int((n/2))){
+            p=(*begi)->former;
+            again=go_back(&p);
+            go_through(&again);
+        }
     }
 }
 
-int go_if(struct squr *now){
-    bool up=(1-road[now->x][(now->y)-2])&((now->y)-2>0);
-    bool down=(1-road[now->x][now->y+2])&((now->y)+2<n);
-    bool left=(1-road[(now->x)-2][now->y])&((now->x)-2>0);
-    bool right=(1-road[(now->x)+2][now->y])&((now->x)+2<n);
-    int num=0;
-    if(up)num++;
-    if(down)num++;
-    if(left)num++;
-    if(right)num++;
-    return num;
-}
 
 void print_maze(int n){
     struct squr *begin=(struct squr*)malloc(sizeof(struct squr));
@@ -142,36 +154,19 @@ void print_maze(int n){
     begin->y=1;
     finish=1;
     go_through(&begin);
-
+    road[0][1]=1;
+    road[n-1][n-2]=1;
     for(int i=0;i<n;i++){
         for(int j=0;j<n;j++){
             if(road[i][j]){
                 cout<<"  ";
             }
             else{
-                cout<<"0 ";
+                cout<<"O ";
             }
         }
         cout<<endl;
     }
 }
-/*void print_maze(){
-	cout<<"¡ö  " ;
-	for(int i=3;i<=10;i++){
-		cout<<"¡ö";
-	}
-	cout<<endl;
-	for(int i=2;i<=9;i++){
-		cout<<"¡ö";
-		for(int i=2;i<=9;i++){
-			cout<<"  ";
-		}
-		cout<<"¡ö"<<endl;
-	}
-	for(int i=1;i<=8;i++){
-		cout<<"¡ö";
-	}
-	cout<<"  ¡ö";
-}*/
 
 
