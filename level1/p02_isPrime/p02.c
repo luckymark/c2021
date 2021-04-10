@@ -5,14 +5,14 @@ void isPrime(int n)
     if (n==2) printf("%d是素数。\n",n);
     else
     {
-        for (int i=2; i<=n/2; i++)
+        for (int i=2; i<=n/2+1; i++)
         {
             if (n%i==0)
             {
                 printf("%d不是素数。\n",n);
                 break;
             }
-            if (i==n/2) printf("%d是素数。\n",n);
+            if (i==n/2+1) printf("%d是素数。\n",n);
         }
     }
 }
