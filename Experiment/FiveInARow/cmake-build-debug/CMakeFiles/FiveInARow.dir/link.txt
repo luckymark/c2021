@@ -1,0 +1,3 @@
+"D:\CLion 2020.3.2\bin\cmake\win\bin\cmake.exe" -E rm -f CMakeFiles\FiveInARow.dir/objects.a
+C:\mingw64\bin\ar.exe cr CMakeFiles\FiveInARow.dir/objects.a @CMakeFiles\FiveInARow.dir\objects1.rsp
+C:\mingw64\bin\g++.exe -g   -Wl,--whole-archive CMakeFiles\FiveInARow.dir/objects.a -Wl,--no-whole-archive  -o FiveInARow.exe -Wl,--out-implib,libFiveInARow.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\FiveInARow.dir\linklibs.rsp
