@@ -6,7 +6,7 @@ using namespace std;
 
 bool maze[100][100]={0};
 bool road[100][100]={0};
-int n,finish;
+int n,finish,now_x,now_y;
 
 typedef struct squr{
     int x;
@@ -15,14 +15,69 @@ typedef struct squr{
     struct squr *former;
 };
 
-void print_maze(int n);
+void make_maze(int n);
 void go_through(struct squr **begi);
 struct squr* go_back(struct squr **begi);
+void go_up();
+void go_down();
+void go_right();
+void go_left();
+void maze_print(int x,int y);
+
 
 int main(){
     char b;
+    bool end=0;
     cin>>n;
-    print_maze(n);
+    make_maze(n);
+    //maze_print(0,1);
+    now_x=0;
+    now_y=1;
+    while(scanf("%c",&b)&&!end){
+        switch (b){
+            case 'w':
+                go_up();
+                break;
+            case 's':
+                go_down();
+                break;
+            case 'd':
+                go_right();
+                break;
+            case 'a':
+                go_left();
+                break;
+        }
+        maze_print(now_x,now_y);
+        if(now_x==n-1&&now_y==n-2){
+            break;
+        }
+    }
+    cout<<"Congratulation!!";
+}
+
+void go_up(){
+     if(road[now_x-1][now_y]){
+         now_x=now_x-1;
+     }
+}
+
+void go_down(){
+    if(road[now_x+1][now_y]){
+        now_x=now_x+1;
+    }
+}
+
+void go_left(){
+    if(road[now_x][now_y-1]){
+        now_y=now_y-1;
+    }
+}
+
+void go_right(){
+    if(road[now_x][now_y+1]){
+        now_y=now_y+1;
+    }
 }
 
 struct squr* go_back(struct squr **begi){
@@ -140,7 +195,7 @@ void go_through(struct squr **begi){
 }
 
 
-void print_maze(int n){
+void make_maze(int n){
     struct squr *begin=(struct squr*)malloc(sizeof(struct squr));
     for(int i=0;i<n;i++){
         for(int j=0;j<n;j++){
@@ -156,17 +211,21 @@ void print_maze(int n){
     go_through(&begin);
     road[0][1]=1;
     road[n-1][n-2]=1;
+}
+
+void maze_print(int x,int y){
     for(int i=0;i<n;i++){
         for(int j=0;j<n;j++){
-            if(road[i][j]){
+            if(road[i][j]&&(i!=x||j!=y)){
                 cout<<"  ";
             }
+            else if(road[i][j]){
+                cout<<"G ";
+            }
             else{
-                cout<<"O ";
+                cout<<"0 ";
             }
         }
         cout<<endl;
     }
 }
-
-
