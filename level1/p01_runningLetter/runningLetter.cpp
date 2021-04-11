@@ -17,15 +17,17 @@ void runningLetter() {
     hout = GetStdHandle(STD_OUTPUT_HANDLE);
     pos.X = 0, pos.Y = 0;  //设置Y坐标(不变)
 
-    //客户区位置
-    HWND hwnd = GetConsoleWindow();
-    RECT rectW;
+    //控制台窗口信息
+    CONSOLE_SCREEN_BUFFER_INFO scr;
 
-    bool judge = false;  //用于判断是否碰到右侧边界
+    //用于判断是否碰到右侧边界
+    bool judge = false;
+
+    DWORD result;
 
     while (true) {
-        GetClientRect(hwnd, &rectW);  //每次刷新获取窗口大小
-        if (x + len >= rectW.right / 8)
+        GetConsoleScreenBufferInfo(hout, &scr);  //每次刷新获取窗口大小
+        if (x + len >= scr.dwSize.X)
             judge = true;
         else if (x <= 0)
             judge = false;
@@ -43,6 +45,7 @@ void runningLetter() {
         Sleep(50);  //设置刷新速度
         system("cls");
     }
+    CloseHandle(hout);
 }
 
 int main() {
