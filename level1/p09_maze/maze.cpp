@@ -10,32 +10,32 @@ int Map[N][N];
 int Difficulty=0;
 
 void Menu(){
-    system("cls");
-    puts("As we all know, HIMCRH is a fan of Coca-Cola.");
-    puts("Unfortunately, he is trapped in a maze.");
-    puts("If he can't leave the maze, he can only drink the Pepsi.");
-    puts("You, a kind freshman of UESTC, decide to help him.");
-    puts("Press \"Enter\" to start your journey!");
+;
+    puts("\033[33mAs we all know, HIMCRH is a fan of \033[31mCoca-Co1a.");
+    puts("\033[33mUnfortunately, he is trapped in a maze.");
+    puts("\033[33mIf he can't leave the maze, he can only drink the \033[34mPepsi.");
+    puts("\033[33mYou, a kind freshman of UESTC, decide to help him.");
+    puts("\033[33mPress \"Enter\" to start your journey!");
     while(getchar()=='\n')
     return;
 }
 
 void Differ(){
     system("cls");
-    puts("No pain, no gain; more pain, more gain!");
-    puts("There are three difficulties for you to choose:");
-	puts("Input \"1\" for a little bottle of Coca-Cola");
-	puts("Input \"2\" for a big bottle of Coca-Cola");
-	puts("Input \"3\" for a ton of Coca-Cola");
-    puts("Please make this choice with your conscience!");
-    puts("----------------------------------------------------");
-    puts("You can press \"ESC\" to exit");
+    puts("\033[33mNo pain, no gain; more pain, more gain!");
+    puts("\033[33mThere are three difficulties for you to choose:");
+	puts("\033[33mInput \"1\" for a little bottle of \033[31mCoca-Co1a");
+	puts("\033[33mInput \"2\" for a big bottle of \033[31mCoca-Cola");
+	puts("\033[33mInput \"3\" for a ton of \033[31mCoca-Co1a");
+    puts("\033[33mPlease make this choice with your conscience!");
+    puts("\033[33m----------------------------------------------------");
+    puts("\033[33mYou can press \"ESC\" to exit");
     char ch=_getch();
     while(ch<'1'||ch>'3'){
         if(ch==27){
             exit(0);
         }
-        puts("Your input is invalid");
+        puts("\033[33mYour input is invalid");
         ch=_getch();
     }
     Difficulty=ch-'0';
@@ -69,9 +69,9 @@ void CreateMaze(){
     vector<cell> v;//存储未连接的单元格
     v.push_back({3,1});
     v.push_back({1,3});
-    //printf("111\n");
+    //printf("\033[33m111\n");
     while(v.size()){
-        //printf("111\n");
+        //printf("\033[33m111\n");
         int t=rand()%v.size();
         cell c=v[t];//随机选中未连接的单元格c
         if(Map[c.x][c.y]==0){
@@ -87,7 +87,7 @@ void CreateMaze(){
                 if((i!=0&&j!=0)||(i==0&&j==0))
                 continue;
                 int dy=c.y+j;
-                //printf("%d %d\n",dx,dy);
+                //printf("\033[33m%d %d\n",dx,dy);
                 if(dy<=0||dy>=RC-1)
                 continue;
                 if(Map[dx][dy]==0)
@@ -109,19 +109,19 @@ void PrintMaze(){
     for(int i=0;i<RC;i++){
         for(int j=0;j<RC;j++){
             if(i==sx&&j==sy){
-                printf("Y ");
+                printf("\033[31mY ");
             }
             else if(Map[i][j]==1){
-                printf("回");
+                printf("\033[32m回");
             }
             else if(Map[i][j]==0){
                 printf("  ");
             }
         }
-        printf("\n");
+        printf("\033[33m\n");
     }
-    puts("You can press \"ESC\" to exit.");
-    puts("You can press \"q\" to back to the menu.");
+    puts("\033[33mYou can press \"ESC\" to exit.");
+    puts("\033[33mYou can press \"q\" to back to the menu.");
 }
 
 int Getdir(){
@@ -150,8 +150,8 @@ void Start(){
     while(1){
 		system("cls");
 		if(sy==RC-1&&sx==RC-2){
-			printf("Congratulations!\n");
-			puts("Press \"Enter\" to back to menu");
+			printf("\033[33mCongratulations!\n");
+			puts("\033[33mPress \"Enter\" to back to menu");
 			while(getchar()!='\n');
 			Differ();
             //creat the maze
