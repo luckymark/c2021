@@ -64,7 +64,7 @@ void link_delete(int valde, Linklist *node){
     while(p->value!=valde){
         p=p->next;
         if(p->next==node&&p->value!=valde){
-            printf("%d is not s valde of the list.\n",valde);
+            printf("%d is not a element of the list.\n",valde);
             return;
         }
     }
@@ -85,7 +85,7 @@ void link_find(int valfd, Linklist *node){
     while(p->value!=valfd){
         p=p->next;
         if(p->next==node&&p->value!=valfd){
-            printf("%d is not a valde of the list.\n",valfd);
+            printf("%d is not a element of the list.\n",valfd);
             return;
         }
     }
