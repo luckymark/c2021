@@ -2,6 +2,7 @@
 #include<cstdio>
 #include<stdlib.h>
 #include<windows.h>
+#include<ctime> 
 using namespace std;
 
 bool maze[100][100]={0};
@@ -29,6 +30,9 @@ int main(){
     char b;
     bool end=0;
     cin>>n;
+    unsigned seed; 
+    seed = time(0);
+    srand(seed);
     make_maze(n);
     //maze_print(0,1);
     now_x=0;
