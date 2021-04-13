@@ -7,7 +7,6 @@ typedef struct Linklist{
     Linklist *pre,*next;
 }Linklist;
 
-
 void link_init(int val,int i, Linklist *node){
     Linklist *p=(Linklist*)malloc(sizeof(Linklist));
     p->order=i;
