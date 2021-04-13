@@ -10,7 +10,6 @@ int Map[N][N];
 int Difficulty=0;
 
 void Menu(){
-;
     puts("\033[33mAs we all know, HIMCRH is a fan of \033[31mCoca-Co1a.");
     puts("\033[33mUnfortunately, he is trapped in a maze.");
     puts("\033[33mIf he can't leave the maze, he can only drink the \033[34mPepsi.");
@@ -118,7 +117,7 @@ void PrintMaze(){
                 printf("  ");
             }
         }
-        printf("\033[33m\n");
+        printf("\n");
     }
     puts("\033[33mYou can press \"ESC\" to exit.");
     puts("\033[33mYou can press \"q\" to back to the menu.");

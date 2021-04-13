@@ -3,10 +3,10 @@ using namespace std;
 
 int main(){
     //generate the console
-    /*int h=80,w=80;
+    int h=120,w=70;
 	char chCmd[32];
 	sprintf(chCmd,"mode con cols=%d lines=%d",h,w);
-	system(chCmd);*/
+	system(chCmd);
     //generate the menu
     Menu();
     //choose the difficulty
