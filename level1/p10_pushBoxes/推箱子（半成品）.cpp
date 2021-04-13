@@ -1,5 +1,6 @@
 #include<iostream>
 #include<cstdio>
+#include<cstring>
 #include<stdlib.h>
 #include<windows.h>
 using namespace std;
@@ -8,7 +9,7 @@ int maze[100][100]={0};
 bool box[100][100]={0};
 bool road[100][100]={0};
 bool goal[100][100]={0};
-int n,finish,now_x,now_y;
+int n,finish,now_x,now_y,step;
 
 void go_up();
 void go_down();
@@ -22,8 +23,9 @@ int main(){
     int m,read,x;
     bool end=0;
     FILE *fp;
-	char str[10000]={' '}; 
+	char str[10000]={' '};
 	read=0;
+	step=0;
 	m=0;x=0;
 	fp=fopen("C:\\Users\\Lenovo\\Desktop\\C程作业\\c2021\\level1\\p10_pushBoxes\\map.txt","rt");
     while(fgets(str, 100, fp)!=NULL) {
@@ -83,9 +85,12 @@ int main(){
 				}
 			}
 		} 
+		step++;
 		if(finish==1)break;
     }
-    cout<<"Congratulation!!";
+    cout<<"Congratulation!!"<<endl;
+    cout<<"通关所用步数为"<<step;
+	fprintf(fp,"%d",step);
     fclose(fp);
     return 0;
 }
