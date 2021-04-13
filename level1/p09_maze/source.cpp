@@ -38,23 +38,23 @@ int main(){
 		Maze[i] = (int*)calloc(L, sizeof(int));
     
 	}
-  for (int i = 0; i < L; i++){
-		Maze[i][0] = ROUTE;
-		Maze[0][i] = ROUTE;
-		Maze[i][L - 1] = ROUTE;
-		Maze[L - 1][i] = ROUTE;
+  for (int i = 0; i < L; i++){	  
+	Maze[i][0] = ROUTE;
+	Maze[0][i] = ROUTE;
+	Maze[i][L - 1] = ROUTE;
+	Maze[L - 1][i] = ROUTE;
 	}
   Maze[2][1]=ROUTE;
   //创建迷宫并打印
   CreateMaze(Maze,2,1);  
   Maze[2][1]=LOSTER;
   for (int i = L - 3; i >= 0; i--) {
-		if (Maze[i][L - 3] == ROUTE) {
-			Maze[i][L - 2] = ROUTE;
-      endx=i;
-			break;
-		}
+	if (Maze[i][L - 3] == ROUTE) {
+		Maze[i][L - 2] = ROUTE;
+      		endx=i;
+		break;
 	}
+  }
   
   print(Maze);
   //键盘控制
@@ -75,19 +75,19 @@ int main(){
 }
 void print(int **Maze){	
   for (int i = 0; i < L; i++) {
-		for (int j = 0; j < L; j++) {
-			if (Maze[i][j] == ROUTE) {
-				printf("  ");
-			}
-			else if (Maze[i][j] == WALL) {
-				printf("■");
-			}
-      else{
-        printf("●");
-      }
+	for (int j = 0; j < L; j++) {
+		if (Maze[i][j] == ROUTE) {
+			printf("  ");
 		}
-		printf("\n");
+		else if (Maze[i][j] == WALL) {
+			printf("■");
+		}
+      	else{
+        	printf("●");
+      	}
 	}
+		printf("\n");
+  }
 }
 void CreateMaze(int **Maze,int x,int y){
   	Maze[x][y] = ROUTE;
