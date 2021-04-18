@@ -108,13 +108,15 @@ void PrintMaze(){
     for(int i=0;i<RC;i++){
         for(int j=0;j<RC;j++){
             if(i==sx&&j==sy){
-                printf("\033[31mY ");
+                printf("\033[31mY");
+                putchar(' ');
             }
             else if(Map[i][j]==1){
                 printf("\033[32m回");
             }
             else if(Map[i][j]==0){
-                printf("  ");
+                putchar(' ');
+                putchar(' ');
             }
         }
         printf("\n");
