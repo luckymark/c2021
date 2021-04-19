@@ -46,7 +46,6 @@ int main(){
     return 0;
 }
 
-
 int get_direction(){
     while(1){
         Sleep(20);
