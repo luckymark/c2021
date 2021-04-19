@@ -3,7 +3,7 @@ using namespace std;
 
 int main(){
     //generate the console
-    int h=120,w=70;
+    int h=70,w=40;
 	char chCmd[32];
 	sprintf(chCmd,"mode con cols=%d lines=%d",h,w);
 	system(chCmd);

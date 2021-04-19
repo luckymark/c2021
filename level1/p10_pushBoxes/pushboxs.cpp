@@ -21,7 +21,7 @@ void Menu(){
 
 void Differ(){
     system("cls");
-	puts("\033[33mPress a numble from \"1\" to \"5\" to select a map");
+	puts("\033[33mPress a numble from \"1\" to \"4\" to select a map");
     puts("\033[33m----------------------------------------------------");
     puts("\033[33mYou can press \"ESC\" to exit");
     char ch=_getch();
@@ -37,15 +37,20 @@ void Differ(){
 }
 
 void CreateMap(){
+    system("cls");
+    //printf("111\n");
     freopen("boxsmap.txt","r",stdin);
     char ch=getchar();
-    while(ch!=Difficulty||ch<'1'||ch>'5')
+    while(ch!=Difficulty+'A'-1)
     ch=getchar();
     scanf("%d %d",&Row,&Col);
+    aim=0;
+    score=0;
     for(int i=0;i<Row;i++){
         while(ch!='-'&&ch!='#')
         ch=getchar();
         for(int j=0;j<Col;j++){
+            //printf("111\n");
             Map[i][j]=ch;
             if(ch=='Y'){
                 sx=i;
@@ -57,6 +62,7 @@ void CreateMap(){
             ch=getchar();
         }
     }
+    fclose(stdin);
 }
 
 int Getdir(){
@@ -80,47 +86,41 @@ int Getdir(){
     }
 }
 
-void PrintMaze(){
+void PrintMap(){
     for(int i=0;i<Row;i++){
         for(int j=0;j<Col;j++){
-            if(i==sx&&j==sy){
-                printf("\033[31m♂");
-                putchar(' ');
-            }
-            else if(Map[i][j]=='#'){
-                printf("\033[32m回");
-            }
-            else if(Map[i][j]=='$'){
-                printf("☆");
-            }
-            else if(Map[i][j]=='.'){
-                printf("◎");
-            }
-            else if(Map[i][j]=='A'){
-                printf("★");
-            }
-            else if(Map[i][j]=='-'){
-                printf("  ");
+            switch (Map[i][j]){
+            case 'Y':{printf("\033[31m♂");break;}
+            case 'B':{printf("\033[31mB");break;}    
+            case '#':{printf("\033[32m#");break;}
+            case '$':{printf("\033[32m$");break;}
+            case '.':{printf("\033[32m.");break;}
+            case 'A':{printf("\033[34mA");break;}
+            case '-':{putchar(' ');break;}
             }
         }
         printf("\n");
+        //printf("111  %d  111\n",i);
     }
     puts("♂ means the man.");
-    puts("回 means the wall.");
-    puts("☆ means the box.");
-    puts("◎ means the aimed location without the box.");
-    puts("★ means the aimed location with a box.");
+    puts("# means the wall.");
+    puts("$ means the box.");
+    puts(". means the aimed location without the box.");
+    puts("A means the aimed location with a box.");
+    puts("B means the man on an aimed location .");
     puts("\033[33mYou can press \"ESC\" to exit.");
     puts("\033[33mYou can press \"q\" to back to the menu.");
 }
 
 void Start(){
+    //printf("11111\n");
     while(1){
 		system("cls");
 		if(score==aim){
 			printf("\033[33mCongratulations!\n");
-			puts("\033[33mPress \"Enter\" to back to menu");
-			while(getchar()!='\n');
+			printf("\033[33mPress \"Enter\" to back to menu\n");
+            while(getchar()!='\n');
+            Menu();
 			Differ();
             //creat the maze
             CreateMap();
@@ -132,7 +132,7 @@ void Start(){
 		int nx=sx+cx[d],nnx=sx+2*cx[d];//nx为人物的移动，nnx为箱子的移动
 		int ny=sy+cy[d],nny=sy+2*cy[d];
 	    if(Map[nx][ny]=='-'){
-            Map[sx][sy]='-';
+            Map[sx][sy]=(Map[sx][sy]=='Y'?'-':'.');
             Map[nx][ny]='Y';
             sx=nx;
             sy=ny;
@@ -141,14 +141,14 @@ void Start(){
             if(Map[nnx][nny]=='-'){
                 Map[nnx][nny]='$';
                 Map[nx][ny]='Y';
-                Map[sx][sy]='-';
+                Map[sx][sy]=(Map[sx][sy]=='Y'?'-':'.');
                 sx=nx;
                 sy=ny;
             }
             else if(Map[nnx][nny]=='.'){
                 Map[nnx][nny]='A';
                 Map[nx][ny]='Y';
-                Map[sx][sy]='-';
+                Map[sx][sy]=(Map[sx][sy]=='Y'?'-':'.');
                 sx=nx;
                 sy=ny;
                 score++;
@@ -158,7 +158,7 @@ void Start(){
             if(Map[nnx][nny]=='-'){
                 Map[nnx][nny]='$';
                 Map[nx][ny]='Y';
-                Map[sx][sy]='-';
+                Map[sx][sy]=(Map[sx][sy]=='Y'?'-':'.');
                 sx=nx;
                 sy=ny;
                 score--;
@@ -166,10 +166,16 @@ void Start(){
             else if(Map[nnx][nny]=='.'){
                 Map[nnx][nny]='A';
                 Map[nx][ny]='Y';
-                Map[sx][sy]='-';
+                Map[sx][sy]=(Map[sx][sy]=='Y'?'-':'.');
                 sx=nx;
                 sy=ny;
             }
+        }
+        else if(Map[nx][ny]=='.'){
+                Map[nx][ny]='B';
+                Map[sx][sy]=(Map[sx][sy]=='Y'?'-':'.');
+                sx=nx;
+                sy=ny;
         }
 	}
 }
