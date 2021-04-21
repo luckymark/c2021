@@ -63,6 +63,7 @@ void CreateMap(){
         }
     }
     fclose(stdin);
+    freopen("CON","r",stdin);
 }
 
 int Getdir(){
@@ -119,7 +120,13 @@ void Start(){
 		if(score==aim){
 			printf("\033[33mCongratulations!\n");
 			printf("\033[33mPress \"Enter\" to back to menu\n");
-            while(getchar()!='\n');
+            int i=1;
+            char ch;
+            while((ch=getchar())!='\n'){
+                printf("111%c%d\n",ch,i++);
+                if(i==30)
+                exit(0);    
+            }
             Menu();
 			Differ();
             //creat the maze
