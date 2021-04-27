@@ -10,5 +10,5 @@ int Risk(const bool &Color,const int &x,const int &y);
 int GetScore(int *A);
 int NewRisk(const bool &Color,const int &x,const int &y);
 bool neighbor(const int &x,const int &y);
-void GeneratePoint(vector<pair<int,int> > &Ans,const bool &Color,const int &Limit,const bool &flag);
+void GeneratePoint(vector<pair<int,pair<int,int> > > &Ans,const bool &Color,const int &Limit,const bool &flag);
 #endif

@@ -95,21 +95,23 @@ pair<int,pair<int,int> > olddfs(int dep,bool Color,int MaxLimit,ull state){
 
 pair<int,pair<int,int> > newdfs(int dep,bool Color,int MaxLimit,ull state){
     if(F.count(state))return F[state];
-    vector<pair<int,int> >Points;
+    vector<pair<int,pair<int,int> > >Points;
     // if(dep==7)debug=1;
-    GeneratePoint(Points,Color,20,0);
-    // debug=0;
+    GeneratePoint(Points,Color,25,dep<=3);
+    debug=0;
     if(!Points.size())return {2*INF,{-1,-1}};
-    if(Points.size()==1)return F[state]={NewRisk(Color,Points[0].first,Points[0].second),Points[0]};
+    if(Points.size()==1)return F[state]=Points[0];
+    sort(Points.begin(),Points.end(),greater<pair<int,pair<int,int> > >());
     int x=-1,y=-1;
     int Max=-1e9;
     for(auto P:Points){
-        int i=P.first;
-        int j=P.second;
-        int Rating=NewRisk(Color,i,j);
+        int Rating=P.first;
+        int i=P.second.first;
+        int j=P.second.second;
         if(dep){
             Board[i][j]=Color;
-            Rating-=newdfs(dep-1,Color^1,Rating-Max,state^Hash[Color][i][j]).first;
+            auto tmp=newdfs(dep-1,Color^1,Rating-Max,state^Hash[Color][i][j]);
+            Rating-=tmp.first;
             Rating=min(Rating,INF);
             Rating=max(Rating,-INF);
             Board[i][j]=-1;

@@ -32,12 +32,12 @@ bool Computer(const bool &Color){
     if(Step>=2){
         F.clear();
         // if(Step&1){//w
-        //     auto tmp=newdfs(7,Color,INF,0);
+	       //  auto tmp=olddfs(DeepLimit,Color,INF,0);
         //     x=tmp.second.first;
         //     y=tmp.second.second;
         // }
         // else {//b
-	        auto tmp=olddfs(DeepLimit,Color,INF,0);
+            auto tmp=newdfs(9,Color,INF,0);
 	        x=tmp.second.first;
 	        y=tmp.second.second;
         // }
