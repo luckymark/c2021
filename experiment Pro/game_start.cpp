@@ -17,7 +17,7 @@ void game_start() //玩家对战电脑模式，玩家先手
             printf("Peaciful end!");
             return;
         }
-        int x = size / 2 - 1, y = size / 2, pre = B.board[0][0]; //记录之前这个位置的放置类型
+        int x = 0, y = 0, pre = B.board[0][0]; //记录之前这个位置的放置类型
         B.board[x][y] = -1;
         while (true) //玩家操作
         {

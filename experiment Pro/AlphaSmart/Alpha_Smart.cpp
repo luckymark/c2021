@@ -1,14 +1,26 @@
-#include "chessboard.cpp"
-#include "head.cpp"
-
+#include <bits/stdc++.h>
+#include <conio.h>
+#include <ctime>
+#include <windows.h>
+#ifndef consider_step
+#define consider_step 4 //考虑步数
+#define total_num 10    //棋手人数
+#define size 15         //棋盘大小
+#define generations 10  //进化代数
+#define mod (1 + total_num / 2) * total_num / 4
+using namespace std;
+int previousx, previousy;
+#endif
 struct Node;
 int fight(Node *a, Node *b);
 
 struct Node //棋手，不同策略
 {
     double weight[10];
-    //权重: 0五子相连 1四子两空 2四子一空 3三子两空 4三子一空 5两子两空 6两子一空
-    //规定5恒为1.0
+    /*权重: 0五子相连 1四子两空 2四子一空 3三子两空 4三子一空
+    5两子两空 6两子一空 7四子不空
+    */
+    //规定6恒为1.0 7为负
     void show_parameter() //展示参数
     {
         for (int i = 0; i <= 6; i++)
@@ -18,12 +30,13 @@ struct Node //棋手，不同策略
     void create() //创造一个新骑手
     {
         weight[6] = 1.0; //保证其为常数
-        weight[5] = rand() % 5 + weight[6];
-        weight[4] = rand() % 20 + weight[5];
-        weight[3] = rand() % 50 + weight[4];
-        weight[2] = rand() % 100 + weight[3];
-        weight[1] = rand() % 300 + weight[2];
-        weight[0] = rand() % 1000 + weight[1]; //保证递增
+        weight[5] = rand() % 10 + weight[6];
+        weight[4] = rand() % 500 + 100 + weight[5];
+        weight[3] = rand() % 2000 + 500 + weight[4];
+        weight[2] = rand() % 5000 + 1000 + weight[3];
+        weight[1] = rand() % 10000 + 10000 + weight[2];
+        weight[0] = 1000000;          //保证递增
+        weight[7] = -(rand() % 4000); //防止走无谓的步数
     }
     bool operator<(Node p) //对战结果决定排名
     {
@@ -55,6 +68,8 @@ double get_score(int num, int blocks, Node *player) //连线数 封锁数 玩家
             return player->weight[1]; //四子两空
         if (blocks == 1)
             return player->weight[2]; //四子一空
+        if (blocks == 2)
+            return player->weight[7]; //四子不空
     }
     else if (num == 3)
     {
@@ -104,8 +119,8 @@ double take_step_value(int x, int y, int condition, Node *player, int step)
         blocks++;
     score += get_score(k1 + k2 - 1, blocks, player);
     blocks = 0;
-    k2 = B.judge(x, y, condition, 6); //右下
-    k1 = B.judge(x, y, condition, 7);
+    k1 = B.judge(x, y, condition, 6); //右下
+    k2 = B.judge(x, y, condition, 7);
     if (x + k1 == size || y + k1 == size || B.board[x + k1][y + k1] == 3 - condition)
         blocks++;
     if (x - k2 == -1 || y - k2 == -1 || B.board[x - k2][y - k2] == 3 - condition)
@@ -230,4 +245,145 @@ void GA() //棋手进行遗传淘汰
         int k = rand() % total_num + 1;
         node[k].variation();
     }
+}
+
+void game_start() //玩家对战电脑模式，玩家先手
+{
+    memset(B.board, 0, sizeof(B.board));
+    printf("player first? y or n\n");
+    char c;
+    cin >> c;
+    if (c == 'n')
+        B.board[size / 2][size / 2] = 2; //电脑先手
+    B.print_board();
+    int round = 0;
+    while (true)
+    {
+        round += 2;
+        if (round >= size * size - 4) //和棋
+        {
+            printf("Peaciful end!");
+            return;
+        }
+        int x = 0, y = 0, pre = B.board[0][0]; //记录之前这个位置的放置类型
+        B.board[x][y] = -1;
+        while (true) //玩家操作
+        {
+            char c = getch();
+            if (c == 'j' && !pre) //落子
+            {
+                B.board[x][y] = 1;
+                previousx = x;
+                previousy = y;
+                B.print_board();
+                if (B.end_game(x, y, 1)) //玩家获胜
+                {
+                    printf("The player wins!");
+                    return;
+                }
+                break;
+            }
+            if (c == 'a') //左
+            {
+                if (y - 1 > -1)
+                {
+                    B.board[x][y] = pre;
+                    pre = B.board[x][y - 1];
+                    --y;
+                    B.board[x][y] = -1;
+                }
+            }
+            if (c == 's') //下
+            {
+                if (x + 1 < size)
+                {
+                    B.board[x][y] = pre;
+                    pre = B.board[x + 1][y];
+                    ++x;
+                    B.board[x][y] = -1;
+                }
+            }
+            if (c == 'w') //上
+            {
+                if (x - 1 > -1)
+                {
+                    B.board[x][y] = pre;
+                    pre = B.board[x - 1][y];
+                    --x;
+                    B.board[x][y] = -1;
+                }
+            }
+            if (c == 'd') //右
+            {
+                if (y + 1 < size)
+                {
+                    B.board[x][y] = pre;
+                    pre = B.board[x][y + 1];
+                    ++y;
+                    B.board[x][y] = -1;
+                }
+            }
+            B.print_board();
+        }
+        int score = -INT_MAX, new_score; //电脑操作
+        x = 0;
+        y = 0;
+        for (int i = max(0, previousx - 5); i < min(size, previousx + 5); i++)
+            for (int j = max(0, previousy - 5); j < min(size, previousy + 5); j++)
+            {
+                if (B.board[i][j])
+                    continue;
+                new_score = take_step_value(i, j, 2, &node[1], 1); //用最强的电脑棋手与之对战
+                if ((new_score > score) || ((new_score == score) && (rand() | 1)))
+                {
+                    x = i;
+                    y = j;
+                    score = new_score;
+                }
+            }
+        B.board[x][y] = 2; //落子
+        B.print_board();
+        if (B.end_game(x, y, 2)) //电脑获胜
+        {
+            printf("The computer wins!");
+            return;
+        }
+    }
+}
+
+int main()
+{
+    srand(time(NULL));
+    cout << "whether to machine learning for 5 hours before play?" << endl
+         << "print y for yes, n for no" << endl;
+    char c = getchar();
+    if (c == 'y') //如果愿意机器自己学习十个小时左右；
+    {
+        for (int i = 1; i <= total_num; i++)
+            node[i].create();
+        printf("generation=%d:\n", 0);
+        for (int i = 1; i <= total_num; i++)
+            node[i].show_parameter();
+        for (int generation = 1; generation <= generations; ++generation) //进化代数，确定最优解；
+        {
+            GA();
+            printf("generation=%d:\n", generation);
+            for (int i = 1; i <= total_num; i++)
+                node[i].show_parameter();
+        }
+    }
+    else
+    {
+        node[1].weight[0] = 100000;
+        node[1].weight[1] = 8000;
+        node[1].weight[2] = ;
+        node[1].weight[3] = 34.75;
+        node[1].weight[4] = 9.25;
+        node[1].weight[5] = 3;
+        node[1].weight[6] = 1;
+        node[1].weight[7] = -4000;
+        game_start(); //上面皆为机器学习内容，学习完成后玩家可与node[1]对战
+        //这组参数较为优秀 0:770.000000 1:304.750000 2:78.750000 3:34.750000 4:9.250000 5:3.000000 6:1.000000
+    }
+    return 0;
 }
