@@ -1,12 +1,15 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define maxn 60000
-#define size 784 // 图片大小
-#define learning_num 1000
-#define learning_times 200
-#define test_num 100
-inline void read(int &a) // 快速读入
+#define size 784             // 图片大小
+#define hidden_layer 2       // 隐藏层层数
+#define learning_num 60000   // 学习样本数
+#define hidden_num 20        // 隐藏层每层神经元数
+#define learning_times 10000 // 学习代数
+#define test_num 10000       // 测试样本数
+inline void read(int &a)     // 快速读入
 {
+    a = 0;
     char c = getchar();
     while (c < '0' || c > '9')
         c = getchar();
@@ -15,6 +18,7 @@ inline void read(int &a) // 快速读入
         a = (a << 1) + (a << 3) + c - '0';
         c = getchar();
     }
+    return;
 }
 
 inline const double Sigmoid(double x) // Sigmoid
@@ -40,56 +44,79 @@ struct Fig // 图片
         {
             int x;
             read(x);
-            vec[i] = double(x) / 400.0; // 图像格灰度值大约在200左右
+            vec[i] = double(x) / 350.0; // 图像格灰度值大约在200左右
         }
     }
-} train_fig[60000], test_fig[10000];
+} train_fig[60000], test_fig[10000]; // 样本集 测试集
 
 struct NeuralNetworks // 神经网络
 {
-    double label[10];                            // 图像标签，除标签项为1外其余全为0
-    double layer1[size], layer2[15], layer3[10]; // 初始层 隐藏层 输出层
+    double label[10];                                                  // 图像标签，除标签项为1外其余全为0
+    double layer1[size], layer2[hidden_layer][hidden_num], layer3[10]; // 初始层 隐藏层 输出层
     int layer4;
-    double bias2[15], bias3[10];      // 隐藏层 输出层偏置
-    double w1[size][15], w2[15][10];  // 初始层 隐藏层权值
-    double loss;                      // 损失值
-    inline const double rand_weight() // 随机生成一个-100到100的double型权值
+    double bias2[hidden_layer][hidden_num], bias3[10];             // 隐藏层 输出层偏置
+    double w1[size][hidden_num], w2[hidden_layer][hidden_num][10]; // 初始层 隐藏层权值
+    double loss;                                                   // 损失值
+    inline const double rand_weight()                              // 随机生成一个权值
     {
-        return double(rand() % 2 | 1) * double(rand() % 100);
+        if (rand())
+            return double(rand() % 1000) / 10000.0;
+        else
+            return -1.0 * double(rand() % 1000) / 10000.0;
+    }
+    inline const double rand_bias() // 随机生成一个偏置
+    {
+        if (rand())
+            return double(rand() % 1000) / 100.0;
+        else
+            return -1.0 * double(rand() % 1000) / 100.0;
     }
     void init() // 初始设置权值为随机数
     {
-        for (int i = 0; i < 15; i++) // 隐藏层
-            bias2[i] = rand_weight();
+        for (int k = 0; k < hidden_layer; k++) // 隐藏层
+            for (int i = 0; i < hidden_num; i++)
+                bias2[k][i] = rand_bias();
         for (int i = 0; i < 10; i++) // 输出层
-            bias3[i] = rand_weight();
+            bias3[i] = rand_bias();
         for (int i = 0; i < size; i++) // 初始层
-            for (int j = 0; j < 15; j++)
+            for (int j = 0; j < hidden_num; j++)
                 w1[i][j] = rand_weight();
-        for (int i = 0; i < 15; i++) // 隐藏层
-            for (int j = 0; j < 10; j++)
-                w2[i][j] = rand_weight();
+        for (int k = 0; k < hidden_layer; k++) // 隐藏层
+            for (int i = 0; i < hidden_num; i++)
+                for (int j = 0; j < 10; j++)
+                    w2[k][i][j] = rand_weight();
+        for (int k = 0; k < hidden_layer; k++) // 隐藏层偏置
+            for (int i = 0; i < hidden_num; i++)
+                bias2[k][i] = rand_bias();
+        for (int i = 0; i < 10; i++) // 输出层偏置
+            bias3[i] = rand_bias();
     }
     void transmit(Fig *f) // 根据初始层进行传播，传入一个样本数据
     {
         for (int i = 0; i < 10; i++) // 填充label
-        {
             label[i] = f->label[i];
-        }
         for (int i = 0; i < size; i++) // 填充输入层
             layer1[i] = f->vec[i];
-        for (int i = 0; i < 15; i++) // 填充隐藏层
-            layer2[i] = bias2[i];
-        for (int i = 0; i < size; i++)
-            for (int j = 0; j < 15; j++)
-                layer2[j] += w1[i][j] * layer1[i];
-        for (int i = 0; i < 15; i++)
-            layer2[i] = Sigmoid(layer2[i]);
+        for (int k = 0; k < hidden_layer; k++) // 填充隐藏层
+            for (int i = 0; i < hidden_num; i++)
+                layer2[k][i] = bias2[k][i];
+        for (int i = 0; i < size; i++) // 填充第0层隐藏层
+            for (int j = 0; j < hidden_num; j++)
+                layer2[0][j] += w1[i][j] * layer1[i];
+        for (int i = 0; i < hidden_num; i++)
+            layer2[0][i] = Sigmoid(layer2[0][i]);
+        for (int k = 1; k < hidden_layer; k++) // 填充其余隐藏层
+            for (int i = 0; i < hidden_num; i++)
+                for (int j = 0; j < hidden_num; j++)
+                    layer2[k][j] += w2[k - 1][i][j] * layer2[k - 1][i];
+        for (int k = 0; k < hidden_layer; k++)
+            for (int i = 0; i < hidden_num; i++)
+                layer2[k][i] = Sigmoid(layer2[k][i]);
         for (int i = 0; i < 10; i++) // 填充输出层
             layer3[i] = bias3[i];
-        for (int i = 0; i < 15; i++)
+        for (int i = 0; i < hidden_num; i++)
             for (int j = 0; j < 10; j++)
-                layer3[j] += w2[i][j] * layer2[i];
+                layer3[j] += w2[hidden_layer - 1][i][j] * layer2[hidden_layer - 1][i];
         for (int i = 0; i < 10; i++)
             layer3[i] = Sigmoid(layer3[i]);
         layer4 = 0; // 填充答案
@@ -100,7 +127,7 @@ struct NeuralNetworks // 神经网络
     void loss_function() // 计算损失函数
     {
         // loss = sigma (label[i]-layer[3])^2
-        loss = 0;
+        loss = 0.0;
         for (int i = 0; i < 10; i++) // 仍然逐项做差表示损失
             loss += (label[i] - layer3[i]) * (label[i] - layer3[i]);
     }
@@ -111,43 +138,57 @@ struct NeuralNetworks // 神经网络
         layer3[j] = sigmoid( sigma( layer2[i]*w2[i][j] ) + bias3[j] )
         layer2[j] = sigmoid( sigma( layer1[i]*w1[i][j] ) + bias2[j] )
         */
-        double dif_layer1[size], dif_layer2[15], dif_layer3[10];
+        double dif_layer1[size], dif_layer2[hidden_layer][hidden_num], dif_layer3[10];
         // 初始层 隐藏层 输出层除去sigmoid关于loss偏导
-        double dif_bias2[15], dif_bias3[10];     // 隐藏层 输出层偏置关于loss的偏导
-        double dif_w1[size][15], dif_w2[15][10]; // 初始层 隐藏层权值关于loss的偏导
-        double step_len = x;                     // 确定学习步长
-        for (int i = 0; i < learning_num; i++)   // 逐个样本进行学习
+        double dif_bias2[hidden_layer][hidden_num], dif_bias3[10];
+        // 隐藏层 输出层偏置关于loss的偏导
+        double dif_w1[size][hidden_num], dif_w2[hidden_layer][hidden_num][10];
+        // 初始层 隐藏层权值关于loss的偏导
+        double step_len = x;                   // 确定学习步长
+        for (int i = 0; i < learning_num; i++) // 逐个样本进行学习
         {
-            transmit(&train_fig[i]);     // 进行传播
-            loss_function();             // 计算损失
+            transmit(&train_fig[i]); // 进行传播
+            loss_function();         // 计算损失
+            memset(dif_layer2, 0, sizeof(dif_layer2));
+            memset(dif_bias2, 0, sizeof(dif_bias2));
             for (int i = 0; i < 10; i++) // 计算dif_layer3
-                dif_layer3[i] = Dif_Sigmoid(layer3[i]);
+                dif_layer3[i] = 2 * (layer3[i] - label[i]) * Dif_Sigmoid(layer3[i]);
             for (int i = 0; i < 10; i++) // 计算dif_bias3
                 dif_bias3[i] = dif_layer3[i];
-            for (int i = 0; i < 15; i++)
-                for (int j = 0; j < 10; j++) // 计算dif_w2 i j 与 dif_layer2 i
+            for (int i = 0; i < hidden_num; i++)
+                for (int j = 0; j < 10; j++) // 计算dif_w2与dif_layer2第hidden_layer-1层
                 {
-                    dif_w2[i][j] = dif_layer3[j] * layer2[i];
-                    dif_layer2[i] = Dif_Sigmoid(dif_layer3[j] * w2[i][j]);
+                    dif_w2[hidden_layer - 1][i][j] = dif_layer3[j] * layer2[hidden_layer - 1][i];
+                    dif_layer2[hidden_layer - 1][i] += dif_layer3[j] * w2[hidden_layer - 1][i][j] * Dif_Sigmoid(layer2[hidden_layer - 1][i]);
                 }
-            for (int i = 0; i < 15; i++) // 计算dif_bias2
-                dif_bias2[i] = dif_layer2[i];
+            for (int k = hidden_layer - 2; k >= 0; k--)
+                for (int i = 0; i < hidden_num; i++)
+                    for (int j = 0; j < 10; j++) // 计算dif_w2与dif_layer2其余层
+                    {
+                        dif_w2[k][i][j] = dif_layer2[k + 1][j] * layer2[k][i];
+                        dif_layer2[k][i] += dif_layer2[k + 1][j] * w2[k][i][j] * Dif_Sigmoid(layer2[k][i]);
+                    }
+            for (int k = hidden_layer - 2; k >= 0; k--) // 计算dif_bias2
+                for (int i = 0; i < hidden_num; i++)
+                    dif_bias2[k][i] = dif_layer2[k + 1][i];
             for (int i = 0; i < size; i++)
-                for (int j = 0; j < 15; j++) // 计算dif_w1 i j 与 dif_layer1 i
+                for (int j = 0; j < hidden_num; j++) // 计算dif_w1 i j 与 dif_layer1 i
                 {
-                    dif_w1[i][j] = dif_layer2[j] * layer1[i];
-                    dif_layer1[i] = Dif_Sigmoid(dif_layer2[j] * w1[i][j]);
+                    dif_w1[i][j] = dif_layer2[0][j] * layer1[i];
+                    dif_layer1[i] = dif_layer2[0][j] * w1[i][j] * Dif_Sigmoid(layer1[i]);
                 }
             // 更新权值与偏置
             for (int i = 0; i < 10; i++) // 更新bias3
                 bias3[i] -= dif_layer3[i] * step_len;
-            for (int i = 0; i < 15; i++)
-                for (int j = 0; j < 10; j++) // 更新w2 i j
-                    w2[i][j] -= dif_w2[i][j] * step_len;
-            for (int i = 0; i < 15; i++) // 更新bias2
-                bias2[i] -= bias2[i] * step_len;
+            for (int k = 0; k < hidden_layer; k++) // 更新w2 i j
+                for (int i = 0; i < hidden_num; i++)
+                    for (int j = 0; j < 10; j++)
+                        w2[k][i][j] -= dif_w2[k][i][j] * step_len;
+            for (int k = 0; k < hidden_layer; k++)
+                for (int i = 0; i < hidden_num; i++) // 更新bias2
+                    bias2[k][i] -= bias2[k][i] * step_len;
             for (int i = 0; i < size; i++)
-                for (int j = 0; j < 15; j++) // 更新w1 i j
+                for (int j = 0; j < hidden_num; j++) // 更新w1 i j
                     w1[i][j] -= dif_w1[i][j] * step_len;
         }
     }
@@ -167,18 +208,20 @@ void Read_data() // 读入所有所需图片
 
 int main()
 {
+    srand(time(NULL));
     N.init();    // 初始化
     Read_data(); // 读入所有数据
+                 // printf("%lf\n", N.w1[1][1]);
+    N.transmit(&train_fig[0]);
     for (int i = 1; i <= learning_times; i++)
-        N.train(0.4); // 学习权值
-    double rate = 0;
-    for (int i = 1; i <= test_num; i++)
+        N.train(0.1); // 学习权值
+    double ans = 0;
+    for (int i = 0; i < test_num; i++) // 测试数据
     {
         N.transmit(&test_fig[i]);
-        if (N.layer4 == test_fig[i].l)
-            rate += 1.0;
+        if (test_fig[i].l == N.layer4)
+            ans += 1.0; // 测试正确
     }
-    rate = rate * 100.0 / test_num;
-    printf("accuracy rario: %d%\n", int(rate));
+    printf("%lf%\n", ans / learning_num * 100);
     return 0;
 }
