@@ -155,4 +155,46 @@ void testflat()
                  j = t2;
              }
          }
-         */
+
+         int DFS(int me, int others, int depth)//dfs遍历四层决策树
+{
+    int my_score = -100;
+    int t = -1000;
+    int temp;
+    int cnt;
+    int empty_p[100][2] = { {0},{0} };
+    int a[4] = { 0 };
+    int i = 0;
+    int best_position = 0;
+    if (depth==0)//超过预定层数，结束递归，返回分数
+    {
+        t = evaluate(red, white) - evaluate(white, red);
+        if (t > my_score)
+        {
+            my_score = t;
+            best_position = a[0];
+        }
+        return best_position;
+    }
+    else
+    {
+        cnt = generator(empty_p);
+        for (int k = 0;k < cnt;k++)
+        {
+            int tree_x = empty_p[k][0];
+            int tree_y = empty_p[k][1];
+            board[tree_x][tree_y] = me;
+            a[i] = k;
+            i++;
+            temp = me;//交换敌方和己方
+            me = others;
+            others = temp;
+            DFS(me, others, depth--);
+            board[tree_x][tree_y] = me;//（回到上一步）清除标记
+
+        }
+
+    }
+}
+
+ */

@@ -85,7 +85,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>D:\Documents\c语言\C语言课程\BetaGo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -143,6 +143,7 @@
     <ClCompile Include="draft.c" />
     <ClCompile Include="GUI.c" />
     <ClCompile Include="max-min.c" />
+    <ClCompile Include="minmaxAB.c" />
     <ClCompile Include="五子棋1.0.c" />
   </ItemGroup>
   <ItemGroup>

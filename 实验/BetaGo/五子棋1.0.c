@@ -1,15 +1,16 @@
 #include "go.h"
+#define PTIF 2147483647//正无穷,Beta
+#define NGIF -2147483648//负无穷,Alpha
 
-int board[17][17];
+int board[L+2][L+2];
 
 int AI_regrex, AI_regrey, man_regrex, man_regrey;
 
 int AI_x, AI_y;
-int AI_x2, AI_y2;
 int man_x, man_y;//man_y=i,man_x=j
-int man_x2, man_y2;
+//board[i][j]与position之间的关系gotoxy(4 * (man_x-1), 2 * (man_y-1) + 1)
 int dir[][2] = { {-1,-1},{-1,0},{-1,1},{0,-1},{0,1},{1,-1},{1,0},{1,1} };//八向的常量数组
-//判断输赢，判断是否下过
+
 int flag = 0;//判断输赢
 int count = 0;//计算棋子数量 
 
@@ -51,7 +52,7 @@ void board_array()
 
 void man_move()//白棋移动光标 
 {
-	loop1:gotoxy(4*man_x,2*man_y+1);
+	loop1:gotoxy(4 * (man_x - 1), 2 * (man_y - 1) + 1);
 	char key='y';
 	while(key!='0')
 	{
@@ -110,20 +111,11 @@ void man_move()//白棋移动光标
 	}
 }
 
-void test_board()//调试输出代码
-{
-	gotoxy(1, 1);
-	for (int i = 1;i < L + 1;i++)
-	{
-		for (int j = 1;j < L + 1;j++)
-			printf("%d\t", board[i][j]);
-		printf("\n");
-	}		
-}
+
 
 void machine_move()//打印AI的棋子的函数，机器用红子，玩家用白子
 {
-	generator();
+	minMax_AB(4, red, NGIF, PTIF,board);
 	board[AI_y][AI_x] = red;
 	gotoxy(4*(AI_x-1), 2*(AI_y-1)+1);//坐标和数组的顺序是反的
 	BackGround(4, 0);
@@ -244,11 +236,11 @@ void man_machine()//人机对战模式
 
 void Regret()//悔棋函数 
 {
-	gotoxy(man_x2,man_y2);
+	gotoxy(4 * (man_x - 1), 2 * (man_y - 1) + 1);
 	BackGround(0,0);
  	printf("  ");
 	board[man_y][man_x]=0;
-	gotoxy(AI_y2,AI_x2);
+	gotoxy(4 * (AI_x - 1), 2 * (AI_y - 1) + 1);
 	BackGround(0,0);
  	printf("  ");
 	board[AI_y][AI_x]=0;

@@ -1,4 +1,4 @@
-
+/*
 #include "go.h"
 typedef struct
 {
@@ -9,7 +9,7 @@ typedef struct
 }Tree;
 //ÔõÃ´±íÊ¾Æ²Şà£¿²»ºÃÅúÁ¿½¨Á¢Ò»Î¬Êı×é£¬Ğ±×ÅµÄÔÙ½¨Á¢¶şÎ¬Êı×é
 
-int search(int x, int y,int me,int vis[][L+2],int copy[][L+2])//ËÑË÷ÓĞ¶àÉÙ¿ÅÁ¬×Ó
+int search(int x, int y, int me, int vis[][L + 2], int copy[][L + 2])//ËÑË÷ÓĞ¶àÉÙ¿ÅÁ¬×Ó
 {
     int value = 0;
     int maxdir = 0;
@@ -29,8 +29,8 @@ int search(int x, int y,int me,int vis[][L+2],int copy[][L+2])//ËÑË÷ÓĞ¶àÉÙ¿ÅÁ¬×Ó
     for (int i = 0;i < 8;i++)//i±íÊ¾°Ë¸ö·½Ïò
         for (int j = 1;j <= 5;j++)//j±íÊ¾ÑØÕâ¸ö·½Ïò×ßÁË¼¸²½
         {
-            int dx = x + j*dir[i][0];
-            int dy = y + j*dir[i][1];
+            int dx = x + j * dir[i][0];
+            int dy = y + j * dir[i][1];
             if (copy[dx][dy] != T)
             {
                 if (j > value)
@@ -39,11 +39,11 @@ int search(int x, int y,int me,int vis[][L+2],int copy[][L+2])//ËÑË÷ÓĞ¶àÉÙ¿ÅÁ¬×Ó
                     maxdir = i;
                 }
                 break;
-            }       
+            }
         }
- 
+
     //ÌØÊâÇé¿öÓÅÏÈ
-   
+
     //±ê¼ÇÒÑ¾­ËÑË÷ÇÒÔÚ×î´óÂ·¾¶ÉÏµÄ½Úµã£¬±ÜÃâÖØ¸´ËÑË÷
     for (int j = 0;j <= value;j++)
     {
@@ -51,28 +51,28 @@ int search(int x, int y,int me,int vis[][L+2],int copy[][L+2])//ËÑË÷ÓĞ¶àÉÙ¿ÅÁ¬×Ó
         int dy = y + j * dir[maxdir][1];
         vis[dx][dy] = 1;
     }
-   
+
     //ÅĞ¶ÏÁ¬×ÓµÄËÀ»î
     int dx1 = x + value * dir[maxdir][0];
     int dy1 = y + value * dir[maxdir][1];
     int dx2 = x - dir[maxdir][0];
     int dy2 = y - dir[maxdir][1];
-    if(dx1<0||dy1<0)
+    if (dx1 < 0 || dy1 < 0)
         value--;
-    else 
+    else
         if (copy[dx1][dy1] == F || copy[dx1][dy1] == wall)
             value--;
     if (copy[dx2][dy2] == F || copy[dx2][dy2] == wall)
         value--;
-    return value;    
+    return value;
 }
 
-int evaluate(int me,int copy[][L+2])//È«¾ÖÆÀ¹ÀÄ³Ò»·½µÄ·ÖÊı,turn=1ÆÀ¹Àred£¬a=2ÆÀ¹Àwhite
-{   
-    int  k=0, score=0;
+int evaluate(int me, int copy[][L + 2])//È«¾ÖÆÀ¹ÀÄ³Ò»·½µÄ·ÖÊı,turn=1ÆÀ¹Àred£¬a=2ÆÀ¹Àwhite
+{
+    int  k = 0, score = 0;
     int value = 0;
     int vis[17][17] = { {0},{0} };
- 
+
     //±éÀúÕÒµ½ÎÒ·½Æå×Ó¿ªÊ¼search Á¬×Ó
     for (int i = 1;i < L + 1;i++)
         for (int j = 1;j < L + 1;j++)
@@ -87,29 +87,11 @@ int evaluate(int me,int copy[][L+2])//È«¾ÖÆÀ¹ÀÄ³Ò»·½µÄ·ÖÊı,turn=1ÆÀ¹Àred£¬a=2ÆÀ¹
     return score;
 }
 
-
-int generator(int *empty[][2])//²úÉú¿Õ×ÓĞòÁĞ
-{
-    
-    int empty_cnt = 0;
-    for (int i = 1;i < L + 1;i += 1)
-        for (int j = 1;j < L + 1;j += 1)
-        {
-            if (neighbor(i, j))
-            {
-                empty[empty_cnt][0] = i;
-                empty[empty_cnt][1] = j;
-                empty_cnt++;
-            }
-        }
-    return empty_cnt;
-}
-
-int minMax_AB(int depth, int me, int Alpha, int Beta, int tmp_board[][L+2])
+int minMax_AB(int depth, int me, int Alpha, int Beta)
 //·ÖÊı´«µİ,tÎª1±íÊ¾ºìÆå£¬Îª2±íÊ¾°×Æå,µ÷ÓÃÊ±Alpha£¬Beta¸³ÎªNGIF,PTIF
 {
     int i, j;
-    int c[L+2][L+2];
+    int c[L + 2][L + 2];
     int minmax;
     int rival;
     Tree tree;
@@ -121,18 +103,17 @@ int minMax_AB(int depth, int me, int Alpha, int Beta, int tmp_board[][L+2])
         rival = 2;
     else
         rival = 1;
-    if (depth == 0||judge_winner(tree.X,tree.Y,me)==me)
-        return evaluate(me, tmp_board)-evaluate(rival,tmp_board);
-    if (depth % 2)//ÅĞ¶ÏÊÇmin²ã»¹ÊÇmax²ã,ÆæÊıÊÇmin²ã
+    if (depth == 0 || judge_winner(tree.X, tree.Y, me) == me)
+        return evaluate(me);
+    if (depth % 2 == 0)//ÅĞ¶ÏÊÇmin²ã»¹ÊÇmax²ã,Å¼ÊıÊÇmin²ã
     {
         for (i = 1;i < L + 1;i++)
             for (j = 1;j < L + 1;j++)
             {
-                if (!tmp_board[i][j]&& neighbor(i, j) && tree.Alpha < tree.Beta)
+                if (!board[i][j] && neighbor(i, j) && tree.Alpha < tree.Beta)
                 {
-                    memcpy(c, tmp_board, sizeof(int) * L * L);//¸üĞÂÆåÅÌ
                     c[i][j] = me;
-                    minmax = minMax_AB(depth - 1, rival, tree.Alpha, tree.Beta, c);
+                    minmax = minMax_AB(depth - 1, rival, tree.Alpha, tree.Beta);
                     c[i][j] = 0;
                     if (minmax < tree.Beta)
                     {
@@ -151,12 +132,11 @@ int minMax_AB(int depth, int me, int Alpha, int Beta, int tmp_board[][L+2])
         for (i = 1;i < L + 1;i++)
             for (j = 1;j < L + 1;j++)
             {
-                if (!tmp_board[i][j] && neighbor(i, j) && tree.Alpha < tree.Beta)
+                if (!board[i][j] && neighbor(i, j) && tree.Alpha < tree.Beta)
                 {
-                    memcpy(c, tmp_board, sizeof(int) * L * L);
                     //ÓÃÒ»¸öĞÂµÄÊı×é±íÊ¾ÆåÅÌ£¬ÒÔÃâÆÆ»µÔ­ÆåÅÌ
                     c[i][j] = me;
-                    minmax = minMax_AB(depth - 1, rival, tree.Alpha, tree.Beta,c);
+                    minmax = minMax_AB(depth - 1, rival, tree.Alpha, tree.Beta);
                     c[i][j] = 0;
                     if (minmax > tree.Alpha)
                     {
@@ -172,11 +152,11 @@ int minMax_AB(int depth, int me, int Alpha, int Beta, int tmp_board[][L+2])
         AI_y = tree.Y;
         return tree.Alpha;
     }
-    
+
 }
 
- 
-int neighbor(int x,int y)//ÅĞ¶Ï¿ÕÎ»ÖÃÁ½²½Ö®ÄÚÊÇ·ñÓĞÁÚ¾Ó
+
+int neighbor(int x, int y)//ÅĞ¶Ï¿ÕÎ»ÖÃÁ½²½Ö®ÄÚÊÇ·ñÓĞÁÚ¾Ó
 {
     for (int di = 0;di < 8;di++)//i±íÊ¾°Ë¸ö·½Ïò
         for (int dj = 1;dj < 3;dj++)//j±íÊ¾ÑØÕâ¸ö·½Ïò×ßÁË¼¸²½
@@ -190,6 +170,4 @@ int neighbor(int x,int y)//ÅĞ¶Ï¿ÕÎ»ÖÃÁ½²½Ö®ÄÚÊÇ·ñÓĞÁÚ¾Ó
     return 0;
 }
 
-
-
-
+*/
