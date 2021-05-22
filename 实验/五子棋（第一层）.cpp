@@ -43,6 +43,8 @@ int main(){
 			cout<<"You lose!"<<endl;
 			break;
 		}
+		/*qipan[7][9]=-1;
+		cout<<search_l(fuzhi,1);*/
 	}
 } 
 
@@ -53,7 +55,8 @@ int play_depth(int now[15][15],int depth){
             copy[t][k]=now[t][k];
         }
     }
-    int com1=-value_com(copy),com2;
+    int com1=-value_com(copy);
+	int com2;
     int p_x,p_y,player,computer,x,y;
     for(int i=0;i<15;i++){
         for(int j=0;j<15;j++){
@@ -86,7 +89,7 @@ int play_depth(int now[15][15],int depth){
         }
     }
     now[p_x][p_y]=1;
-    cout<<"player:"<<p_x<<" "<<p_y<<"  ";
+    //cout<<"player:"<<p_x<<" "<<p_y<<"  ";
     for(int t=0;t<15;t++){
         for(int k=0;k<15;k++){
             copy[t][k]=now[t][k];
@@ -123,7 +126,8 @@ int play_depth(int now[15][15],int depth){
             }
         }
     }
-    cout<<"computer:"<<x<<" "<<y<<endl;
+    now[p_x][p_y]=0;
+    //cout<<"computer:"<<x<<" "<<y<<endl;
     return com2;
 }
 
@@ -163,16 +167,15 @@ void com_play(int now[15][15]){
 				com=play_depth(now,2);
 				if(com>max){
 				    max=com;
-				    x=i;y=j;
+				    c_x=i;c_y=j;
 				}
 				else if(com==max&&(abs(i-7)+abs(j-7))<(abs(x-7)+abs(y-7))){
-				    x=i;y=j;
+				    c_x=i;c_y=j;
 				}
 				now[i][j]=0;
 			} 
 		}
 	}
-	c_x=x; c_y=y;
 }
 
 int win(int now[15][15]){
@@ -319,7 +322,6 @@ int value_player(int now[15][15]){
 	//cout<<"xr: "<<i<<" "<<j<<" "<<valuep<<endl;
 	valuep=valuep+search_xsleft(now,1);
 	//cout<<"xl: "<<i<<" "<<j<<" "<<valuep<<endl;
-	
 	return valuep;
 }
 
@@ -342,35 +344,41 @@ int search_l(int now[15][15],int k){
 	int value_i,num;
 	int cl;
 	for(int i=0;i<=14;i++){
-	    for(int j=0;j<=14;j++){
+	   int j=0;
+	   while(j<=14){
 	        value_i=0;
 	        if(now[i][j]==k){
 	            value_i=10;
 	            cl=0;
-	            if((j>0&&now[i][j-1]==-k)||j==0){
+	            if(j>0&&now[i][j-1]==-k){
 	                value_i=value_i/10;
 	                cl=j;
+	                //cout<<i<<" "<<j<<endl;
 	            }
 	            num=0;
-	            do{
+	            while((now[i][j]==k||(now[i][j]==0&&now[i][j+1]==k&&num==0))&&j<15){
 	                if(now[i][j]==k){
 	                    value_i=value_i*10;
 	                }
 	                else{
-	                    num++;
-	                }
-	                j=j+1;
-	            }while((now[i][j]!=-k)&&num<=1&&j<15);
+	                	num++;
+					}
+	                j++;
+	            }
 	            if(now[i][j]==-k){
 	                if(j-cl<5){
 	                    value_i=0;
 	                }
+	                else{
+	                	value_i=value_i/10;
+					}
 	            }
 	            if(j==15){
 	            	break;
 				}
 	        }
 	        value+=value_i;
+	        j++;
 	    }
 	}
 	return value;
@@ -378,119 +386,149 @@ int search_l(int now[15][15],int k){
 
 int search_r(int now[15][15],int k){
     int value=0;
-    int value_i,num,cl;
-    for(int j=0;j<=14;j++){
-        for(int i=0;i<=14;i++){
-            value_i=0;
-            if(now[i][j]==k){
-                value_i=10;
-                cl=0;
-                if(now[i-1][j]==-k){
-                    value_i=value_i/10;
-                    cl=i;
-                }
-                num=0;
-                do{
-                    if(now[i][j]==k){
-                        value_i=value_i*10;
-                    }
-                    else{
-                        num++;
-                    }
-                    i++;
-                }while((now[i][j]!=-k)&&num<=1&&i<15);
-                if(now[i][j]==-k){
-                    if(i-cl<5){
-                        value_i=0;
-                    }
-                }
-            }
-            value+=value_i;
-        }
-    }
-    return value;
+	int value_i,num;
+	int cl;
+	for(int j=0;j<=14;j++){
+	   int i=0;
+	   while(i<=14){
+	        value_i=0;
+	        if(now[i][j]==k){
+	            value_i=10;
+	            cl=0;
+	            if(i>0&&now[i-1][j]==-k){
+	                value_i=value_i/10;
+	                cl=i;
+	                //cout<<i<<" "<<j<<endl;
+	            }
+	            num=0;
+	            while((now[i][j]==k||(now[i][j]==0&&now[i+1][j]==k&&num==0))&&i<15){
+	                if(now[i][j]==k){
+	                    value_i=value_i*10;
+	                }
+	                else{
+	                	num++;
+					}
+	                i++;
+	            }
+	            if(now[i][j]==-k){
+	                if(i-cl<5){
+	                    value_i=0;
+	                }
+	                else{
+	                	value_i=value_i/10;
+					}
+	            }
+	            if(i==15){
+	            	break;
+				}
+	        }
+	        value+=value_i;
+	        i++;
+	    }
+	}
+	return value;
 }
 
 int search_xsright(int now[15][15],int p_c){
     int value=0;
-    int value_i,num,cl,i,j;
-    for(int t=-14;t<15;t++){
-        if(t<0){
+	int value_i,num,i,j;
+	int cl;
+	for(int t=-14;t<15;t++){
+		if(t<0){
             i=0;j=-t;
         }
         else{
             i=t;j=0;
         }
-        for(int k=0;k<15-abs(t);k++){
-            value_i=0;
-            if(now[i+k][j+k]==p_c){
-                value_i=10;
-                cl=0;
-                if(now[i+k-1][j+k-1]==-p_c){
-                    value_i=value_i/10;
-                    cl=k-1;
-                }
-                num=0;
-                do{
-                    if(now[i+k][j+k]==p_c){
-                        value_i=value_i*10;
-                    }
-                    else{
-                        num++;
-                    }
-                    k++;
-                }while((now[i][j]!=-p_c)&&num<=1&&15-abs(t));
-                if(now[i+k][j+k]==-p_c){
-                    if(k-cl<5){
-                        value_i=0;
-                    }
-                }
-            }
-            value+=value_i;
-        }
-    }
-    return value;
+	   int k=0;
+	   while(k<15-abs(t)){
+	        value_i=0;
+	        if(now[i+k][j+k]==p_c){
+	            value_i=10;
+	            cl=0;
+	            if(k>0&&now[i+k-1][j+k-1]==-p_c){
+	                value_i=value_i/10;
+	                cl=k;
+	                //cout<<i<<" "<<j<<endl;
+	            }
+	            num=0;
+	            while((now[i+k][j+k]==p_c||(now[i+k][j+k]==0&&now[i+k+1][j+k+1]==p_c&&num==0))&&k<15-abs(t)){
+	                if(now[i+k][j+k]==p_c){
+	                    value_i=value_i*10;
+	                }
+	                else{
+	                	num++;
+					}
+	                k++;
+	            }
+	            if(now[i+k][j+k]==-p_c){
+	                if(k-cl<5){
+	                    value_i=0;
+	                }
+	                else{
+	                	value_i=value_i/10;
+					}
+	            }
+	            if(k==15-abs(t)){
+	            	break;
+				}
+	        }
+	        value+=value_i;
+	        k++;
+	    }
+	}
+	return value;
 }
 
 int search_xsleft(int now[15][15],int p_c){
     int value=0;
-    int value_i,num,cl,i,j;
-    for(int t=0;t<29;t++){
-        if(t<15){
+	int value_i,num,i,j;
+	int cl;
+	for(int t=0;t<29;t++){
+		if(t<15){
             i=t;j=0;
         }
         else{
             i=14;j=t-14;
         }
-        for(int k=0;k<15-abs(14-t);k++){
-            value_i=0;
-            if(now[i+k][j+k]==p_c){
-                value_i=10;
-                cl=0;
-                if(now[i-k+1][j+k-1]==-p_c){
-                    value_i=value_i/10;
-                    cl=k-1;
-                }
-                num=0;
-                do{
-                    if(now[i-k][j+k]==p_c){
-                        value_i=value_i*10;
-                    }
-                    else{
-                        num++;
-                    }
-                    k++;
-                }while((now[i-k][j+k]!=-p_c)&&num<=1&&k<15-abs(14-t));
-                if(now[i-k][j+k]==-p_c){
-                    if(k-cl<5){
-                        value_i=0;
-                    }
-                }
-            }
-            value+=value_i;
-        }
-    }
-    return value;
+	   int k=0;
+	   while(k<15-abs(14-t)){
+	        value_i=0;
+	        if(now[i-k][j+k]==p_c){
+	            value_i=10;
+	            cl=0;
+	            if(k>0&&now[i-k+1][j+k-1]==-p_c){
+	                value_i=value_i/10;
+	                cl=k;
+	                //cout<<i<<" "<<j<<endl;
+	            }
+	            num=0;
+	            while((now[i-k][j+k]==p_c||(now[i-k][j+k]==0&&now[i-k-1][j+k+1]==p_c&&num==0))&&k<15-abs(14-t)){
+	                if(now[i-k][j+k]==p_c){
+	                    value_i=value_i*10;
+	                }
+	                else{
+	                	num++;
+					}
+	                k++;
+	            }
+	            if(now[i-k][j+k]==-p_c){
+	                if(k-cl<5){
+	                    value_i=0;
+	                }
+	                else{
+	                	value_i=value_i/10;
+					}
+	            }
+	            if(k==15-abs(14-t)){
+	            	break;
+				}
+	        }
+	        value+=value_i;
+	        k++;
+	    }
+	}
+	return value;
 }
 
 void print_qipan(){
