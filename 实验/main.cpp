@@ -1,40 +1,41 @@
-//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½
+
 #include <stdio.h>
 #include <windows.h>
 #include "def.h"
 
 int main()
 {
-
-    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½15x15ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    //´´½¨Ò»¸öÆåÅÌ
     int **board = creatboard();
-    //ï¿½ï¿½ï¿½ï¿½
+    //³õÊ¼»¯Ê÷¸ù
+    test_board(board); //²âÊÔÓÃ´úÂë
     steps tree;
     steps *head = &tree;
     head->x = 0;
     head->y = 0;
     head->scores = 0;
+    head->num = 0;
     head->nextstep = NULL;
-    int count = 0;
-    //ï¿½Ã»ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½å»¹ï¿½Çºï¿½ï¿½ï¿½
-    int choose = 0;
-    while (choose != black && choose != white)
+    //Ñ¡ÔñºÚ°×Æå
+    //
+    int choose = -1;
+    while (choose != 1 && choose != 2)
     {
-        printf("Ñ¡ï¿½ï¿½ï¿½ï¿½å»¹ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)\n1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\n2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\n");
-        scanf("%d", &choose);
-        if (choose == black)
+        printf("1.Ñ¡ÔñºÚÆå£¨ÆäÊµÊÇ°×É«£© 2.Ñ¡Ôñ°×Æå£¨ÆäÊµÊÇºìÉ«£©(ºÚÆåÏÈÊÖ)\n");
+        scanf_s("%d", &choose);
+        if (choose == 1)
         {
-            Roleplay(board, choose, head);
+            Roleplay(board, black, head);
             break;
         }
-        else if (choose == white)
+        else if (choose == 2)
         {
-            board[6][6] = black; //Ä¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½
-            Roleplay(board, choose, head);
+            board[8][8] = black; //Ä¬ÈÏ»úÆ÷ÏÂÔÚÆåÅÌ×îÖÐ¼ä
+            Roleplay(board, white, head);
             break;
         }
     }
-
+    //
     free(board);
     system("Pause");
     return 0;
