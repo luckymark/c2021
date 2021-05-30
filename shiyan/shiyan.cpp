@@ -3,6 +3,8 @@
 #include"Player.h"
 #include"Enemy.h"
 
+//WASD移动，J或者空格攻击，K防御
+
 using namespace sf;
 
 extern int PlayerPositionX;
