@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "def.h"
 #include <windows.h>
-void Roleplay(int **board, int choose, steps *head)
+void Roleplay(int **board, int choose)
 {
 
     int x, y;
@@ -28,28 +28,26 @@ void Roleplay(int **board, int choose, steps *head)
     if (win(board, x, y))
     {
         puts("you win");
-        free(head->nextstep);
-        head->nextstep = NULL;
         return;
     }
-    Robotplay(board, choose, head);
+    Robotplay(board, choose, x, y);
 }
-void Robotplay(int **board, int choose, steps *head)
+void Robotplay(int **board, int choose, int x, int y)
 {
     int max = 10000000;
     int min = -10000000;
     int *a = &min;
     int *b = &max;
-    tree(board, choose, head, deepth, a, b);
-    int x = find_steps(head)->x;
-    int y = find_steps(head)->y;
-    if (choose == white)
-        board[x][y] = black;
-    else
-        board[x][y] = white;
+    steps *head = head_creat();
+    tree(board, choose, head, deepth, a, b, x, y);
+    int dx = find_steps(head)->x;
+    int dy = find_steps(head)->y;
+    board[dx][dy] = abs(1 - choose);
     system("cls");
     printf_board(board);
-    if (win(board, x, y))
+    printf("%d\n", board_scores(board, choose));
+    printf("%d", head->win);
+    if (win(board, dx, dy))
     {
         puts("you lose");
         free(head->nextstep);
@@ -57,7 +55,7 @@ void Robotplay(int **board, int choose, steps *head)
         return;
     }
     free(head->nextstep);
-    head->nextstep = NULL;
-    Roleplay(board, choose, head);
+    free(head);
+    Roleplay(board, choose);
     return;
 }

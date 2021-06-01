@@ -3,6 +3,7 @@
 #include <windows.h>
 void printf_board(int **board)
 {
+    printf("©–¢Ù¢Ú¢Û¢Ü¢Ý¢Þ¢ß¢à¢á¢â1112131415\n");
     for (int i = 0; i < 17; i++)
     {
         for (int j = 0; j < 17; j++)
@@ -10,8 +11,7 @@ void printf_board(int **board)
             if (board[i][j] == empty)
                 printf("¡õ");
             else if (board[i][j] == black)
-                printf("¡ñ");
-            else if (board[i][j] == white)
+
             {
                 SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY |
                                                                              FOREGROUND_RED);
@@ -19,6 +19,8 @@ void printf_board(int **board)
                 SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY |
                                                                              FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
             }
+            else if (board[i][j] == white)
+                printf("¡ñ");
             else if (board[i][j] == wall)
                 printf("¡ö");
         }
@@ -45,17 +47,4 @@ int **creatboard(void) //ÆåÅÌ´´½¨º¯Êý
         board[i][16] = wall;
     }
     return board;
-}
-void test_board(int **board)
-{
-    board[3][3] = black;
-    board[4][4] = black;
-    board[3][4] = white;
-    board[4][3] = white;
-    board[2][4] = white;
-    board[2][6] = white;
-    board[3][5] = white;
-    board[3][6] = black;
-    board[2][5] = black;
-    board[4][5] = black;
 }
