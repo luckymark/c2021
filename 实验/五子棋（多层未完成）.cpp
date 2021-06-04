@@ -2,13 +2,14 @@
 #include<cstdio>
 #include<stdlib.h>
 #include<windows.h>
+#include<math.h>
 using namespace std;
 int qipan[15][15]={0};
 int fuzhi[15][15];
 int c_x,c_y;
 
-int value_player(int now[15][15]);
-int value_com(int now[15][15]); 
+int value_player(int now[15][15],int k);
+int value_com(int now[15][15],int k); 
 int win(int now[15][15]);
 int play_depth(int now[15][15],int depth);
 int search_l(int now[15][15],int k);
@@ -17,6 +18,7 @@ int search_xsright(int now[15][15],int p_c);
 int search_xsleft(int now[15][15],int p_c);
 void print_qipan();
 void com_play(int now[15][15]);
+int nearb(int i,int j);
 
 int main(){
 	int a,b;
@@ -43,10 +45,21 @@ int main(){
 			cout<<"You lose!"<<endl;
 			break;
 		}
-		/*qipan[7][9]=-1;
-		cout<<search_l(fuzhi,1);*/
+		//qipan[7][9]=-1;
+		//cout<<value_player(fuzhi,0);
 	}
 } 
+
+int nearb(int i,int j){
+    int n=0;
+	for(int t=-2;t<=2;t++){
+		if(qipan[i+t][j]!=0)n=1;
+		if(qipan[i][j+t]!=0)n=1;
+		if(qipan[i+t][j+t]!=0)n=1;
+		if(qipan[i+t][j-t]!=0)n=1;
+	}
+	return n;	
+}
 
 int play_depth(int now[15][15],int depth){
     int copy[15][15];
@@ -58,10 +71,25 @@ int play_depth(int now[15][15],int depth){
         }
     }
     d=depth;
-    int com1=-value_com(copy);
+    int com1=-value_com(copy,0);
 	int com2;
+	int com;
     int player,computer;
+    for(int t=0;t<15;t++){
+        for(int k=0;k<15;k++){
+            copy[t][k]=now[t][k];
+        }
+    }
+    player=value_player(copy,0);
+    for(int t=0;t<15;t++){
+        for(int k=0;k<15;k++){
+            copy[t][k]=now[t][k];
+        }
+    }
+    computer=value_com(copy,0);
+    com=computer-player;
     while(depth>1){
+    	p_x=0;p_y=0;x=0;y=0;
     	for(int i=0;i<15;i++){
         for(int j=0;j<15;j++){
             if(now[i][j]==0){
@@ -71,13 +99,17 @@ int play_depth(int now[15][15],int depth){
                         copy[t][k]=now[t][k];
                     }
                 }
-                player=value_player(copy);
+                player=value_player(copy,1);
+                //if(now[6][10]==-1&&i==6&&j==8)cout<<"1 "<<player<<endl;
+                //if(now[6][10]==-1&&i==5&&j==9)cout<<"2 "<<player<<endl;
                 for(int t=0;t<15;t++){
                     for(int k=0;k<15;k++){
                         copy[t][k]=now[t][k];
                     }
                 }
-                computer=value_com(copy);
+                computer=value_com(copy,0);
+                //if(now[6][10]==-1&&i==6&&j==8)cout<<"3 "<<computer<<endl;
+                //if(now[6][10]==-1&&i==5&&j==9)cout<<"4 "<<computer<<endl;
                 now[i][j]=0;
                 if(player-computer>com1){
                     p_x=i;p_y=j;
@@ -93,13 +125,15 @@ int play_depth(int now[15][15],int depth){
         }
     }
     now[p_x][p_y]=1;
-    //cout<<"player:"<<p_x<<" "<<p_y<<"  ";
+    //if(now[6][8]==-1)cout<<com1<<" "<<p_x<<" "<<p_y<<endl;
+    //if(now[6][10]==-1)cout<<com1<<" "<<p_x<<" "<<p_y<<endl;
+    //cout<<"player:"<<p_x<<" "<<p_y<<"  "<<endl;
     for(int t=0;t<15;t++){
         for(int k=0;k<15;k++){
             copy[t][k]=now[t][k];
         }
     }
-    com2=-value_player(copy);
+    com2=-value_player(copy,0);
     for(int i=0;i<15;i++){
         for(int j=0;j<15;j++){
             if(now[i][j]==0){
@@ -109,13 +143,13 @@ int play_depth(int now[15][15],int depth){
                         copy[t][k]=now[t][k];
                     }
                 }
-                player=value_player(copy);
+                player=value_player(copy,0);
                 for(int t=0;t<15;t++){
                     for(int k=0;k<15;k++){
                         copy[t][k]=now[t][k];
                     }
                 }
-                computer=value_com(copy);
+                computer=value_com(copy,1);
                 now[i][j]=0;
                 if((computer-player)>com2){
                     com2=computer-player;
@@ -130,31 +164,34 @@ int play_depth(int now[15][15],int depth){
             }
         }
     }
-    now[x][y]=-1;
-        depth=depth-1;
-	}
-    now[x][y]=0;
-    now[p_x][p_y]=0;
     //cout<<"computer:"<<x<<" "<<y<<endl;
-    return com2;
+    now[x][y]=-1;
+    depth=depth-1;
+    com=com+com2/pow(5,2*(d-depth)-1);
+    //com=(com*8+com2)/7;   
+	}
+    //if(now[6][8]==-1)cout<<com2<<" "<<x<<" "<<y<<endl;
+    //if(now[6][10]==-1)cout<<com2<<" "<<x<<" "<<y<<endl;
+    //cout<<"computer:"<<x<<" "<<y<<endl;
+    return com;
 }
 
 void com_play(int now[15][15]){
-	int player,com;
+	int player,comp;
 	int computer,max,x,y;
 	int copy[15][15];
 	x=0;y=0;
-	max=-value_player(now);
+	max=-value_player(now,0);
 	for(int i=0;i<15;i++){
 		for(int j=0;j<15;j++){
-			if(now[i][j]==0){
+			if(now[i][j]==0&&nearb(i,j)==1){
 				now[i][j]=-1;
-				/*for(int t=0;t<15;t++){
+				for(int t=0;t<15;t++){
 			        for(int k=0;k<15;k++){
 				        copy[t][k]=now[t][k];
 			        }
 		        }
-				player=value_player(copy);
+				/*player=value_player(copy);
 				for(int t=0;t<15;t++){
 			        for(int k=0;k<15;k++){
 				        copy[t][k]=now[t][k];
@@ -172,13 +209,19 @@ void com_play(int now[15][15]){
 					//cout<<i<<" "<<j<<": "<<player<<" "<<computer<<endl;
 				}
 				player=0;computer=0;*/
-				com=play_depth(now,2);
-				if(com>max){
-				    max=com;
+				comp=play_depth(copy,2); 
+				//if(i==4&&j==8)cout<<com<<endl;
+				//if(i==6&&j==8)cout<<com<<endl;
+				if(comp>max){
+				    max=comp;
 				    c_x=i;c_y=j;
+				    //cout<<i<<" "<<j<<endl;
+			
 				}
-				else if(com==max&&(abs(i-7)+abs(j-7))<(abs(x-7)+abs(y-7))){
+				else if(comp==max&&(abs(i-7)+abs(j-7))<(abs(x-7)+abs(y-7))){
 				    c_x=i;c_y=j;
+				    //cout<<i<<" "<<j<<endl;
+				    
 				}
 				now[i][j]=0;
 			} 
@@ -320,7 +363,7 @@ int win(int now[15][15]){
 	return 0;
 }
 
-int value_player(int now[15][15]){
+int value_player(int now[15][15],int k){
 	int valuep=0; 
 	valuep=valuep+search_l(now,1);
 	//cout<<"l: "<<valuep<<endl;
@@ -330,10 +373,11 @@ int value_player(int now[15][15]){
 	//cout<<"xr: "<<i<<" "<<j<<" "<<valuep<<endl;
 	valuep=valuep+search_xsleft(now,1);
 	//cout<<"xl: "<<i<<" "<<j<<" "<<valuep<<endl;
+	if(k==1)valuep=valuep/2;
 	return valuep;
 }
 
-int value_com(int now[15][15]){
+int value_com(int now[15][15],int k){
 	int valuep=0; 
 	valuep=valuep+search_l(now,-1);
 	//cout<<"l: "<<i<<" "<<j<<" "<<valuep<<endl;
@@ -343,7 +387,7 @@ int value_com(int now[15][15]){
 	//cout<<"xr: "<<i<<" "<<j<<" "<<valuep<<endl;
 	valuep=valuep+search_xsleft(now,-1);
 	//cout<<"xl: "<<i<<" "<<j<<" "<<valuep<<endl;
-	valuep=valuep/2;
+	if(k==1)valuep=valuep/2;
 	return valuep;
 }
 
@@ -364,6 +408,7 @@ int search_l(int now[15][15],int k){
 	                //cout<<i<<" "<<j<<endl;
 	            }
 	            num=0;
+	            j++;
 	            while((now[i][j]==k||(now[i][j]==0&&now[i][j+1]==k&&num==0))&&j<15){
 	                if(now[i][j]==k){
 	                    value_i=value_i*10;
@@ -373,6 +418,7 @@ int search_l(int now[15][15],int k){
 					}
 	                j++;
 	            }
+	            if(cl!=0||now[i][j]==-k)value_i=value_i-1;
 	            if(now[i][j]==-k){
 	                if(j-cl<5){
 	                    value_i=0;
@@ -385,6 +431,7 @@ int search_l(int now[15][15],int k){
 	            	break;
 				}
 	        }
+	        if(value_i>=10000)value_i=value_i*100;
 	        value+=value_i;
 	        j++;
 	    }
@@ -409,6 +456,7 @@ int search_r(int now[15][15],int k){
 	                //cout<<i<<" "<<j<<endl;
 	            }
 	            num=0;
+	            i++;
 	            while((now[i][j]==k||(now[i][j]==0&&now[i+1][j]==k&&num==0))&&i<15){
 	                if(now[i][j]==k){
 	                    value_i=value_i*10;
@@ -418,6 +466,7 @@ int search_r(int now[15][15],int k){
 					}
 	                i++;
 	            }
+	            if(cl!=0||now[i][j]==-k)value_i=value_i-1;
 	            if(now[i][j]==-k){
 	                if(i-cl<5){
 	                    value_i=0;
@@ -430,6 +479,7 @@ int search_r(int now[15][15],int k){
 	            	break;
 				}
 	        }
+	        if(value_i>=10000)value_i=value_i*100;
 	        value+=value_i;
 	        i++;
 	    }
@@ -460,6 +510,7 @@ int search_xsright(int now[15][15],int p_c){
 	                //cout<<i<<" "<<j<<endl;
 	            }
 	            num=0;
+	            k++;
 	            while((now[i+k][j+k]==p_c||(now[i+k][j+k]==0&&now[i+k+1][j+k+1]==p_c&&num==0))&&k<15-abs(t)){
 	                if(now[i+k][j+k]==p_c){
 	                    value_i=value_i*10;
@@ -469,6 +520,7 @@ int search_xsright(int now[15][15],int p_c){
 					}
 	                k++;
 	            }
+	            if(cl!=0||now[i+k][j+k]==-p_c)value_i=value_i-1;
 	            if(now[i+k][j+k]==-p_c){
 	                if(k-cl<5){
 	                    value_i=0;
@@ -481,6 +533,7 @@ int search_xsright(int now[15][15],int p_c){
 	            	break;
 				}
 	        }
+	        if(value_i>=10000)value_i=value_i*100;
 	        value+=value_i;
 	        k++;
 	    }
@@ -511,6 +564,7 @@ int search_xsleft(int now[15][15],int p_c){
 	                //cout<<i<<" "<<j<<endl;
 	            }
 	            num=0;
+	            k++;
 	            while((now[i-k][j+k]==p_c||(now[i-k][j+k]==0&&now[i-k-1][j+k+1]==p_c&&num==0))&&k<15-abs(14-t)){
 	                if(now[i-k][j+k]==p_c){
 	                    value_i=value_i*10;
@@ -520,6 +574,7 @@ int search_xsleft(int now[15][15],int p_c){
 					}
 	                k++;
 	            }
+	            if(cl!=0||now[i-k][j+k]==-p_c)value_i=value_i-1;
 	            if(now[i-k][j+k]==-p_c){
 	                if(k-cl<5){
 	                    value_i=0;
@@ -532,6 +587,7 @@ int search_xsleft(int now[15][15],int p_c){
 	            	break;
 				}
 	        }
+	        if(value_i>=10000)value_i=value_i*100;
 	        value+=value_i;
 	        k++;
 	    }
