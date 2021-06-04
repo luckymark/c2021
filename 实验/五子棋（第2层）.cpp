@@ -125,7 +125,7 @@ int play_depth(int now[15][15],int depth){
                 player=0;computer=0;
             }
         }
-    }
+    } 
     now[p_x][p_y]=0;
     //cout<<"computer:"<<x<<" "<<y<<endl;
     return com2;
