@@ -1,41 +1,16 @@
 #include "go.h"
-#define PTIF 2147483647//正无穷,Beta
-#define NGIF -2147483648//负无穷,Alpha
 
 int board[L+2][L+2];
 
-int AI_regrex, AI_regrey, man_regrex, man_regrey;
+int AI_regretx, AI_regrety, man_regretx, man_regrety;
 
-int AI_x, AI_y;
-int man_x, man_y;//man_y=i,man_x=j
+int AI_x=0, AI_y=0;
+int man_x=0, man_y=0;//man_y=i,man_x=j
 //board[i][j]与position之间的关系gotoxy(4 * (man_x-1), 2 * (man_y-1) + 1)
 int dir[][2] = { {-1,-1},{-1,0},{-1,1},{0,-1},{0,1},{1,-1},{1,0},{1,1} };//八向的常量数组
 
 int flag = 0;//判断输赢
-int count = 0;//计算棋子数量 
-
-void chess_menu()//打印棋盘旁的菜单 
-{
-	int i,j;
-	for(i=1;i<=29;i++)
-	{
-		gotoxy(67,i);
-		printf("||");
-	}
-	for(i=1;i<=29;i++)
-	{
-		gotoxy(89,i);
-		printf("||");
-	}
-	gotoxy(69,1);
-	printf("--------------------");
-	gotoxy(69,29);
-	printf("--------------------");
-	gotoxy(75,3);
-	printf("模   式");
-	gotoxy(75,20);
-	printf("提   示");
-}
+int rank = 2;
 
 void board_array()
 {
@@ -52,11 +27,15 @@ void board_array()
 
 void man_move()//白棋移动光标 
 {
-	loop1:gotoxy(4 * (man_x - 1), 2 * (man_y - 1) + 1);
+loop1:location(man_x, man_y,white);
+	gotoxy(4 * man_x , 2 * (man_y - 1) + 1);
 	char key='y';
-	while(key!='0')
+	while(key!=' ')
 	{
 	    key=_getch();
+		if (AI_x != 0 && AI_y != 0)//玩家先手，第一次不用清除
+			clearlocation(AI_x, AI_y);
+		clearlocation(man_x, man_y);
 		switch(key)
 		{
     		case 72:
@@ -92,7 +71,8 @@ void man_move()//白棋移动光标
     			}
     		}
     	}
-		gotoxy(4 * (man_x-1), 2 * (man_y-1) + 1);
+		location(man_x, man_y,white);
+		gotoxy(4 * man_x, 2 * (man_y-1) + 1);
     }
 	if (board[man_y][man_x])
 	{
@@ -104,23 +84,22 @@ void man_move()//白棋移动光标
 	else 
 	{
 		board[man_y][man_x] = white;
-		BackGround(7, 0);
-		man_regrex = man_x;
-		man_regrey = man_y;
+		man_regretx = man_x;
+		man_regrety = man_y;
 		printf("●");
 	}
 }
 
-
-
 void machine_move()//打印AI的棋子的函数，机器用红子，玩家用白子
 {
-	minMax_AB(4, red, NGIF, PTIF,board);
+	IDDFS();
+	minMax_AB(rank, red, NGIF, PTIF, board);	
+	clearlocation(man_x, man_y);
 	board[AI_y][AI_x] = red;
-	gotoxy(4*(AI_x-1), 2*(AI_y-1)+1);//坐标和数组的顺序是反的
-	BackGround(4, 0);
-	AI_regrex = AI_x;//记录电脑上一落子的位置 ,方便悔棋 
-	AI_regrey = AI_y;
+	location(AI_x, AI_y, red);
+	gotoxy(4*AI_x, 2*(AI_y-1)+1);//坐标和数组的顺序是反的
+	AI_regretx = AI_x;//记录电脑上一落子的位置 ,方便悔棋 
+	AI_regrety = AI_y;
 	printf("●");
 }
 
@@ -174,6 +153,10 @@ void man_machine()//人机对战模式
 	printf("玩家为白子，电脑为红子(输入相应序号选择)");
 	key=_getch();
 	system("cls");
+	gotoxy(2, 5);
+	printf("请输入难度等级(输入偶数,例:2,4,6,难度等级越大,程序运行越慢):");
+	rank = _getch() - '0';
+	system("cls");
 	control = 1;
 	if(key!='1'&& key!='2')
 	{
@@ -191,11 +174,11 @@ void man_machine()//人机对战模式
 	{
 		AI_x = 7;
 		AI_y = 8;
-		gotoxy(4 * (AI_x - 1), 2 * (AI_y - 1) + 1);//机器第一次下在中间位置
-		BackGround(4, 0);
-		AI_regrex = AI_x;//记录电脑上一落子的位置 ,方便悔棋 
-		AI_regrey = AI_y;
-		board[AI_y][AI_x] = 1;
+		AI_regretx = AI_x;//记录电脑上一落子的位置 ,方便悔棋 
+		AI_regrety = AI_y;
+		board[AI_y][AI_x] = red;
+		location(AI_x, AI_y,red);
+		gotoxy(4 * AI_x, 2 * (AI_y - 1) + 1);//机器第一次下在中间位	
 		printf("●");
 	}
 	while(flag==0)
@@ -228,22 +211,18 @@ void man_machine()//人机对战模式
 	{
 		MessageBox(NULL,TEXT("游戏结束，您输给了电脑"),TEXT("五子棋游戏"),MB_OK);
 	}
-	if(count>=225)
-	{
-		MessageBox(NULL,TEXT("平局"),TEXT("五子棋游戏"),MB_OK);
-	}
 }
 
 void Regret()//悔棋函数 
 {
-	gotoxy(4 * (man_x - 1), 2 * (man_y - 1) + 1);
+	gotoxy(4 * man_regretx , 2 * (man_regrety - 1) + 1);
 	BackGround(0,0);
  	printf("  ");
-	board[man_y][man_x]=0;
-	gotoxy(4 * (AI_x - 1), 2 * (AI_y - 1) + 1);
+	board[man_regrety][man_regretx]=0;
+	gotoxy(4 * AI_regretx , 2 * (AI_regrety - 1) + 1);
 	BackGround(0,0);
  	printf("  ");
-	board[AI_y][AI_x]=0;
+	board[AI_regrety][AI_regretx]=0;
 } 
 
 

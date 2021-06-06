@@ -144,6 +144,7 @@
     <ClCompile Include="GUI.c" />
     <ClCompile Include="max-min.c" />
     <ClCompile Include="minmaxAB.c" />
+    <ClCompile Include="priority.c" />
     <ClCompile Include="五子棋1.0.c" />
   </ItemGroup>
   <ItemGroup>

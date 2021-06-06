@@ -1,4 +1,3 @@
-
 #include "go.h"
 typedef struct
 {
@@ -41,29 +40,32 @@ int search(int x, int y,int me,int vis[][L+2],int copy[][L+2])//搜索有多少颗连子
                 break;
             }       
         }
- 
-    //特殊情况优先
    
-    //标记已经搜索且在最大路径上的节点，避免重复搜索
-    for (int j = 0;j <= value;j++)
+    if (value == 5)//成五的情况最最优先，不需要再考虑两头的死活
+        ;
+    else
     {
-        int dx = x + j * dir[maxdir][0];
-        int dy = y + j * dir[maxdir][1];
-        vis[dx][dy] = 1;
-    }
-   
-    //判断连子的死活
-    int dx1 = x + value * dir[maxdir][0];
-    int dy1 = y + value * dir[maxdir][1];
-    int dx2 = x - dir[maxdir][0];
-    int dy2 = y - dir[maxdir][1];
-    if(dx1<0||dy1<0)
-        value--;
-    else 
-        if (copy[dx1][dy1] == F || copy[dx1][dy1] == wall)
+        //标记已经搜索且在最大路径上的节点，避免重复搜索
+        for (int j = 0;j <= value;j++)
+        {
+            int dx = x + j * dir[maxdir][0];
+            int dy = y + j * dir[maxdir][1];
+            vis[dx][dy] = 1;
+        }
+
+        //判断连子的死活
+        int dx1 = x + value * dir[maxdir][0];
+        int dy1 = y + value * dir[maxdir][1];
+        int dx2 = x - dir[maxdir][0];
+        int dy2 = y - dir[maxdir][1];
+        if (dx1 < 0 || dy1 < 0)
             value--;
-    if (copy[dx2][dy2] == F || copy[dx2][dy2] == wall)
-        value--;
+        else
+            if (copy[dx1][dy1] == F || copy[dx1][dy1] == wall)
+                value--;
+        if (copy[dx2][dy2] == F || copy[dx2][dy2] == wall)
+            value--;
+    }
     return value;    
 }
 
@@ -105,6 +107,13 @@ int generator(int *empty[][2])//产生空子序列
     return empty_cnt;
 }
 
+int IDDFS()
+{
+    for (int i = 2;i < rank;i = i + 2)
+    {
+        if (!minMax_AB(i, red, NGIF, PTIF, board))break;       
+    }
+}
 int minMax_AB(int depth, int me, int Alpha, int Beta, int tmp_board[][L+2])
 //分数传递,t为1表示红棋，为2表示白棋,调用时Alpha，Beta赋为NGIF,PTIF
 {
@@ -121,8 +130,10 @@ int minMax_AB(int depth, int me, int Alpha, int Beta, int tmp_board[][L+2])
         rival = 2;
     else
         rival = 1;
-    if (depth == 0||judge_winner(tree.X,tree.Y,me)==me)
+    if (depth == 0)
         return evaluate(me, tmp_board)-evaluate(rival,tmp_board);
+    if (judge_winner(tree.X, tree.Y, me) == me)
+        return 0;
     if (depth % 2)//判断是min层还是max层,奇数是min层
     {
         for (i = 1;i < L + 1;i++)
@@ -155,7 +166,7 @@ int minMax_AB(int depth, int me, int Alpha, int Beta, int tmp_board[][L+2])
                 {
                     memcpy(c, tmp_board, sizeof(int) * L * L);
                     //用一个新的数组表示棋盘，以免破坏原棋盘
-                    c[i][j] = me;
+                    c[i][j] = me; 
                     minmax = minMax_AB(depth - 1, rival, tree.Alpha, tree.Beta,c);
                     c[i][j] = 0;
                     if (minmax > tree.Alpha)

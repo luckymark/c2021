@@ -197,4 +197,33 @@ void testflat()
     }
 }
 
+#include "go.h"
+int priority()
+{
+    int i, j, k, p;
+    int c[L + 2][L + 2];
+    for (i = 1;i < L + 1;i++)
+        for (j = 1;j < L + 1;j++)
+        {
+            if (!board[i][j] && neighbor(i, j))
+            {
+                memcpy(c, board, sizeof(int) * L * L);//更新棋盘
+                c[i][j] = red;
+                for (k = 0;k < 8;k++)//i表示八个方向
+                    for (p = 1;p <= 5;p++)//j表示沿这个方向走了几步
+                    {
+                        int dx = i + p * dir[k][0];
+                        int dy = j + p * dir[k][1];
+                        if (c[dx][dy] != red)break;
+                    }
+                if (p == 5)
+                {
+                    AI_x = j;
+                    AI_y = i;
+                    return 1;
+                }
+            }
+        }
+    return 0;
+}
  */
