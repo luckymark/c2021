@@ -159,6 +159,22 @@ bool neighbor(const int &x,const int &y){
     return 0;
 }
 
+inline int stv(int s){
+    int v;
+    if(s>=SFive)v=1e9;
+    else if(s>=SFour)v=1e8*(s/SFour);
+    else if(s>=2*SBlockedFour)v=9e7*(s/(2*SBlockedFour));
+    else if(s>=SBlockedFour+SThree)v=8e7*(s/(SBlockedFour+SThree));
+    else if(s>=SBlockedFour)v=5e5;
+    else if(s>=2*SThree)v=5e7*(s/(2*SThree));
+    else if(s>=SThree)v=3e5;
+    else if(s>=SBolckedThree)v=1e4*(s/SBolckedThree);
+    else if(s>=STwo)v=5e3*(s/STwo);
+    else if(s>=SBlockedTwo)v=1e2*(s/SBlockedTwo);
+    else v=s;
+    return v;
+}
+
 void GeneratePoint(vector<pair<int,pair<int,int> > > &Ans,const bool &Color,const int &Limit,const bool &flag){
     vector<pair<int,pair<int,int> > > Five[2];
     vector<pair<int,pair<int,int> > > Four[2];
@@ -174,18 +190,7 @@ void GeneratePoint(vector<pair<int,pair<int,int> > > &Ans,const bool &Color,cons
             int s0=NewRisk(Color,i,j);
             int s1=NewRisk(Color^1,i,j);
 
-            int v;
-            if(s0>=SFive)v=1e9;
-            else if(s0>=SFour)v=1e8*(s0/SFour);
-            else if(s0>=2*SBlockedFour)v=9e7*(s0/(2*SBlockedFour));
-            else if(s0>=SBlockedFour+SThree)v=8e7*(s0/(SBlockedFour+SThree));
-            else if(s0>=SBlockedFour)v=5e5;
-            else if(s0>=2*SThree)v=5e7*(s0/(2*SThree));
-            else if(s0>=SThree)v=3e5;
-            else if(s0>=SBolckedThree)v=1e4*(s0/SBolckedThree);
-            else if(s0>=STwo)v=5e3*(s0/STwo);
-            else if(s0>=SBlockedTwo)v=1e2*(s0/SBlockedTwo);
-            else v=s0;
+            int v=stv(s0);
             v+=500*(N/2-max(abs(i-N/2),abs(j-N/2)))/(Step|1);
             // v+=s1;
             if(s0>=SFive)Five[0].push_back({v,{i,j}});
@@ -220,7 +225,7 @@ void GeneratePoint(vector<pair<int,pair<int,int> > > &Ans,const bool &Color,cons
         puts("Three[1]");DEBUG(Three[1]);
         system("pause");
     }
-
+    
     if(Five[0].size()){
         Ans=Five[0];
         return ;

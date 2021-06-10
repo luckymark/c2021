@@ -96,11 +96,13 @@ pair<int,pair<int,int> > olddfs(int dep,bool Color,int MaxLimit,ull state){
 pair<int,pair<int,int> > newdfs(int dep,bool Color,int MaxLimit,ull state){
     if(F.count(state))return F[state];
     vector<pair<int,pair<int,int> > >Points;
-    // if(Step==28)debug=1;
-    GeneratePoint(Points,Color,50,dep<=7);
+    // if(Step==9)debug=1;
+    GeneratePoint(Points,Color,50,dep<=5);
     // debug=0;
     if(!Points.size())return {0,{-1,-1}};
-    if(Points.size()==1)return F[state]=Points[0];
+    if(state==0&&Points.size()==1){
+        return F[state]=Points[0];
+    }
     sort(Points.begin(),Points.end(),greater<pair<int,pair<int,int> > >());
     int x=-1,y=-1;
     int Max=-1e9;
@@ -118,7 +120,7 @@ pair<int,pair<int,int> > newdfs(int dep,bool Color,int MaxLimit,ull state){
             // ::y=j;
             auto tmp=newdfs(dep-1,Color^1,Rating-Max,state^Hash[Color][i][j]);
             if(human){
-                Rating-=tmp.first*0.95;
+                Rating-=tmp.first*0.97;
             }
             else {
                 Rating-=tmp.first;

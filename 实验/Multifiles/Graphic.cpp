@@ -29,35 +29,43 @@ void Print(){
 
 bool Computer(const bool &Color){
     clock_t start=clock();
-    if(Step>=1){
+    if(Step>=2){
         F.clear();
         if(Step>=7){
-            auto tmp=newdfs(11,Color,INF,0);
+            auto tmp=newdfs(9,Color,INF,0);
             x=tmp.second.first;
             y=tmp.second.second;
         }
         else {
-	        // auto tmp=olddfs(DeepLimit,Color,INF,0);
+            // auto tmp=olddfs(DeepLimit,Color,INF,0);
 
-            auto tmp=newdfs(9,Color,INF,0);
-	        x=tmp.second.first;
-	        y=tmp.second.second;
+            auto tmp=newdfs(7,Color,INF,0);
+            x=tmp.second.first;
+            y=tmp.second.second;
         }
         // if(tmp.first<=-INF*0.9)return 1;
     }
-    // else if(Step==1){
-    //     while(1){
-    //         int d=rand()%8;
-    //         int nx=x+dxxx[d];
-    //         int ny=y+dyyy[d];
-    //         if(nx>=0&&ny>=0&&nx<N&&ny<N){
-    //             x=nx,y=ny;
-    //             break;
-    //         }
-    //     }
-    //     // x--;
-    //     // y++;
-    // }
+    else if(Step==1){
+        if(x==N/2&&y==N/2){
+            while(1){
+                int d=rand()%8;
+                int nx=x+dxxx[d];
+                int ny=y+dyyy[d];
+                if(nx>=0&&ny>=0&&nx<N&&ny<N){
+                    x=nx,y=ny;
+                    break;
+                }
+            }
+        }
+        else {
+            if(x>N/2)--x;
+            else if(x<N/2)++x;
+            if(y>N/2)--y;
+            else if(y<N/2)++y;
+        }
+        // x--;
+        // y++;
+    }
     Board[x][y]=Color;
     ++Step;
     History[Step]={x,y};
@@ -91,22 +99,22 @@ bool Player(int Color){
             return Computer(Color);
         }
         if(d==7){
-        	if(Step<BackStep)continue;
-        	Board[History[Step].first][History[Step].second]=-1;
-        	--Step;
-        	if(BackStep==2){
-	        	Board[History[Step].first][History[Step].second]=-1;
-	        	--Step;
-	        	x=History[Step].first;
-	        	y=History[Step].second;
-	        	return Player(Color);
-        	}
-        	else {
-	        	x=History[Step].first;
-	        	y=History[Step].second;
-	        	Print();
-        		return 0;
-        	}
+            if(Step<BackStep)continue;
+            Board[History[Step].first][History[Step].second]=-1;
+            --Step;
+            if(BackStep==2){
+                Board[History[Step].first][History[Step].second]=-1;
+                --Step;
+                x=History[Step].first;
+                y=History[Step].second;
+                return Player(Color);
+            }
+            else {
+                x=History[Step].first;
+                y=History[Step].second;
+                Print();
+                return 0;
+            }
         }
         int nx=x+dx[d];
         int ny=y+dy[d];
@@ -225,29 +233,29 @@ void ComputerVSComputer(){
     Print();
     while(1){
         if(_kbhit()){
-        	switch(_getch()){
-        		case 27:return ;
-        	}
+            switch(_getch()){
+                case 27:return ;
+            }
         }
         if(Now){
-        	if(Computer(1)){
-	            puts("Computer 2 (white) give up!");
-	            break;
-	        }
-	        if(Check()){
-	            puts("Computer 2 (white) wins!");
-	            break;
-	        }
+            if(Computer(1)){
+                puts("Computer 2 (white) give up!");
+                break;
+            }
+            if(Check()){
+                puts("Computer 2 (white) wins!");
+                break;
+            }
         }
         else {
-        	if(Computer(0)){
-	            puts("Computer 1 (black) give up!");
-	            break;
-	        }
-	        if(Check()){
-	            puts("Computer 1 (black) wins!");
-	            break;
-        	}
+            if(Computer(0)){
+                puts("Computer 1 (black) give up!");
+                break;
+            }
+            if(Check()){
+                puts("Computer 1 (black) wins!");
+                break;
+            }
         }
         if(Step==N*N){
             puts("Tie!");
