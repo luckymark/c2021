@@ -80,13 +80,16 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="C:/Users/10917/Desktop/gobang/gobang/function.h">
+			<Option target="gobang"/>
+		</Unit>
 		<Unit filename="C:/Users/10917/Desktop/gobang/gobang/gobang.h">
 			<Option target="gobang"/>
 		</Unit>
 		<Unit filename="C:/Users/10917/Desktop/gobang/gobang/main.cpp">
 			<Option target="gobang"/>
 		</Unit>
-		<Unit filename="C:/Users/10917/Desktop/gobang/gobang/types.h">
+		<Unit filename="C:/Users/10917/Desktop/gobang/gobang/map_print.h">
 			<Option target="gobang"/>
 		</Unit>
 		<Unit filename="C:/Users/10917/Desktop/gobang/gobang/CMakeLists.txt">

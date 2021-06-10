@@ -6,6 +6,12 @@
 
 #IncludeRegexTransform: 
 
+C:/Users/10917/Desktop/gobang/gobang/function.h
+iostream
+-
+time.h
+-
+
 C:/Users/10917/Desktop/gobang/gobang/gobang.h
 stdio.h
 -
@@ -17,14 +23,14 @@ string.h
 C:/Users/10917/Desktop/gobang/gobang/main.cpp
 gobang.h
 C:/Users/10917/Desktop/gobang/gobang/gobang.h
-types.h
-C:/Users/10917/Desktop/gobang/gobang/types.h
-time.h
--
 iostream
 -
+map_print.h
+C:/Users/10917/Desktop/gobang/gobang/map_print.h
+function.h
+C:/Users/10917/Desktop/gobang/gobang/function.h
 
-C:/Users/10917/Desktop/gobang/gobang/types.h
-stdint.h
+C:/Users/10917/Desktop/gobang/gobang/map_print.h
+iostream
 -
 
