@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/10917/Desktop/gobang/gobang/gobang.h
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+
+C:/Users/10917/Desktop/gobang/gobang/main.cpp
+gobang.h
+C:/Users/10917/Desktop/gobang/gobang/gobang.h
+types.h
+C:/Users/10917/Desktop/gobang/gobang/types.h
+time.h
+-
+iostream
+-
+
+C:/Users/10917/Desktop/gobang/gobang/types.h
+stdint.h
+-
+

@@ -1,0 +1,3 @@
+C:/Users/10917/Desktop/gobang/gobang/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/Users/10917/Desktop/gobang/gobang/cmake-build-debug/CMakeFiles/gobang.dir
+C:/Users/10917/Desktop/gobang/gobang/cmake-build-debug/CMakeFiles/edit_cache.dir

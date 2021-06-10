@@ -1,0 +1,3 @@
+"D:\CLion 2021.1\bin\cmake\win\bin\cmake.exe" -E rm -f CMakeFiles\gobang.dir/objects.a
+C:\minGW\mingw32\bin\ar.exe cr CMakeFiles\gobang.dir/objects.a @CMakeFiles\gobang.dir\objects1.rsp
+C:\minGW\mingw32\bin\g++.exe -g -Wl,--whole-archive CMakeFiles\gobang.dir/objects.a -Wl,--no-whole-archive -o gobang.exe -Wl,--out-implib,libgobang.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\gobang.dir\linklibs.rsp
