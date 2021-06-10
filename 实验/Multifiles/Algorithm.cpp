@@ -97,13 +97,29 @@ pair<int,pair<int,int> > newdfs(int dep,bool Color,int MaxLimit,ull state){
     if(F.count(state))return F[state];
     vector<pair<int,pair<int,int> > >Points;
     // if(Step==9)debug=1;
-    GeneratePoint(Points,Color,50,dep<=5);
+    GeneratePoint(Points,Color,30,dep<=5);
     // debug=0;
     if(!Points.size())return {0,{-1,-1}};
-    if(state==0&&Points.size()==1){
+    if((!state)&&Points.size()==1){
+    // if(Points.size()==1){
+    //     if(state&&dep){
+    //         int &Rating=Points[0].first;
+    //         int i=Points[0].second.first;
+    //         int j=Points[0].second.second;
+    //         Board[i][j]=Color;
+    //         while(dep>4)dep-=2;
+    //         auto tmp=newdfs(dep-1,Color^1,Rating+1e9,state^Hash[Color][i][j]);
+    //         if(human){
+    //             Rating-=tmp.first*0.97;
+    //         }
+    //         else {
+    //             Rating-=tmp.first;
+    //         }
+    //         Board[i][j]=-1;
+    //     }
         return F[state]=Points[0];
     }
-    sort(Points.begin(),Points.end(),greater<pair<int,pair<int,int> > >());
+    // sort(Points.begin(),Points.end(),greater<pair<int,pair<int,int> > >());
     int x=-1,y=-1;
     int Max=-1e9;
     ll sum=0;

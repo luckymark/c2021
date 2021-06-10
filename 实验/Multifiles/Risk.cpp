@@ -225,7 +225,7 @@ void GeneratePoint(vector<pair<int,pair<int,int> > > &Ans,const bool &Color,cons
         puts("Three[1]");DEBUG(Three[1]);
         system("pause");
     }
-    
+
     if(Five[0].size()){
         Ans=Five[0];
         return ;
@@ -244,6 +244,13 @@ void GeneratePoint(vector<pair<int,pair<int,int> > > &Ans,const bool &Color,cons
         if(flag)return ;
     }
 
+    // sort(TwoThree[0].begin(),TwoThree[0].end(),greater<pair<int,pair<int,int> > >());
+    // sort(TwoThree[1].begin(),TwoThree[1].end(),greater<pair<int,pair<int,int> > >());
+    // sort(BlockedFour[0].begin(),BlockedFour[0].end(),greater<pair<int,pair<int,int> > >());
+    // sort(BlockedFour[1].begin(),BlockedFour[1].end(),greater<pair<int,pair<int,int> > >());
+    // sort(Three[0].begin(),Three[0].end(),greater<pair<int,pair<int,int> > >());
+    // sort(Three[1].begin(),Three[1].end(),greater<pair<int,pair<int,int> > >());
+
     Ans.insert(Ans.end(),TwoThree[0].begin(),TwoThree[0].end());
     Ans.insert(Ans.end(),TwoThree[1].begin(),TwoThree[1].end());
     Ans.insert(Ans.end(),BlockedFour[0].begin(),BlockedFour[0].end());
@@ -251,7 +258,7 @@ void GeneratePoint(vector<pair<int,pair<int,int> > > &Ans,const bool &Color,cons
     Ans.insert(Ans.end(),Three[0].begin(),Three[0].end());
     Ans.insert(Ans.end(),Three[1].begin(),Three[1].end());
 
-    // sort(Ans.begin(),Ans.end(),greater<pair<int,pair<int,int> > >());
+    sort(Ans.begin(),Ans.end(),greater<pair<int,pair<int,int> > >());
     if(flag)return ;
     // if(TwoThree[0].size()||TwoThree[1].size()||flag){
     //     return ;
