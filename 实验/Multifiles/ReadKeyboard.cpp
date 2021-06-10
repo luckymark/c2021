@@ -17,6 +17,7 @@ int GetDirection(){
                 case ' ':return 4;
                 case 'g':return 5;
                 case 'h':return 6;
+                case 'b':return 7;
                 case 27:exit(0);
             }
         }

@@ -12,6 +12,7 @@ using namespace std;
 #define ull unsigned long long
 
 extern bool debug;
+extern bool human;
 extern const int N;
 extern const int INF;
 extern const int CountLimit;
@@ -19,6 +20,7 @@ extern const int DeepLimit;
 extern const int CountLimit2;
 extern const int DeepLimit2;
 extern int Board[15][15];
+extern pair<int,int> History[];
 extern ull Hash[2][15][15];
 //-1: unused
 // 0: black 
@@ -33,6 +35,9 @@ extern int dxx[];
 extern int dyy[];
 extern int dxxx[];
 extern int dyyy[];
+
+extern int Base[10];
+extern int Data[20005];
 
 extern unordered_map<ull,pair<int,pair<int,int> > >F;
 #endif

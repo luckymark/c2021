@@ -63,7 +63,17 @@ const int SBlockedTwo=1e2;
 
 #define Assert(x) if(!(x)){for(int i=0;i<9;++i)printf("%d\t",A[i]);puts("");assert(x);system("pause");}
 
+inline int HASH(int *A){
+    int ret=0;
+    for(int i=0;i<9;++i){
+        ret+=Base[i]*((~A[i])?A[i]:2);
+    }
+    return ret;
+}
+
 int GetScore(int *A){
+    int &ans=Data[HASH(A)];
+    if(~ans)return ans;
     int cnt[2]={0},len[2][4]={0};
     for(int i=3;~i;--i){
         if(A[i]==-1)break;
@@ -78,40 +88,40 @@ int GetScore(int *A){
 
     int lenm=len[0][0]+1+len[1][0];
 
-    if(lenm>=5)return SFive;
+    if(lenm>=5)return ans=SFive;
 
-    if(lenm+len[0][1]+len[0][2]+len[0][3]+len[1][1]+len[1][2]+len[1][3]<5)return 0;
+    if(lenm+len[0][1]+len[0][2]+len[0][3]+len[1][1]+len[1][2]+len[1][3]<5)return ans=0;
     
-    if(lenm==4 && len[0][1]>=1 && len[1][1]>=1 )return SFour;
-    if(lenm==3 && len[0][1]==1 && len[0][2]>=1 && len[1][1]==1 && len[1][2]>=1)return SFour;
-    if(lenm==2 && len[0][1]==1 && len[0][2]>=2 && len[1][1]==1 && len[1][2]>=2)return SFour;
-    if(lenm==1 && len[0][1]==1 && len[0][2]>=3 && len[1][1]==1 && len[1][2]>=3)return SFour;
+    if(lenm==4 && len[0][1]>=1 && len[1][1]>=1 )return ans=SFour;
+    if(lenm==3 && len[0][1]==1 && len[0][2]>=1 && len[1][1]==1 && len[1][2]>=1)return ans=SFour;
+    if(lenm==2 && len[0][1]==1 && len[0][2]>=2 && len[1][1]==1 && len[1][2]>=2)return ans=SFour;
+    if(lenm==1 && len[0][1]==1 && len[0][2]>=3 && len[1][1]==1 && len[1][2]>=3)return ans=SFour;
 
-    if(lenm==4 &&  (len[0][1]>=1 || len[1][1]>=1))return SBlockedFour;
-    if(lenm==3 && ((len[0][1]==1 && len[0][2]>=1) || (len[1][1]==1 && len[1][2]>=1)))return SBlockedFour;
-    if(lenm==2 && ((len[0][1]==1 && len[0][2]>=2) || (len[1][1]==1 && len[1][2]>=2)))return SBlockedFour;
-    if(lenm==1 && ((len[0][1]==1 && len[0][2]>=3) || (len[1][1]==1 && len[1][2]>=3)))return SBlockedFour;
+    if(lenm==4 &&  (len[0][1]>=1 || len[1][1]>=1))return ans=SBlockedFour;
+    if(lenm==3 && ((len[0][1]==1 && len[0][2]>=1) || (len[1][1]==1 && len[1][2]>=1)))return ans=SBlockedFour;
+    if(lenm==2 && ((len[0][1]==1 && len[0][2]>=2) || (len[1][1]==1 && len[1][2]>=2)))return ans=SBlockedFour;
+    if(lenm==1 && ((len[0][1]==1 && len[0][2]>=3) || (len[1][1]==1 && len[1][2]>=3)))return ans=SBlockedFour;
 
-    Assert(lenm<4);
+    // Assert(lenm<4);
 
-    if(lenm==3 && len[0][1]>=1 && len[1][1]>=1 &&   len[0][1]+len[1][1]>=3)return SThree;
-    if(lenm==2 && len[0][1]>=1 && len[1][1]>=1 && ((len[0][1]==1 && len[0][2]>=1 && len[0][3]>=1) || (len[1][1]==1 && len[1][2]>=1 && len[1][3]>=1)))return SThree;
-    if(lenm==1 && len[0][1]>=1 && len[1][1]>=1 && ((len[0][1]==1 && len[0][2]>=2 && len[0][3]>=1) || (len[1][1]==1 && len[1][2]>=2 && len[1][3]>=1)))return SThree;
+    if(lenm==3 && len[0][1]>=1 && len[1][1]>=1 &&   len[0][1]+len[1][1]>=3)return ans=SThree;
+    if(lenm==2 && len[0][1]>=1 && len[1][1]>=1 && ((len[0][1]==1 && len[0][2]>=1 && len[0][3]>=1) || (len[1][1]==1 && len[1][2]>=1 && len[1][3]>=1)))return ans=SThree;
+    if(lenm==1 && len[0][1]>=1 && len[1][1]>=1 && ((len[0][1]==1 && len[0][2]>=2 && len[0][3]>=1) || (len[1][1]==1 && len[1][2]>=2 && len[1][3]>=1)))return ans=SThree;
 
-    if(lenm==3 &&  (len[0][1]>=2 || len[1][1]>=2  || (len[0][1]==1 && len[1][1]==1)))return SBolckedThree;
-    if(lenm==2 && ((len[0][1]==1 && len[0][2]>=1) || (len[1][1]==1 && len[1][2]>=1) || (len[0][1]==2 && len[0][2]>=1) || (len[1][1]==2 && len[1][2]>=1)))return SBolckedThree;
-    if(lenm==1 && ((len[0][1]==1 && len[0][2]>=2) || (len[1][1]==1 && len[1][2]==2) || (len[0][1]==2 && len[0][2]>=2) || (len[1][1]==2 && len[1][2]>=2) || (len[0][1]==1 && len[0][2]>=1 && len[1][1]==1 && len[1][2]>=1)))return SBolckedThree;
+    if(lenm==3 &&  (len[0][1]>=2 || len[1][1]>=2  || (len[0][1]==1 && len[1][1]==1)))return ans=SBolckedThree;
+    if(lenm==2 && ((len[0][1]==1 && len[0][2]>=1) || (len[1][1]==1 && len[1][2]>=1) || (len[0][1]==2 && len[0][2]>=1) || (len[1][1]==2 && len[1][2]>=1)))return ans=SBolckedThree;
+    if(lenm==1 && ((len[0][1]==1 && len[0][2]>=2) || (len[1][1]==1 && len[1][2]==2) || (len[0][1]==2 && len[0][2]>=2) || (len[1][1]==2 && len[1][2]>=2) || (len[0][1]==1 && len[0][2]>=1 && len[1][1]==1 && len[1][2]>=1)))return ans=SBolckedThree;
     
-    Assert(lenm<3);
+    // Assert(lenm<3);
 
-    if(lenm==2 &&   len[0][1]>=1 &&   len[1][1]>=1 && len[0][1]+len[1][1]>=4)return STwo;
-    if(lenm==1 && ((len[0][1]>=1 && ((len[1][1]==1 && len[1][2]>=1 && len[1][3]>=1) || (len[1][1]==2 && len[1][2]==1 ))) || (len[1][1]>=1 && ((len[0][1]==1 && len[0][2]>=1 && len[0][3]>=1) || (len[0][1]==2 && len[0][2]==1)))))return STwo;
+    if(lenm==2 &&   len[0][1]>=1 &&   len[1][1]>=1 && len[0][1]+len[1][1]>=4)return ans=STwo;
+    if(lenm==1 && ((len[0][1]>=1 && ((len[1][1]==1 && len[1][2]>=1 && len[1][3]>=1) || (len[1][1]==2 && len[1][2]==1 ))) || (len[1][1]>=1 && ((len[0][1]==1 && len[0][2]>=1 && len[0][3]>=1) || (len[0][1]==2 && len[0][2]==1)))))return ans=STwo;
 
-    if(lenm==2)return SBlockedTwo;
-    if(lenm==1 && (len[1][1]<=3 && len[1][1]+len[1][3]>=3 && len[1][2]==1) || (len[0][1]<=3 && len[0][1]+len[0][3]>=3 && len[1][2]==1))return SBlockedTwo;
+    if(lenm==2)return ans=SBlockedTwo;
+    if(lenm==1 && (len[1][1]<=3 && len[1][1]+len[1][3]>=3 && len[1][2]==1) || (len[0][1]<=3 && len[0][1]+len[0][3]>=3 && len[1][2]==1))return ans=SBlockedTwo;
 
-    Assert(lenm<2);
-    return 10*(len[0][2]+lenm+len[1][2]);
+    // Assert(lenm<2);
+    return ans=10*(len[0][2]+lenm+len[1][2]);
 }
 
 int NewRisk(const bool &Color,const int &x,const int &y){
@@ -169,15 +179,15 @@ void GeneratePoint(vector<pair<int,pair<int,int> > > &Ans,const bool &Color,cons
             else if(s0>=SFour)v=1e8*(s0/SFour);
             else if(s0>=2*SBlockedFour)v=9e7*(s0/(2*SBlockedFour));
             else if(s0>=SBlockedFour+SThree)v=8e7*(s0/(SBlockedFour+SThree));
-            else if(s0>=SBlockedFour)v=5e6;
+            else if(s0>=SBlockedFour)v=5e5;
             else if(s0>=2*SThree)v=5e7*(s0/(2*SThree));
-            else if(s0>=SThree)v=3e6;
-            else if(s0>=SBolckedThree)v=1e5*(s0/SBolckedThree);
+            else if(s0>=SThree)v=3e5;
+            else if(s0>=SBolckedThree)v=1e4*(s0/SBolckedThree);
             else if(s0>=STwo)v=5e3*(s0/STwo);
             else if(s0>=SBlockedTwo)v=1e2*(s0/SBlockedTwo);
             else v=s0;
-            v+=10*(N/2-max(abs(i-N/2),abs(j-N/2)));
-
+            v+=500*(N/2-max(abs(i-N/2),abs(j-N/2)))/(Step|1);
+            // v+=s1;
             if(s0>=SFive)Five[0].push_back({v,{i,j}});
             else if(s1>=SFive)Five[1].push_back({v,{i,j}});
             else if(s0>=SFour)Four[0].push_back({v,{i,j}});
@@ -197,6 +207,7 @@ void GeneratePoint(vector<pair<int,pair<int,int> > > &Ans,const bool &Color,cons
     }
 
     if(debug){
+        Print();
         puts("Five[0]");DEBUG(Five[0]);
         puts("Five[1]");DEBUG(Five[1]);
         puts("Four[0]");DEBUG(Four[0]);
@@ -220,7 +231,7 @@ void GeneratePoint(vector<pair<int,pair<int,int> > > &Ans,const bool &Color,cons
     }
     if(Four[0].size()){
         Ans=Four[0];
-        if(flag)return ;
+        return ;
     }
     if(Four[1].size()){
         Ans.insert(Ans.end(),Four[1].begin(),Four[1].end());
@@ -235,6 +246,7 @@ void GeneratePoint(vector<pair<int,pair<int,int> > > &Ans,const bool &Color,cons
     Ans.insert(Ans.end(),Three[0].begin(),Three[0].end());
     Ans.insert(Ans.end(),Three[1].begin(),Three[1].end());
 
+    // sort(Ans.begin(),Ans.end(),greater<pair<int,pair<int,int> > >());
     if(flag)return ;
     // if(TwoThree[0].size()||TwoThree[1].size()||flag){
     //     return ;

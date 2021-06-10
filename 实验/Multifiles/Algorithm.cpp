@@ -85,7 +85,7 @@ pair<int,pair<int,int> > olddfs(int dep,bool Color,int MaxLimit,ull state){
         //     Rating=max(Rating,-INF);
         //     Board[i][j]=-1;
         // }
-        if(Rating>Max)x=i,y=j,Max=Rating;
+        if(Rating>Max&&rand()%50)x=i,y=j,Max=Rating;
         if(Max>=MaxLimit){
             return F[state]={Max,{x,y}};
         }
@@ -96,30 +96,55 @@ pair<int,pair<int,int> > olddfs(int dep,bool Color,int MaxLimit,ull state){
 pair<int,pair<int,int> > newdfs(int dep,bool Color,int MaxLimit,ull state){
     if(F.count(state))return F[state];
     vector<pair<int,pair<int,int> > >Points;
-    // if(dep==7)debug=1;
-    GeneratePoint(Points,Color,25,dep<=3);
-    debug=0;
-    if(!Points.size())return {2*INF,{-1,-1}};
+    // if(Step==28)debug=1;
+    GeneratePoint(Points,Color,50,dep<=7);
+    // debug=0;
+    if(!Points.size())return {0,{-1,-1}};
     if(Points.size()==1)return F[state]=Points[0];
     sort(Points.begin(),Points.end(),greater<pair<int,pair<int,int> > >());
     int x=-1,y=-1;
     int Max=-1e9;
+    ll sum=0;
+    int cnt=0;
+    vector<pair<int,int> >tmp;
     for(auto P:Points){
+    	++cnt;
         int Rating=P.first;
         int i=P.second.first;
         int j=P.second.second;
         if(dep){
             Board[i][j]=Color;
+            // ::x=i;
+            // ::y=j;
             auto tmp=newdfs(dep-1,Color^1,Rating-Max,state^Hash[Color][i][j]);
-            Rating-=tmp.first;
+            if(human){
+                Rating-=tmp.first*0.95;
+            }
+            else {
+                Rating-=tmp.first;
+            }
             Rating=min(Rating,INF);
             Rating=max(Rating,-INF);
             Board[i][j]=-1;
         }
-        if(Rating>Max)x=i,y=j,Max=Rating;
+        sum+=Rating;
+        if(Rating>Max){
+            Max=Rating;
+            tmp.clear();
+            tmp.push_back({i,j});
+        }
+        else if(Rating==Max){
+            tmp.push_back({i,j});
+        }
         if(Max>=MaxLimit){
-            return F[state]={Max,{x,y}};
+        	if(human){
+        		return F[state]={Max*0.98+sum/cnt*0.02,tmp[rand()%tmp.size()]};
+        	}
+            return F[state]={Max,tmp[rand()%tmp.size()]};
         }
     }
-    return F[state]={Max,{x,y}};
+    if(human){
+		return F[state]={Max*0.98+sum/cnt*0.02,tmp[rand()%tmp.size()]};
+	}
+    return F[state]={Max,tmp[rand()%tmp.size()]};
 }
