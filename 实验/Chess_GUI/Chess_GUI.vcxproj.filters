@@ -15,34 +15,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GUI.c">
+    <ClCompile Include="Chess-board.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="max-min.c">
+    <ClCompile Include="HomeScreen.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="draft.c">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="minmaxAB.c">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Chess.c">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="heuristic.c">
-      <Filter>源文件</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Chess.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="heuristic.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="max-min.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

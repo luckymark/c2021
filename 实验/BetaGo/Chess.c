@@ -1,18 +1,19 @@
-#include "go.h"
+#include "Chess.h"
 
-int board[L+2][L+2];
+int board[L+2][L+2];//表示棋盘的二维数组
 
-int AI_regretx, AI_regrety, man_regretx, man_regrety;
+int AI_regretx, AI_regrety, man_regretx, man_regrety;//记录人和AI上一轮下棋的位置，便于悔棋
 
-int AI_x=0, AI_y=0;
+int AI_x=0, AI_y=0;//记录AI本轮下棋的位置
 int man_x=0, man_y=0;//man_y=i,man_x=j
-//board[i][j]与position之间的关系gotoxy(4 * (man_x-1), 2 * (man_y-1) + 1)
-int dir[][2] = { {-1,-1},{-1,0},{-1,1},{0,-1},{0,1},{1,-1},{1,0},{1,1} };//八向的常量数组
+//board[i][j]与position之间的关系gotoxy(4 * man_x, 2 * (man_y-1) + 1)
+int dir[][2] = { {-1,-1},{-1,0},{-1,1},{0,-1},{0,1},{1,-1},{1,0},{1,1} };//表示八个方向的常量数组
 
 int flag = 0;//判断输赢
 int rank = 2;
 
-void board_array()
+//初始化表示棋盘的数组
+void board_init()
 {
 	for (int i = 0;i < L+2;i++)
 		for (int j = 0;j < L+2;j++)//解决边界问题，加一个边界，边界=3
@@ -24,7 +25,7 @@ void board_array()
 				board[i][j] = 3;
 		}
 }
-
+//实现人控制的光标移动和下棋
 void man_move()//白棋移动光标 
 {
 loop1:location(man_x, man_y,white);
@@ -89,11 +90,10 @@ loop1:location(man_x, man_y,white);
 		printf("●");
 	}
 }
-
+//实现AI控制的光标移动和下棋
 void machine_move()//打印AI的棋子的函数，机器用红子，玩家用白子
 {
 	IDDFS();
-	minMax_AB(rank, red, NGIF, PTIF, board);	
 	clearlocation(man_x, man_y);
 	board[AI_y][AI_x] = red;
 	location(AI_x, AI_y, red);
@@ -102,8 +102,8 @@ void machine_move()//打印AI的棋子的函数，机器用红子，玩家用白子
 	AI_regrety = AI_y;
 	printf("●");
 }
-
-int judge_winner(int x, int y, int me)//判断输赢，要向两个方向搜索
+//每下一步棋之后，判断输赢的函数
+int judge_winner(int x, int y, int me, int now_board[L+2][L+2])//判断输赢，要向两个方向搜索
 {
 	int n1 = 0, n2 = 0;
 	int flag = 0;
@@ -113,7 +113,7 @@ int judge_winner(int x, int y, int me)//判断输赢，要向两个方向搜索
 		{
 			int dx = x + j * dir[i][0];
 			int dy = y + j * dir[i][1];
-			if (board[dy][dx] == me)//AI_x,AI_y都是坐标上的x，y，表示数组要反过来
+			if (now_board[dy][dx] == me)//AI_x,AI_y都是坐标上的x，y，表示数组要反过来
 				n1++;
 			else 
 				break;
@@ -122,7 +122,7 @@ int judge_winner(int x, int y, int me)//判断输赢，要向两个方向搜索
 		{
 			int dx = x + j * dir[7 - i][0];
 			int dy = y + j * dir[7 - i][1];
-			if (board[dy][dx] == me)
+			if (now_board[dy][dx] == me)
 				n2++;
 			else 
 				break;
@@ -137,7 +137,7 @@ int judge_winner(int x, int y, int me)//判断输赢，要向两个方向搜索
 	}
 	return flag;
 }
-
+//实现人机对战功能的函数
 void man_machine()//人机对战模式 
 {
 	loop6:system("cls");
@@ -168,7 +168,7 @@ void man_machine()//人机对战模式
 	man_y=7;
 	man_x=8;
 	chess_board();
-	board_array();
+	board_init();
 	chess_menu();
 	if (key == '2')
 	{
@@ -189,7 +189,7 @@ void man_machine()//人机对战模式
 			BackGround(6,0);
 			printf("   玩 家 执 手    "); 
 			man_move();
-			flag=judge_winner(man_x,man_y,white);
+			flag=judge_winner(man_x,man_y,white,board);
 		}
 		else
 		{
@@ -197,7 +197,7 @@ void man_machine()//人机对战模式
 			BackGround(6,0);
 			printf("   电 脑 执 手    "); 
 			machine_move();
-			flag=judge_winner(AI_x,AI_y,red);
+			flag=judge_winner(AI_x,AI_y,red,board);
 		}
 		control=-control;
 	}
@@ -212,7 +212,12 @@ void man_machine()//人机对战模式
 		MessageBox(NULL,TEXT("游戏结束，您输给了电脑"),TEXT("五子棋游戏"),MB_OK);
 	}
 }
+//实现人与人对战功能的函数
+void man_man() 
+{
 
+}
+//实现悔棋功能的函数
 void Regret()//悔棋函数 
 {
 	gotoxy(4 * man_regretx , 2 * (man_regrety - 1) + 1);
@@ -224,7 +229,6 @@ void Regret()//悔棋函数
  	printf("  ");
 	board[AI_regrety][AI_regretx]=0;
 } 
-
 
 int main()
 {

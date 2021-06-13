@@ -1,6 +1,7 @@
-#include "go.h"
+#include "Chess.h"
 
-void welcome()//游戏菜单 
+//游戏菜单 
+void welcome()
 {
 	int k;
 	char choose;
@@ -33,8 +34,8 @@ void welcome()//游戏菜单
 
 	gotoxy(13, 20);
 }
-
-char Gametips()//游戏帮助 
+//游戏帮助
+char Gametips() 
 {
 	char choose;
 	int key;
@@ -55,8 +56,8 @@ char Gametips()//游戏帮助
 
 	return _getch();
 }
-
-void chess_board()//打印棋盘 
+//打印棋盘 
+void chess_board()
 {
 	int i, j;
 	for (i = 1;i <= 29;i++)
@@ -79,8 +80,8 @@ void chess_board()//打印棋盘
 		printf("——");
 	}		
 }
-
-void chess_menu()//打印棋盘旁的菜单 
+//打印棋盘旁的菜单
+void chess_menu() 
 {
 	int i, j;
 	for (i = 1;i <= 29;i++)
@@ -102,7 +103,7 @@ void chess_menu()//打印棋盘旁的菜单
 	gotoxy(75, 20);
 	printf("提   示");
 }
-
+//在玩家移动光标和下棋时输出图形对光标所在位置进行定位
 void location(int x, int y,int color)                    // 定位
 {
 	if (color == red)
@@ -127,8 +128,8 @@ void location(int x, int y,int color)                    // 定位
 		gotoxy(x * 4 + 2, y * 2);puts("┏");
 	}	
 }
-
-void clearlocation(int x, int y)                 //清除定位
+//清除定位
+void clearlocation(int x, int y)                 
 {
 	if (x > 1 && y > 1)
 	{
@@ -147,14 +148,14 @@ void clearlocation(int x, int y)                 //清除定位
 		gotoxy(x * 4 + 2, y * 2);puts("  ");
 	}
 }
-
-void BackGround(unsigned int ForeColor, unsigned int BackGroundColor)  //颜色 
+//背景颜色控制函数
+void BackGround(unsigned int ForeColor, unsigned int BackGroundColor)  
 {
 	HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);  //获取控制台的句柄
 	SetConsoleTextAttribute(handle, ForeColor + BackGroundColor * 0x10);//改变当前光标的背景和字体颜色
 }
-
-void gotoxy(int x, int y)    //光标函数 
+//光标函数 
+void gotoxy(int x, int y)    
 {
 	HANDLE handle;
 	COORD coord;   //获取坐标轴结构体

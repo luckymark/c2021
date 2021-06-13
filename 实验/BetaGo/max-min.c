@@ -1,13 +1,8 @@
-#include "go.h"
-typedef struct
-{
-    int Alpha;
-    int Beta;
-    int X;
-    int Y;
-}Tree;
+#include "Chess.h"
+#include "max-min.h"
 //ÔõÃ´±íÊ¾Æ²Şà£¿²»ºÃÅúÁ¿½¨Á¢Ò»Î¬Êı×é£¬Ğ±×ÅµÄÔÙ½¨Á¢¶şÎ¬Êı×é
 
+//ËÑË÷±éÀúÆåĞÍµÄº¯Êı£¬ÆÀ¹Àº¯ÊıevaluateÊÇÔÚsearch»ù´¡ÉÏµÄ´ò·Ö
 int search(int x, int y,int me,int vis[][L+2],int copy[][L+2])//ËÑË÷ÓĞ¶àÉÙ¿ÅÁ¬×Ó
 {
     int value = 0;
@@ -62,13 +57,17 @@ int search(int x, int y,int me,int vis[][L+2],int copy[][L+2])//ËÑË÷ÓĞ¶àÉÙ¿ÅÁ¬×Ó
             value--;
         else
             if (copy[dx1][dy1] == F || copy[dx1][dy1] == wall)
+            {
                 value--;
+                if (copy[dx2][dy2] == F || copy[dx2][dy2] == wall)
+                    value = 0;
+            }               
         if (copy[dx2][dy2] == F || copy[dx2][dy2] == wall)
             value--;
     }
     return value;    
 }
-
+//È«¾Ö·ÖÊıÆÀ¹Àº¯Êı
 int evaluate(int me,int copy[][L+2])//È«¾ÖÆÀ¹ÀÄ³Ò»·½µÄ·ÖÊı,turn=1ÆÀ¹Àred£¬a=2ÆÀ¹Àwhite
 {   
     int  k=0, score=0;
@@ -88,36 +87,20 @@ int evaluate(int me,int copy[][L+2])//È«¾ÖÆÀ¹ÀÄ³Ò»·½µÄ·ÖÊı,turn=1ÆÀ¹Àred£¬a=2ÆÀ¹
         }
     return score;
 }
-
-
-int generator(int *empty[][2])//²úÉú¿Õ×ÓĞòÁĞ
-{
-    
-    int empty_cnt = 0;
-    for (int i = 1;i < L + 1;i += 1)
-        for (int j = 1;j < L + 1;j += 1)
-        {
-            if (neighbor(i, j))
-            {
-                empty[empty_cnt][0] = i;
-                empty[empty_cnt][1] = j;
-                empty_cnt++;
-            }
-        }
-    return empty_cnt;
-}
-
+//µü´ú¼ÓÉîËÑË÷
 int IDDFS()
 {
-    for (int i = 2;i < rank;i = i + 2)
+    for (int i = 2;i <= rank;i++)
     {
-        if (!minMax_AB(i, red, NGIF, PTIF, board))break;       
+        if (!minMax_AB(i, red, NGIF, PTIF, board))break;
     }
+    return 0;
 }
+
+//¼«´óÖµ¼«Ğ¡ÖµËÑË÷£¨º¬¦Á¦Â¼ôÖ¦£©
 int minMax_AB(int depth, int me, int Alpha, int Beta, int tmp_board[][L+2])
 //·ÖÊı´«µİ,tÎª1±íÊ¾ºìÆå£¬Îª2±íÊ¾°×Æå,µ÷ÓÃÊ±Alpha£¬Beta¸³ÎªNGIF,PTIF
 {
-    int i, j;
     int c[L+2][L+2];
     int minmax;
     int rival;
@@ -134,12 +117,96 @@ int minMax_AB(int depth, int me, int Alpha, int Beta, int tmp_board[][L+2])
         return evaluate(me, tmp_board)-evaluate(rival,tmp_board);
     if (judge_winner(tree.X, tree.Y, me) == me)
         return 0;
+    if (depth % 2)//ÅĞ¶ÏÊÇmin²ã»¹ÊÇmax²ã
+    {
+        //min²ã
+        int empty_point[100][2] = { 0 };
+        int empty_cnt = generator(empty_point,tmp_board);
+        int point_value[100][3] = { 0 };
+        heuristic_search(point_value, empty_point, empty_cnt,white, tmp_board);
+        for (int k = 0;k < empty_cnt;k++)
+        {
+            int i = point_value[k][0];
+            int j = point_value[k][1];
+            if (tree.Alpha < tree.Beta)
+            {
+                memcpy(c, tmp_board, sizeof(int) * L * L);//¸üĞÂÆåÅÌ
+                c[i][j] = me;
+                minmax = minMax_AB(depth - 1, rival, tree.Alpha, tree.Beta, c);
+                c[i][j] = 0;
+                if (minmax < tree.Beta)
+                {
+                    tree.Beta = minmax;
+                    tree.X = j;
+                    tree.Y = i;
+                    if (tree.Alpha >= tree.Beta)
+                        return tree.Alpha;//¦Á¼ôÖ¦£¬Å×ÆúºóĞø½Úµã
+                }
+            }
+        }
+        return tree.Beta;
+    }
+    else
+    {
+        //max²ã
+        int empty_point[100][2] = { 0 };
+        int empty_cnt = generator(empty_point, tmp_board);
+        int point_value[100][3] = { 0 };
+        heuristic_search(point_value, empty_point, empty_cnt,red, tmp_board);
+        for (int k = 0;k < empty_cnt;k++)
+        {
+            int i = point_value[k][0];
+            int j = point_value[k][1];
+            if (tree.Alpha < tree.Beta)
+            {
+                memcpy(c, tmp_board, sizeof(int) * L * L);
+                //ÓÃÒ»¸öĞÂµÄÊı×é±íÊ¾ÆåÅÌ£¬ÒÔÃâÆÆ»µÔ­ÆåÅÌ
+                c[i][j] = me; 
+                minmax = minMax_AB(depth - 1, rival, tree.Alpha, tree.Beta,c);
+                c[i][j] = 0;
+                if (minmax > tree.Alpha)
+                {
+                    tree.Alpha = minmax;
+                    tree.X = j;
+                    tree.Y = i;
+                    if (tree.Alpha >= tree.Beta)
+                        return tree.Beta;//¦Á¼ôÖ¦£¬Å×ÆúºóĞø½Úµã
+                }
+            }
+        }
+        AI_x = tree.X;
+        AI_y = tree.Y;
+        return tree.Alpha;
+    }
+    
+}
+
+/*
+int minMax_AB(int depth, int me, int Alpha, int Beta, int tmp_board[][L + 2])
+//·ÖÊı´«µİ,tÎª1±íÊ¾ºìÆå£¬Îª2±íÊ¾°×Æå,µ÷ÓÃÊ±Alpha£¬Beta¸³ÎªNGIF,PTIF
+{
+    int i, j;
+    int c[L + 2][L + 2];
+    int minmax;
+    int rival;
+    Tree tree;
+    tree.Alpha = Alpha;
+    tree.Beta = Beta;
+    tree.X = 0;
+    tree.Y = 0;
+    if (me == 1)
+        rival = 2;
+    else
+        rival = 1;
+    int if_win = judge_winner(tree.X, tree.Y, me, tmp_board);
+    if (if_win ==me||depth==0)
+        return evaluate(me, tmp_board) - evaluate(rival, tmp_board);
     if (depth % 2)//ÅĞ¶ÏÊÇmin²ã»¹ÊÇmax²ã,ÆæÊıÊÇmin²ã
     {
         for (i = 1;i < L + 1;i++)
             for (j = 1;j < L + 1;j++)
             {
-                if (!tmp_board[i][j]&& neighbor(i, j) && tree.Alpha < tree.Beta)
+                if (!tmp_board[i][j] && neighbor(i, j, tmp_board) && tree.Alpha < tree.Beta)
                 {
                     memcpy(c, tmp_board, sizeof(int) * L * L);//¸üĞÂÆåÅÌ
                     c[i][j] = me;
@@ -154,7 +221,7 @@ int minMax_AB(int depth, int me, int Alpha, int Beta, int tmp_board[][L+2])
                             return tree.Alpha;//¦Á¼ôÖ¦£¬Å×ÆúºóĞø½Úµã
                     }
                 }
-            }
+             }
         return tree.Beta;
     }
     else
@@ -162,12 +229,12 @@ int minMax_AB(int depth, int me, int Alpha, int Beta, int tmp_board[][L+2])
         for (i = 1;i < L + 1;i++)
             for (j = 1;j < L + 1;j++)
             {
-                if (!tmp_board[i][j] && neighbor(i, j) && tree.Alpha < tree.Beta)
+                if (!tmp_board[i][j] && neighbor(i, j, tmp_board) && tree.Alpha < tree.Beta)
                 {
                     memcpy(c, tmp_board, sizeof(int) * L * L);
                     //ÓÃÒ»¸öĞÂµÄÊı×é±íÊ¾ÆåÅÌ£¬ÒÔÃâÆÆ»µÔ­ÆåÅÌ
-                    c[i][j] = me; 
-                    minmax = minMax_AB(depth - 1, rival, tree.Alpha, tree.Beta,c);
+                    c[i][j] = me;
+                    minmax = minMax_AB(depth - 1, rival, tree.Alpha, tree.Beta, c);
                     c[i][j] = 0;
                     if (minmax > tree.Alpha)
                     {
@@ -183,23 +250,12 @@ int minMax_AB(int depth, int me, int Alpha, int Beta, int tmp_board[][L+2])
         AI_y = tree.Y;
         return tree.Alpha;
     }
-    
 }
+*/
 
- 
-int neighbor(int x,int y)//ÅĞ¶Ï¿ÕÎ»ÖÃÁ½²½Ö®ÄÚÊÇ·ñÓĞÁÚ¾Ó
-{
-    for (int di = 0;di < 8;di++)//i±íÊ¾°Ë¸ö·½Ïò
-        for (int dj = 1;dj < 3;dj++)//j±íÊ¾ÑØÕâ¸ö·½Ïò×ßÁË¼¸²½
-        {
-            int dx = x + dj * dir[di][0];
-            int dy = y + dj * dir[di][1];
-            if (dx > 0 && dx < L + 1 && dy>0 && dy < L + 1)
-                if (board[dx][dy] == red || board[dx][dy] == white)
-                    return 1;
-        }
-    return 0;
-}
+
+
+
 
 
 
