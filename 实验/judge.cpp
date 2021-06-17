@@ -2,17 +2,6 @@
 #include "def.h"
 #include <windows.h>
 #include <math.h>
-int judge_win(int **board, int x, int y, int dx, int dy, int obj, int deep)
-{
-    if (board[x + dx][y + dy] == obj)
-    {
-        deep++;
-        int a = judge_win(board, x + dx, y + dy, dx, dy, obj, deep);
-        return a;
-    }
-    else
-        return deep;
-}
 int win(int **board, int x, int y) //胜利判断函数
 {
     int dir[8][2] = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}, {1, -1}, {-1, 1}, {1, 1}, {-1, -1}};
@@ -22,14 +11,34 @@ int win(int **board, int x, int y) //胜利判断函数
     {
         int deep1 = 0; //一个方向上
         int deep2 = 0; //另一个方向上
-        deep1 = judge_win(board, x, y, dir[2 * i][0], dir[2 * i][1], obj, deep1);
+        int dx = x;
+        int dy = y;
+        for (int j = 0; j < 5; j++)
+            if (board[dx + dir[2 * i][0]][dy + dir[2 * i][1]] == obj)
+            {
+                deep1++;
+                dx = dx + dir[2 * i][0];
+                dy = dy + dir[2 * i][1];
+            }
+            else
+                break;
         if (deep1 == 4)
         {
             return 1;
         } //直接ok
         else
         {
-            deep2 = judge_win(board, x, y, dir[2 * i + 1][0], dir[2 * i + 1][1], obj, deep2); //找同一直线的另一个方向
+            dx = x;
+            dy = y;
+            for (int j = 0; j < 5; j++)
+                if (board[dx + dir[2 * i + 1][0]][dy + dir[2 * i + 1][1]] == obj)
+                {
+                    deep2++;
+                    dx = dx + dir[2 * i + 1][0];
+                    dy = dy + dir[2 * i + 1][1];
+                }
+                else
+                    break; //找同一直线的另一个方向
             int deep = deep1 + deep2 + 1;
             if (deep >= 5)
             {
@@ -41,21 +50,25 @@ int win(int **board, int x, int y) //胜利判断函数
 }
 void judge_ends(int **board, int x, int y, int dx, int dy, int obj, int deep, continuation *current)
 {
-    if (board[x + dx][y + dy] == obj)
+    int px = x, py = y;
+    for (int j = 0; j < 5; j++)
     {
-        deep++;
-        judge_ends(board, x + dx, y + dy, dx, dy, obj, deep, current);
-        return;
-    }
-    else
-    {
-        current->deep = deep;
-        if (board[x + dx][y + dy] == empty)
-            current->end = 0; //活路
+        if (board[px + dx][py + dy] == obj)
+        {
+            deep++;
+            px = px + dx;
+            py = py + dy;
+        }
         else
-            current->end = 1; //死路
-        return;
+        {
+            if (board[px + dx][py + dy] == empty)
+                current->end = 0; //活路
+            else
+                current->end = 1; //死路
+            break;
+        }
     }
+    current->deep = deep;
 }
 int canplay(int **board, int x, int y)
 {

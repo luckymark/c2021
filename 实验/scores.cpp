@@ -20,6 +20,7 @@ int steps_scores(int **board, int x, int y) //估值函数
         deep2.end = 0;
         judge_ends(board, x, y, dir[2 * i][0], dir[2 * i][1], obj, 0, &deep1);
         judge_ends(board, x, y, dir[2 * i + 1][0], dir[2 * i + 1][1], obj, 0, &deep2);
+
         chesses = deep1.deep + deep2.deep + 1;
         int ends = 0;
         ends = deep1.end + deep2.end;
@@ -98,14 +99,14 @@ int steps_scores(int **board, int x, int y) //估值函数
         sum = sum * 0.8;
     return sum;
 }
-int board_scores(int **board, int choose)
+int board_scores(int **board, int user)
 {
     int sum = 0;
     for (int i = 1; i < 17; i++)
         for (int j = 1; j < 17; j++)
-            if (board[i][j] == choose)
+            if (board[i][j] == user)
                 sum = sum + steps_scores(board, i, j);
-            else if (board[i][j] == abs(1 - choose))
+            else if (board[i][j] == abs(1 - user))
                 sum = sum - steps_scores(board, i, j) * 1.1;
     return sum;
 }

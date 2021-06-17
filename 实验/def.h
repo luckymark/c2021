@@ -45,3 +45,5 @@ void test_board(int **board);
 int canplay(int **board, int x, int y);
 void tree_search(steps *current, int count, int deep);
 steps *head_creat(void);
+int cmp1(const void *a, const void *b);
+int cmp1(const void *a, const void *b);

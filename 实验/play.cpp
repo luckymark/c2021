@@ -31,6 +31,7 @@ void Roleplay(int **board, int choose)
         return;
     }
     Robotplay(board, choose, x, y);
+    return;
 }
 void Robotplay(int **board, int choose, int x, int y)
 {
