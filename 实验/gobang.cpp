@@ -127,8 +127,8 @@ void showboard(){
         printf("%2d ", i);
         for (int j = 1;j <= 15;++j){
             if (j != 1)printf("─");
-            if (board[0][i][j])printf("●");//黑棋
-            else if (board[1][i][j])printf("○");//白棋
+            if (board[0][i][j])printf("○");//黑棋
+            else if (board[1][i][j])printf("●");//白棋
             else if (i == 1 && j == 1)printf("┌");
             else if (i == 1 && j == 15)printf("┐");
             else if (i == 15 && j == 1)printf("└");
