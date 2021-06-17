@@ -1,5 +1,6 @@
 #include "Chess.h"
 #include "max-min.h"
+#include "heuristic.h"
 //怎么表示撇捺？不好批量建立一维数组，斜着的再建立二维数组
 
 //搜索遍历棋型的函数，评估函数evaluate是在search基础上的打分
@@ -29,7 +30,7 @@ int search(int x, int y,int me,int vis[][L+2],int copy[][L+2])//搜索有多少颗连子
             {
                 if (j > value)
                 {
-                    value = j;//记录最大连子数和最大的方向
+                    value = j;//记录最大连子数和最大的方向，记录方向是为了之后好寻找
                     maxdir = i;
                 }
                 break;
@@ -60,9 +61,9 @@ int search(int x, int y,int me,int vis[][L+2],int copy[][L+2])//搜索有多少颗连子
             {
                 value--;
                 if (copy[dx2][dy2] == F || copy[dx2][dy2] == wall)
-                    value = 0;
+                    value = 0;//两头都被堵，分数为0
             }               
-        if (copy[dx2][dy2] == F || copy[dx2][dy2] == wall)
+        if (copy[dx2][dy2] == F || copy[dx2][dy2] == wall)//有一头被堵分数-1
             value--;
     }
     return value;    
@@ -105,6 +106,7 @@ int minMax_AB(int depth, int me, int Alpha, int Beta, int tmp_board[][L+2])
     int minmax;
     int rival;
     Tree tree;
+    Point point[200];
     tree.Alpha = Alpha;
     tree.Beta = Beta;
     tree.X = 0;
@@ -113,21 +115,35 @@ int minMax_AB(int depth, int me, int Alpha, int Beta, int tmp_board[][L+2])
         rival = 2;
     else
         rival = 1;
-    if (depth == 0)
+    if (judge_winner(tree.X, tree.Y, me) == me|| depth == 0)
         return evaluate(me, tmp_board)-evaluate(rival,tmp_board);
-    if (judge_winner(tree.X, tree.Y, me) == me)
-        return 0;
     if (depth % 2)//判断是min层还是max层
     {
         //min层
-        int empty_point[100][2] = { 0 };
-        int empty_cnt = generator(empty_point,tmp_board);
-        int point_value[100][3] = { 0 };
-        heuristic_search(point_value, empty_point, empty_cnt,white, tmp_board);
+        int empty_cnt = generator(point,tmp_board);
+        int kill_cnt;
+        kill_cnt =heuristic_search(point, empty_cnt,white, tmp_board);
+        //搜索深度超过四层就开启算杀，只保留估分最高的前五个节点
+        if (depth > 4)
+        {
+            if (kill_cnt)
+                empty_cnt = kill_cnt;
+            else 
+                empty_cnt = 5;
+        }
         for (int k = 0;k < empty_cnt;k++)
         {
-            int i = point_value[k][0];
-            int j = point_value[k][1];
+            //如果遇到杀棋，后面的枝全部剪掉
+            /*经过测试，这样剪枝效果并不理想，可能是因为由于双方决策的原因，有些杀棋无法达成
+            if (kill_cnt)
+            {
+                int i = point[k].X;
+                int j = point[k].Y;
+                empty_cnt = kill_cnt;
+            }
+            */
+            int i = point[k].X;
+            int j = point[k].Y;
             if (tree.Alpha < tree.Beta)
             {
                 memcpy(c, tmp_board, sizeof(int) * L * L);//更新棋盘
@@ -149,14 +165,17 @@ int minMax_AB(int depth, int me, int Alpha, int Beta, int tmp_board[][L+2])
     else
     {
         //max层
-        int empty_point[100][2] = { 0 };
-        int empty_cnt = generator(empty_point, tmp_board);
-        int point_value[100][3] = { 0 };
-        heuristic_search(point_value, empty_point, empty_cnt,red, tmp_board);
+        int empty_cnt = generator(point, tmp_board);
+        heuristic_search(point, empty_cnt, red, tmp_board);
+        if (depth > 4)
+        {
+            if (empty_cnt > 5)
+                empty_cnt = 5;
+        }
         for (int k = 0;k < empty_cnt;k++)
         {
-            int i = point_value[k][0];
-            int j = point_value[k][1];
+            int i = point[k].X;
+            int j = point[k].Y;
             if (tree.Alpha < tree.Beta)
             {
                 memcpy(c, tmp_board, sizeof(int) * L * L);
@@ -181,77 +200,6 @@ int minMax_AB(int depth, int me, int Alpha, int Beta, int tmp_board[][L+2])
     
 }
 
-/*
-int minMax_AB(int depth, int me, int Alpha, int Beta, int tmp_board[][L + 2])
-//分数传递,t为1表示红棋，为2表示白棋,调用时Alpha，Beta赋为NGIF,PTIF
-{
-    int i, j;
-    int c[L + 2][L + 2];
-    int minmax;
-    int rival;
-    Tree tree;
-    tree.Alpha = Alpha;
-    tree.Beta = Beta;
-    tree.X = 0;
-    tree.Y = 0;
-    if (me == 1)
-        rival = 2;
-    else
-        rival = 1;
-    int if_win = judge_winner(tree.X, tree.Y, me, tmp_board);
-    if (if_win ==me||depth==0)
-        return evaluate(me, tmp_board) - evaluate(rival, tmp_board);
-    if (depth % 2)//判断是min层还是max层,奇数是min层
-    {
-        for (i = 1;i < L + 1;i++)
-            for (j = 1;j < L + 1;j++)
-            {
-                if (!tmp_board[i][j] && neighbor(i, j, tmp_board) && tree.Alpha < tree.Beta)
-                {
-                    memcpy(c, tmp_board, sizeof(int) * L * L);//更新棋盘
-                    c[i][j] = me;
-                    minmax = minMax_AB(depth - 1, rival, tree.Alpha, tree.Beta, c);
-                    c[i][j] = 0;
-                    if (minmax < tree.Beta)
-                    {
-                        tree.Beta = minmax;
-                        tree.X = j;
-                        tree.Y = i;
-                        if (tree.Alpha >= tree.Beta)
-                            return tree.Alpha;//α剪枝，抛弃后续节点
-                    }
-                }
-             }
-        return tree.Beta;
-    }
-    else
-    {
-        for (i = 1;i < L + 1;i++)
-            for (j = 1;j < L + 1;j++)
-            {
-                if (!tmp_board[i][j] && neighbor(i, j, tmp_board) && tree.Alpha < tree.Beta)
-                {
-                    memcpy(c, tmp_board, sizeof(int) * L * L);
-                    //用一个新的数组表示棋盘，以免破坏原棋盘
-                    c[i][j] = me;
-                    minmax = minMax_AB(depth - 1, rival, tree.Alpha, tree.Beta, c);
-                    c[i][j] = 0;
-                    if (minmax > tree.Alpha)
-                    {
-                        tree.Alpha = minmax;
-                        tree.X = j;
-                        tree.Y = i;
-                        if (tree.Alpha >= tree.Beta)
-                            return tree.Beta;//α剪枝，抛弃后续节点
-                    }
-                }
-            }
-        AI_x = tree.X;
-        AI_y = tree.Y;
-        return tree.Alpha;
-    }
-}
-*/
 
 
 

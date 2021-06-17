@@ -6,33 +6,43 @@ void welcome()
 	int k;
 	char choose;
 	system("cls");
-	for (k = 2;k <= 12;k += 2)//游戏菜单 
+	BackGround(9, 15);
+	gotoxy(32, 2);
+	printf("$$$$$$$$$$$$$$$$$$$");
+	gotoxy(32, 17);
+	printf("$$$$$$$$$$$$$$$$$$$");
+	for (k = 4;k <= 16;k += 2)//游戏菜单 
 	{
-		gotoxy(5, k);
+		gotoxy(32, k);
 		printf("|-----------------|");
 	}
-	gotoxy(5, 3);
+	BackGround(2, 15);
+	gotoxy(32, 5);
 	printf("|  五 子 棋 游 戏 |");
 
-	gotoxy(5, 5);
+	gotoxy(32, 7);
 	printf("|     菜    单    |");
 
-	gotoxy(5, 7);
+	gotoxy(32, 9);
 	printf("|  1.人 机 对 战  |");
 
-	gotoxy(5, 9);
-	printf("|  2.游 戏 规 则  |");
+	gotoxy(32, 11);
+	printf("|  2.人 人 对 战  |");
 
-	gotoxy(5, 11);
-	printf("|  3.退 出 游 戏  |");
+	gotoxy(32, 13);
+	printf("|  3.游 戏 规 则  |");
 
-	gotoxy(5, 15);
+	gotoxy(32, 15);
+	printf("|  4.退 出 游 戏  |");	
+
+	gotoxy(20, 19);
+	BackGround(6, 15);
 	printf("温馨提示:输入菜单对应序号进行操作");
 
-	gotoxy(5, 20);
+	gotoxy(20, 21);
 	printf("祝您游戏愉快！");
 
-	gotoxy(13, 20);
+	gotoxy(20, 22);
 }
 //游戏帮助
 char Gametips() 

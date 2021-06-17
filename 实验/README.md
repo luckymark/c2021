@@ -150,6 +150,8 @@ dfs的搜索方式和递归程序结合起来理解
 
 快排 qsort
 
+结构体数组
+
 ## 学习能力
 
 ## bug list
@@ -203,19 +205,25 @@ dfs的搜索方式和递归程序结合起来理解
 
 - [x] 奇数层是min，evaluate要相减
 
-- [ ] 堵的时候隔了一颗棋子  判断死活value不用+1
-
 - [x] 设置一些优先情况
 
 - [x] 悔棋功能
+
+- [x] 设置结构体传递空位
 
 - [ ] 完善人机对战功能和界面
 
 - [ ] 启发式搜索
 
-  生成空位置能不能仅生成一次
+  生成空位置能不能仅生成一次，直接在大函数里面定义，之后层层传下去？但是每次的棋盘都在改变，分数的估值都在改变
 
   
+
+改进：最终放弃启发式搜索中搜索杀棋
+
+放弃迭代加深
+
+算杀在启搜的基础上来做
 
 
 ## 项目感悟
@@ -256,8 +264,6 @@ dfs的搜索方式和递归程序结合起来理解
 
 在min_max里加上优先情况，可能被剪枝剪掉了
 
-![image-20210523101848152](D:\应用软件\Typora2\Typora\typora-user-images\image-20210523101848152.png)
-
 ![image-20210606193743892](D:\应用软件\Typora2\Typora\typora-user-images\image-20210606193743892.png)
 
 ![image-20210608132439531](D:\应用软件\Typora2\Typora\typora-user-images\image-20210608132439531.png)中间留空电脑选择了延长自己的活三
@@ -268,15 +274,23 @@ function alphabeta_minmax(node, depth, α, β, Player)
         return the heuristic value of node
     if  Player = MaxPlayer //判断是玩家还是AI做决策，AI决策则为max层，玩家决策则为min层
         //极大节点
-        for each child of node//极小节点 
+        heuristic_search()//嵌入启发式搜索代码，给空位排序，有利于当前玩家的节点排前面
+        if(depth>limit)//搜索深度大于限定值，启动算杀
+            is_killer()
+            empty_cnt=killer_cnt//待遍历的结点数改为杀棋的数目
+        for each child of node//遍历排序好的极小节点 
             α := max(α, alphabeta(child, depth-1, α, β, not(Player) ))//极大节点
             //孩子节点的α，β继承自父节点  
             if β ≤ α 
             // 该极大节点的值>=α>=β，该极大节点后面的搜索到的值肯定会大于β，因此不会被其上层的极小节点所选用了。对于根节点，β为正无穷
                 break                             (* Beta cut-off *)
         return α
-    else // 极小节点
-        for each child of node // 极大节点
+    else  // 极小节点
+        heuristic_search()
+        if(depth>limit)
+            is_killer()
+            empty_cnt=killer_cnt
+        for each child of node // 遍历排序好的极大节点
             β := min(β, alphabeta(child, depth-1, α, β, not(Player) )) // 极小节点
             if β ≤ α // 该极大节点的值<=β<=α，该极小节点后面的搜索到的值肯定会小于α，因此不会被其上层的极大节点所选用了。对于根节点，α为负无穷
                 break                             (* Alpha cut-off *)
@@ -285,98 +299,4 @@ function alphabeta_minmax(node, depth, α, β, Player)
 alphabeta(origin, depth, -infinity, +infinity, MaxPlayer)
 ```
 
-```c
-int minMax_AB(int depth, int me, int Alpha, int Beta, int tmp_board[][L + 2])
-//分数传递,t为1表示红棋，为2表示白棋,调用时Alpha，Beta赋为NGIF,PTIF
-{
-    int i, j;
-    int c[L + 2][L + 2];
-    int minmax;
-    int rival;
-    Tree tree;
-    tree.Alpha = Alpha;
-    tree.Beta = Beta;
-    tree.X = 0;
-    tree.Y = 0;
-    if (me == 1)
-        rival = 2;
-    else
-        rival = 1;
-    if (depth == 0 || judge_winner(tree.X, tree.Y, me) == me)
-        return evaluate(me, tmp_board) - evaluate(rival, tmp_board);
-    if (depth % 2 == 0)//判断是min层还是max层,偶数是min层
-        if (depth == 0 || judge_winner(tree.X, tree.Y, me) == me)
-            return evaluate(me, tmp_board) - evaluate(rival, tmp_board);
-    if (depth % 2)//判断是min层还是max层,奇数是min层
-    {
-        for (i = 1;i < L + 1;i++)
-            for (j = 1;j < L + 1;j++)
-            {
-                if (!board[i][j] && neighbor(i, j) && tree.Alpha < tree.Beta)
-                    if (!tmp_board[i][j] && neighbor(i, j) && tree.Alpha < tree.Beta)
-                    {
-                        memcpy(c, tmp_board, sizeof(int) * L * L);//更新棋盘
-                        c[i][j] = me;
-                        minmax = minMax_AB(depth - 1, rival, tree.Alpha, tree.Beta, c);
-                        if (judge_winner(i, j, white) == white && depth == rank - 1)
-                            //优先情况：对方已经有活四就必须堵
-
-                        {
-                            AI_x = j;
-                            AI_y = i;
-                            return 0;
-                        }
-                        minmax = minMax_AB(depth - 1, rival, tree.Alpha, tree.Beta, c);
-                        c[i][j] = 0;
-                        if (minmax < tree.Beta)
-                        {
-                            tree.Beta = minmax;
-                            tree.X = j;
-                            tree.Y = i;
-                            if (tree.Alpha >= tree.Beta)
-                                return tree.Alpha;//α剪枝，抛弃后续节点
-                        }
-                    }
-            }
-        return tree.Beta;
-    }
-    else
-    {
-        for (i = 1;i < L + 1;i++)
-            for (j = 1;j < L + 1;j++)
-            {
-                if (!board[i][j] && neighbor(i, j) && tree.Alpha < tree.Beta)
-                    if (!tmp_board[i][j] && neighbor(i, j) && tree.Alpha < tree.Beta)
-                    {
-                        memcpy(c, tmp_board, sizeof(int) * L * L);
-                        //用一个新的数组表示棋盘，以免破坏原棋盘
-                        c[i][j] = me;
-                        minmax = minMax_AB(depth - 1, rival, tree.Alpha, tree.Beta, c);
-                        if (judge_winner(i, j, red) == red && depth == rank)
-                            //优先情况：自己已经有活四就必须接着下
-                        {
-                            AI_x = j;
-                            AI_y = i;
-                            return 0;
-                        }
-                        minmax = minMax_AB(depth - 1, rival, tree.Alpha, tree.Beta, c);
-                        c[i][j] = 0;
-                        if (minmax > tree.Alpha)
-                        {
-                            tree.Alpha = minmax;
-                            tree.X = j;
-                            tree.Y = i;
-                            if (tree.Alpha >= tree.Beta)
-                                return tree.Beta;//α剪枝，抛弃后续节点
-                        }
-                    }
-            }
-        AI_x = tree.X;
-        AI_y = tree.Y;
-        return tree.Alpha;
-    }
-}
-```
-
-![image-20210613213456813](D:\应用软件\Typora2\Typora\typora-user-images\image-20210613213456813.png)
-
+![image-20210614093116933](D:\应用软件\Typora2\Typora\typora-user-images\image-20210614093116933.png)

@@ -2,7 +2,7 @@
 #include "heuristic.h"
 
 //Éú³É¿ÉÏÂÆåÇÒÓĞÁÚ¾ÓµÄ¿ÕÎ»µÄº¯Êı
-int generator(int empty[][2],int now_board[L+2][L+2])//²úÉú¿Õ×ÓĞòÁĞ
+int generator(Point empty_point[200],int now_board[L+2][L+2])//²úÉú¿Õ×ÓĞòÁĞ
 {
     int empty_cnt = 0;
     for (int i = 1;i < L + 1;i += 1)
@@ -11,8 +11,9 @@ int generator(int empty[][2],int now_board[L+2][L+2])//²úÉú¿Õ×ÓĞòÁĞ
         {
             if (neighbor(i, j,now_board)&&!now_board[i][j])
             {
-                empty[empty_cnt][0] = i;
-                empty[empty_cnt][1] = j;
+                empty_point[empty_cnt].X = i;
+                empty_point[empty_cnt].Y = j;
+                empty_point[empty_cnt].is_killer = 0;
                 empty_cnt++;
             }
         }
@@ -34,7 +35,11 @@ int point_evaluate(int x, int y,int me, int now_board[L + 2][L + 2])
             if (now_board[dy][dx] == me)//AI_x,AI_y¶¼ÊÇ×ø±êÉÏµÄx£¬y£¬±íÊ¾Êı×éÒª·´¹ıÀ´
                 n1++;
             else
+            {
+                if (!now_board[dy + dir[i][1]][dx + dir[i][0]])
+                    n1--;
                 break;
+            }                
         }
         for (int j = 0;j <= 5;j++)//j±íÊ¾ÑØÕâ¸ö·½Ïò×ßÁË¼¸²½
         {
@@ -43,7 +48,11 @@ int point_evaluate(int x, int y,int me, int now_board[L + 2][L + 2])
             if (now_board[dy][dx] == me)
                 n2++;
             else
+            {
+                if (!now_board[dy+ dir[7 - i][1]][dx+ dir[7 - i][0]])
+                    n2--;
                 break;
+            }      
         }
         t = n1 + n2;
         if (t > value)
@@ -51,7 +60,6 @@ int point_evaluate(int x, int y,int me, int now_board[L + 2][L + 2])
             value = t;
         }
     }
-    //ÅĞ¶ÏÊÇ²»ÊÇÉ±Æå
     now_board[x][y] = 0;
     return value;
 }
@@ -70,9 +78,10 @@ int neighbor(int x, int y, int now_board[L+2][L+2])//ÅĞ¶Ï¿ÕÎ»ÖÃÁ½²½Ö®ÄÚÊÇ·ñÓĞÁÚ¾
     return 0;
 }
 //Æô·¢Ê½ËÑË÷º¯Êı
-void heuristic_search(int point_value[][3], int empty_point[][2], int empty_cnt, int me, int now_board[L + 2][L + 2])
+int heuristic_search(Point empty_point[200], int empty_cnt, int me, int now_board[L + 2][L + 2])
 {
     int cnt = 0;
+    int kill_cnt=0;
     int others;
     if (me == red)
         others = white;
@@ -80,24 +89,56 @@ void heuristic_search(int point_value[][3], int empty_point[][2], int empty_cnt,
         others = red;
     for (int i = 0;i < empty_cnt;i++)
     {
-        int x = empty_point[i][0];
-        point_value[i][0] = x;
-        int y = empty_point[i][1];
-        point_value[i][1] = y;
-        point_value[i][2] = point_evaluate(x, y, me, now_board) + point_evaluate(x, y, others, now_board);
+        int x = empty_point[i].X;
+        int y = empty_point[i].Y;
+        int me_value = point_evaluate(x, y, me, now_board);
+        int others_value = point_evaluate(x, y, others, now_board);
+        empty_point[i].value = me_value + others_value;
+
+        //ÅĞ¶ÏÊÇ²»ÊÇÉ±Æå
+        //is_killer(&empty_point[i], me_value, others_value);
+        //if (empty_point[i].is_killer)
+            //kill_cnt++;        
     }
-
-    qsort(point_value, empty_cnt, sizeof(int) * 3, comp);
-
+    
+   // if(!kill_cnt)
+        //qsort(empty_point, empty_cnt, sizeof(empty_point[0]), comp1);
+    //else
+        qsort(empty_point, kill_cnt, sizeof(empty_point[0]), comp2);
+    return kill_cnt;
 }
-/*
-void heuristic_search(struct Point *p, int me, int now_board[L + 2][L + 2])
-*/
-//qsortÅÅĞòµÄ±È½Ï¹æÔòº¯Êı
-int comp(const void* a, const void* b)
+
+//ÅĞ¶ÏÊÇ·ñÊÇÉ±Æå²¢ÆÀ¶¨µÈ¼¶
+void is_killer(Point* p, int me_value, int others_value)
 {
-    if (((int*)a)[2] < ((int*)b)[2])
-        return 1;
-    else return -1;
+    if (me_value > 4)
+        p->is_killer = 4;
+    else
+    {
+        if (others_value > 4)
+            p->is_killer = 3;
+        else
+        {
+            if (me_value > 3)
+                p->is_killer = 2;
+            else
+            {
+                if (others_value > 3)
+                    p->is_killer = 1;
+            }
+        }
+    }
+}
+
+//qsortÅÅĞòµÄ±È½Ï¹æÔòº¯Êı
+//Ã»ÓĞÉ±Æå¾ÍÓÃÆÀ¹À·ÖÊı±È½Ï
+int comp1(const void* a, const void* b)
+{
+    return (*(Point*)a).value < (*(Point*)b).value ? 1 : -1;
+}
+//ÓĞÉ±Æå¾ÍÓÃÉ±ÆåµÄ¼¶±ğ±È½Ï
+int comp2(const void* a, const void* b)
+{
+    return (*(Point*)a).is_killer < (*(Point*)b).is_killer ? 1 : -1;
 }
 

@@ -1,4 +1,5 @@
 #include "Chess.h"
+#include "max-min.h"
 
 int board[L+2][L+2];//±íÊ¾ÆåÅÌµÄ¶şÎ¬Êı×é
 
@@ -6,6 +7,7 @@ int AI_regretx, AI_regrety, man_regretx, man_regrety;//¼ÇÂ¼ÈËºÍAIÉÏÒ»ÂÖÏÂÆåµÄÎ»Ö
 
 int AI_x=0, AI_y=0;//¼ÇÂ¼AI±¾ÂÖÏÂÆåµÄÎ»ÖÃ
 int man_x=0, man_y=0;//man_y=i,man_x=j
+int man2_x=0, man2_y=0;
 //board[i][j]ÓëpositionÖ®¼äµÄ¹ØÏµgotoxy(4 * man_x, 2 * (man_y-1) + 1)
 int dir[][2] = { {-1,-1},{-1,0},{-1,1},{0,-1},{0,1},{1,-1},{1,0},{1,1} };//±íÊ¾°Ë¸ö·½ÏòµÄ³£Á¿Êı×é
 
@@ -26,10 +28,10 @@ void board_init()
 		}
 }
 //ÊµÏÖÈË¿ØÖÆµÄ¹â±êÒÆ¶¯ºÍÏÂÆå
-void man_move()//°×ÆåÒÆ¶¯¹â±ê 
+void man_move()//ÈËÀàÍæ¼ÒÒÆ¶¯¹â±ê£¬ÎªÁËÔÚÈËÈË¶ÔÕ½Ê±ÊµÏÖ¿ÉÒÔÓÉÁ½Î»Íæ¼Ò²Ù¿Ø£¬ÕâÀïÓÃÖ¸Õë´«µİÎ»ÖÃ×ø±êÊµÏÖ¶àÌ¬
 {
 loop1:location(man_x, man_y,white);
-	gotoxy(4 * man_x , 2 * (man_y - 1) + 1);
+	gotoxy(4 * (man_x) , 2 * (man_y - 1) + 1);
 	char key='y';
 	while(key!=' ')
 	{
@@ -73,7 +75,7 @@ loop1:location(man_x, man_y,white);
     		}
     	}
 		location(man_x, man_y,white);
-		gotoxy(4 * man_x, 2 * (man_y-1) + 1);
+		gotoxy(4 * (man_x), 2 * (man_y-1) + 1);
     }
 	if (board[man_y][man_x])
 	{
@@ -93,7 +95,8 @@ loop1:location(man_x, man_y,white);
 //ÊµÏÖAI¿ØÖÆµÄ¹â±êÒÆ¶¯ºÍÏÂÆå
 void machine_move()//´òÓ¡AIµÄÆå×ÓµÄº¯Êı£¬»úÆ÷ÓÃºì×Ó£¬Íæ¼ÒÓÃ°××Ó
 {
-	IDDFS();
+	//IDDFS();
+	minMax_AB(rank, red, NGIF, PTIF, board);
 	clearlocation(man_x, man_y);
 	board[AI_y][AI_x] = red;
 	location(AI_x, AI_y, red);
@@ -140,6 +143,7 @@ int judge_winner(int x, int y, int me, int now_board[L+2][L+2])//ÅĞ¶ÏÊäÓ®£¬ÒªÏòÁ
 //ÊµÏÖÈË»ú¶ÔÕ½¹¦ÄÜµÄº¯Êı
 void man_machine()//ÈË»ú¶ÔÕ½Ä£Ê½ 
 {
+	system("color F2");
 	loop6:system("cls");
 	char key;
 	int control;
@@ -162,7 +166,8 @@ void man_machine()//ÈË»ú¶ÔÕ½Ä£Ê½
 	{
 		printf("ÇëÖØĞÂÊäÈë");
 		goto loop6;
-	}	
+	}
+	system("color 0F");
 	gotoxy(70,5);
 	printf("   ÈË »ú ¶Ô Õ½    ");
 	man_y=7;
@@ -215,7 +220,47 @@ void man_machine()//ÈË»ú¶ÔÕ½Ä£Ê½
 //ÊµÏÖÈËÓëÈË¶ÔÕ½¹¦ÄÜµÄº¯Êı
 void man_man() 
 {
-
+	char key;
+	int control=1;
+	system("cls");
+	gotoxy(70, 5);
+	printf("   ÈË ÈË ¶Ô Õ½    ");
+	man_y = 7;
+	man_x = 8;
+	man2_y = 7;
+	man2_x = 8;
+	chess_board();
+	board_init();
+	chess_menu();
+	while (flag == 0)
+	{
+		if (control == 1)
+		{
+			gotoxy(70, 22);
+			BackGround(6, 0);
+			printf("   Íæ ¼Ò1 Ö´ ÊÖ    ");
+			man_move();
+			flag = judge_winner(man_x, man_y, white, board);
+		}
+		else
+		{
+			gotoxy(70, 22);
+			BackGround(6, 0);
+			printf("   Íæ ¼Ò2 Ö´ ÊÖ    ");
+			man_move();
+			flag = judge_winner(man2_x, man2_y, red, board);
+		}
+		control = -control;
+	}
+	if (flag == 1)
+	{
+		BackGround(7, 0);
+		MessageBox(NULL, TEXT("ÓÎÏ·½áÊø£¬ºì×ÓÊ¤Àû"), "Îå×ÓÆåÓÎÏ·", MB_OK);
+	}
+	if (flag == 2)
+	{
+		MessageBox(NULL, TEXT("ÓÎÏ·½áÊø£¬°××ÓÊ¤Àû"), "Îå×ÓÆåÓÎÏ·", MB_OK);
+	}
 }
 //ÊµÏÖ»ÚÆå¹¦ÄÜµÄº¯Êı
 void Regret()//»ÚÆåº¯Êı 
@@ -234,6 +279,7 @@ int main()
 {
 	system("title Îå×ÓÆå");
 	system("mode con cols=92 lines=33");
+	system("color F2");
 	char choose, temp;
 loop:welcome();
 	choose = _getch();
@@ -243,11 +289,14 @@ loop:welcome();
 		man_machine();
 		break;
 	case '2':
+		man_man();
+		break;
+	case '3':
 		temp = Gametips();
 		if (temp == 'E' || temp == 'e')
 			goto loop;
 		break;
-	case '3':
+	case '4':
 	{
 		int message = MessageBox(NULL, TEXT("ÊÇ·ñÍË³ö£¿"),TEXT( "ÓÑÇéÌáÊ¾"), MB_OKCANCEL);
 		if (IDCANCEL == message)

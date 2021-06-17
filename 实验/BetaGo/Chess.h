@@ -18,6 +18,7 @@ extern int AI_regrex, AI_regrey, man_regrex, man_regrey;
 
 extern int AI_x, AI_y;
 extern int man_x, man_y;
+extern int man2_x, man2_y;
 extern int AI_regretx, AI_regrety;
 extern int man_regretx, man_regrety;
 extern int dir[][2];
@@ -28,7 +29,7 @@ void gotoxy(int x, int y);
 void chess_menu();
 void chess_board();//打印棋盘 
 void board_init();
-void man_move();//红子棋移动光标
+void man_move();//人类玩家棋移动光标
 void machine_move();
 void clearlocation(int x, int y);
 void location(int x, int y, int color);
