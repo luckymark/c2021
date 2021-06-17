@@ -1,12 +1,12 @@
 #include<bits/stdc++.h>
 using namespace std;
-typedef pair<int, int> pos;
-typedef pair<int, pos> node;
-inline node min(const node &x, const node &y){
+typedef pair<int, int> pos;//<行,列>
+typedef pair<int, pos> topos;//<分数,位置>
+inline topos min(const topos &x, const topos &y){
     if (x.first == y.first)return x;
     return x.first < y.first ? x : y;
 }
-inline node max(const node &x, const node &y){
+inline topos max(const topos &x, const topos &y){
     if (x.first == y.first)return x;
     return x.first > y.first ? x : y;
 }
@@ -18,13 +18,13 @@ vector<pos> getvaild(){
     for (int i = 1;i <= 15;++i)
         for (int j = 1;j <= 15;++j)
             if (board[0][i][j] || board[1][i][j])
-                for (int x = max(1, i - 3);x <= min(15, i + 3);++x)
-                    for (int y = max(1, j - 3);y <= min(15, j + 3);++y)
+                for (int x = max(1, i - 2);x <= min(15, i + 2);++x)
+                    for (int y = max(1, j - 2);y <= min(15, j + 2);++y)
                         if (!mark[x][y] && !board[0][x][y] && !board[1][x][y]){
-                            result.push_back({ x,y });
+                            result.emplace_back(x, y);
                             mark[x][y] = 1;
                         }
-    if (result.empty())result.push_back({ 7,7 });
+    if (result.empty())result.emplace_back(8, 8);
     return result;
 }
 const int mx[] = { 1,0,-1,1 };
@@ -34,14 +34,16 @@ inline bool isvaild(const int &x){
 }
 int sc(const int &cnt, const int &blk){
     if (cnt >= 5)return 1e8;
-    if (blk >= 2 || cnt <= 1)return 0;
+    if (blk >= 2)return 0;
     switch (cnt){
         case 4:
-            return blk ? 1280 : 2560;
+            return blk ? 1e5 : 1e6;
         case 3:
-            return blk ? 160 : 320;
+            return blk ? 1e3 : 1e4;
         case 2:
-            return blk ? 20 : 40;
+            return blk ? 1e2 : 1e3;
+        case 1:
+            return blk ? 0 : 10;
     }
     return 0;
 }
@@ -73,9 +75,9 @@ int assess(bool color){
                 result += assess_one(color, i, j);
     return color == computer ? result : -result;
 }
-node minmaxdfs(int depth, bool color, int alpha, int beta){
+topos minmaxdfs(int depth, bool color, int alpha, int beta){
     if (!depth)return { assess(color) + assess(!color),{0,0} };
-    node score = { (depth & 1) ? INT_MAX : INT_MIN,{0,0} }, temp;
+    topos score = { (depth & 1) ? INT_MAX : INT_MIN,{0,0} }, temp;
     for (pos t : getvaild()){
         board[color][t.first][t.second] = 1;
         temp = minmaxdfs(depth - 1, !color, alpha, beta);
@@ -96,30 +98,44 @@ node minmaxdfs(int depth, bool color, int alpha, int beta){
     return score;
 }
 int px, py;
+void showboard(){
+    printf("   1 2 3 4 5 6 7 8 9 0 1 2 3 4 5\n");
+    for (int i = 1;i <= 15;++i){
+        printf("%2d ", i);
+        for (int j = 1;j <= 15;++j){
+            if (j != 1)printf("─");
+            if (board[0][i][j])printf("●");
+            else if (board[1][i][j])printf("○");
+            else if (i == 1 && j == 1)printf("┌");
+            else if (i == 1 && j == 15)printf("┐");
+            else if (i == 15 && j == 1)printf("└");
+            else if (i == 15 && j == 15)printf("┘");
+            else if (i == 1)printf("┬");
+            else if (i == 15)printf("┴");
+            else if (j == 1)printf("├");
+            else if (j == 15)printf("┤");
+            else printf("┼");
+        }
+        putchar('\n');
+    }
+}
 int main(){
+    system("chcp 65001");
     computer = !(player = 1);
     int round = 0;
     memset(board, 0, sizeof board);
     for (bool now = 0;;now = !now){
-        printf("round %d\n", round);
-        for (int i = 1;i <= 15;++i){
-            for (int j = 1;j <= 15;++j){
-                if (board[0][i][j])printf("B");
-                else if (board[1][i][j])printf("W");
-                else printf(" ");
-            }
-            printf("\n");
-        }
-        if (++round == 225){
-            printf("pj");
+        if (round)showboard();
+        if (++round == 225){//平局
+            printf("draw");
             exit(0);
         }
         int scnow = assess(0) + assess(1);
-        if (scnow > 1e7){
+        if (scnow > 1e7){//黑棋胜利
             printf("Black Win\n");
             exit(0);
         }
-        else if (scnow < -1e7){
+        else if (scnow < -1e7){//白棋胜利
             printf("White Win\n");
             exit(0);
         }
@@ -135,7 +151,7 @@ int main(){
         }
         else if (now == computer){
             clock_t start = clock();
-            node result = minmaxdfs(4, now, INT_MAX, INT_MIN);
+            topos result = minmaxdfs(4, now, INT_MAX, INT_MIN);
             printf("used time:%.2lfs\n", 1.0 * (clock() - start) / CLOCKS_PER_SEC);
             printf("computer(%d,%d)\n", result.second.first, result.second.second);
             board[now][result.second.first][result.second.second] = 1;
