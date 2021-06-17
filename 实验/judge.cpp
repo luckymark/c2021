@@ -48,28 +48,7 @@ int win(int **board, int x, int y) //胜利判断函数
     }
     return 0;
 }
-void judge_ends(int **board, int x, int y, int dx, int dy, int obj, int deep, continuation *current)
-{
-    int px = x, py = y;
-    for (int j = 0; j < 5; j++)
-    {
-        if (board[px + dx][py + dy] == obj)
-        {
-            deep++;
-            px = px + dx;
-            py = py + dy;
-        }
-        else
-        {
-            if (board[px + dx][py + dy] == empty)
-                current->end = 0; //活路
-            else
-                current->end = 1; //死路
-            break;
-        }
-    }
-    current->deep = deep;
-}
+
 int canplay(int **board, int x, int y)
 {
     int dir[8][2] = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}, {1, -1}, {-1, 1}, {1, 1}, {-1, -1}};

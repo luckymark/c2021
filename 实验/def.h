@@ -36,8 +36,8 @@ void Robotplay(int **board, int choose, int x, int y);                          
 int steps_scores(int **board, int x, int y);                                             //估值函数
 void copyboard(int **from, int **to);                                                    //生成一个暂时的棋盘保存棋盘状态
 int win(int **board, int x, int y);
-int judge_win(int **board, int x, int y, int dx, int dy, int obj, int deep);
-void judge_ends(int **board, int x, int y, int dx, int dy, int obj, int deep, back *a);
+
+void search(int **board, int x, int y, int dx, int dy, int obj, back *a);
 int board_scores(int **board, int choose);
 steps *find_steps(steps *head);
 void test_board(int **board);
@@ -47,3 +47,4 @@ void tree_search(steps *current, int count, int deep);
 steps *head_creat(void);
 int cmp1(const void *a, const void *b);
 int cmp1(const void *a, const void *b);
+int scores(int chesses, int ends);
