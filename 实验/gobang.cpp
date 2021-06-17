@@ -109,12 +109,12 @@ topos minmaxdfs(int depth, bool color, int alpha, int beta){
         if (temp.first >= 1e7 || temp.first <= -1e7)return temp;//连成五子
         if (depth & 1){
             score = min(score, temp);
-            if (temp.first < beta)break;//alpha剪枝
+            if (temp.first < beta)break;//beta剪枝
             alpha = min(alpha, temp.first);
         }
         else{
             score = max(score, temp);
-            if (temp.first > alpha)break;//beta剪枝
+            if (temp.first > alpha)break;//alpha剪枝
             beta = max(beta, temp.first);
         }
     }
