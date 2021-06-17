@@ -48,29 +48,6 @@ int win(int **board, int x, int y) //Ê¤ÀûÅĞ¶Ïº¯Êı
     }
     return 0;
 }
-
-int canplay(int **board, int x, int y)
-{
-    int dir[8][2] = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}, {1, -1}, {-1, 1}, {1, 1}, {-1, -1}};
-    for (int i = 0; i < 8; i++)
-    {
-        if (board[x + dir[i][0]][y + dir[i][1]] == white || board[x + dir[i][0]][y + dir[i][1]] == black)
-        {
-            return 1;
-        }
-        else if (board[x + dir[i][0]][y + dir[i][1]] != wall)
-        {
-            int dx = x + dir[i][0];
-            int dy = y + dir[i][1];
-            for (int i = 0; i < 8; i++)
-            {
-                if (board[dx + dir[i][0]][y + dir[i][1]] == white || board[dx + dir[i][0]][y + dir[i][1]] == black)
-                    return 1;
-            }
-        }
-    }
-    return 0;
-}
 steps *find_steps(steps *head)
 {
     for (int i = 0; i < head->nextstep[0].num; i++)
@@ -83,5 +60,23 @@ steps *find_steps(steps *head)
     {
         if (head->nextstep[i].scores == head->scores)
             return &head->nextstep[i];
+    }
+}
+void mark(int **board, int x, int y)
+{
+    int dir[8][2] = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}, {1, -1}, {-1, 1}, {1, 1}, {-1, -1}};
+    for (int i = 0; i < 8; i++)
+    {
+        if (board[x + dir[i][0]][y + dir[i][1]] == empty)
+        {
+            board[x + dir[i][0]][y + dir[i][1]] = useful;
+        }
+        else if (board[x + dir[i][0]][y + dir[i][1]] != wall)
+        {
+            if (board[x + dir[i][0] + dir[i][0]][y + dir[i][1] + dir[i][1]] == empty)
+            {
+                board[x + dir[i][0] + dir[i][0]][y + dir[i][1] + dir[i][1]] = useful;
+            }
+        }
     }
 }

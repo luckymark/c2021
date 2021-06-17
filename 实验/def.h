@@ -1,4 +1,5 @@
 //ºÚ°×¿Õ
+#define useful 3
 #define empty 2
 #define black 1
 #define white 0
@@ -42,9 +43,9 @@ int board_scores(int **board, int choose);
 steps *find_steps(steps *head);
 void test_board(int **board);
 //else
-int canplay(int **board, int x, int y);
 void tree_search(steps *current, int count, int deep);
 steps *head_creat(void);
 int cmp1(const void *a, const void *b);
 int cmp1(const void *a, const void *b);
 int scores(int chesses, int ends);
+void mark(int **board, int x, int y);

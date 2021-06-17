@@ -8,7 +8,7 @@ void printf_board(int **board)
     {
         for (int j = 0; j < 17; j++)
         {
-            if (board[i][j] == empty)
+            if (board[i][j] == empty || board[i][j] == useful)
                 printf("¡õ");
             else if (board[i][j] == black)
 

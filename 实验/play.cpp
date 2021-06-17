@@ -16,9 +16,10 @@ void Roleplay(int **board, int choose)
         scanf_s("%d", &y);
         if (x > 0 && y > 0 && x < 17 && y < 17)
         {
-            if (board[x][y] == empty)
+            if (board[x][y] == empty || board[x][y] == useful)
             {
                 board[x][y] = choose;
+                mark(board, x, y);
                 ok = 0;
             }
         }
@@ -43,6 +44,7 @@ void Robotplay(int **board, int choose, int x, int y)
     tree(board, choose, head, deepth, a, b, x, y);
     int dx = find_steps(head)->x;
     int dy = find_steps(head)->y;
+    mark(board, dx, dy);
     board[dx][dy] = abs(1 - choose);
     system("cls");
     printf_board(board);

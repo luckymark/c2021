@@ -28,12 +28,12 @@ void tree(int **board, int user, steps *current, int deep, int *a, int *b, int x
         current->scores = board_scores(board, abs(1 - user));
         return;
     } //深搜到最底层
-
+    //启发式搜索
     each cell[225];
     for (int i = 1; i <= 15; i++)
         for (int j = 1; j <= 15; j++)
         {
-            if (board[i][j] == empty && canplay(board, i, j))
+            if (board[i][j] == useful)
             {
 
                 cell[num].x = i;
@@ -43,7 +43,7 @@ void tree(int **board, int user, steps *current, int deep, int *a, int *b, int x
                 else
                     board[i][j] = user;
                 //cell[num].scores = steps_scores(board, i, j);
-                board[i][j] = empty;
+                board[i][j] = useful;
                 num++;
             }
         }
@@ -66,10 +66,12 @@ void tree(int **board, int user, steps *current, int deep, int *a, int *b, int x
         if (deep % 2 == 1)
         {
             board[cell[i].x][cell[i].y] = user;
+            mark(board, cell[i].x, cell[i].y);
         }
         else
         {
             board[cell[i].x][cell[i].y] = abs(1 - user);
+            mark(board, cell[i].x, cell[i].y);
         }
 
         //创建并初始化子节点
@@ -145,6 +147,7 @@ void tree_search(steps *current, int position, int deep)
     {
         current->scores = current->nextstep[position - 1].scores;
         current->win = current->nextstep[position - 1].win;
+        return;
     }
     //极大极小搜索
     if (deep % 2 == 0) //极大搜索
@@ -154,6 +157,7 @@ void tree_search(steps *current, int position, int deep)
             current->scores = current->nextstep[position - 1].scores;
             current->win = current->nextstep[position - 1].win;
         }
+        return;
     }
     else //极小搜索
     {
@@ -162,6 +166,7 @@ void tree_search(steps *current, int position, int deep)
             current->scores = current->nextstep[position - 1].scores;
             current->win = current->nextstep[position - 1].win;
         }
+        return;
     }
 }
 steps *head_creat(void)

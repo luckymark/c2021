@@ -43,7 +43,7 @@ void search(int **board, int x, int y, int dx, int dy, int obj, back *current)
         }
         else
         {
-            if (board[px + dx][py + dy] == empty)
+            if (board[px + dx][py + dy] == empty || board[px + dx][py + dy] == useful)
                 current->end = 0; //活路
             else
                 current->end = 1; //死路
@@ -63,7 +63,7 @@ int board_scores(int **board, int user)
     {
         for (int j = 1; j <= 15; j++)
         {
-            if (board[i][j] == empty && robot == 0 && role == 0)
+            if ((board[i][j] == empty || board[i][j] == useful) && robot == 0 && role == 0)
             {
                 end = 0;
             }
@@ -91,7 +91,7 @@ int board_scores(int **board, int user)
                 role = 0;
                 robot++;
             }
-            else if (board[i][j] == empty)
+            else if (board[i][j] == empty || board[i][j] == useful)
             {
                 sum = sum + scores(role, end);
                 sum = sum - scores(robot, end) * 1.1;
@@ -109,7 +109,7 @@ int board_scores(int **board, int user)
     {
         for (int i = 1; i <= 15; i++)
         {
-            if (board[i][j] == empty && robot == 0 && role == 0)
+            if ((board[i][j] == empty || board[i][j] == useful) && robot == 0 && role == 0)
             {
                 end = 0;
             }
@@ -137,7 +137,7 @@ int board_scores(int **board, int user)
                 role = 0;
                 robot++;
             }
-            else if (board[i][j] == empty)
+            else if (board[i][j] == empty || board[i][j] == useful)
             {
                 sum = sum + scores(role, end);
                 sum = sum - scores(robot, end) * 1.1;
@@ -155,7 +155,7 @@ int board_scores(int **board, int user)
     {
         for (int j = 1; j <= k - 1; j++)
         {
-            if (board[k - j][j] == empty && robot == 0 && role == 0)
+            if ((board[k - j][j] == empty || board[k - j][j] == useful) && robot == 0 && role == 0)
             {
                 end = 0;
             }
@@ -183,7 +183,7 @@ int board_scores(int **board, int user)
                 role = 0;
                 robot++;
             }
-            else if (board[k - j][j] == empty)
+            else if (board[k - j][j] == empty || board[k - j][j] == useful)
             {
                 sum = sum + scores(role, end);
                 sum = sum - scores(robot, end) * 1.1;
@@ -200,7 +200,7 @@ int board_scores(int **board, int user)
     {
         for (int j = 15; j >= k - 15; j--)
         {
-            if (board[k - j][j] == empty && robot == 0 && role == 0)
+            if ((board[k - j][j] == empty || board[k - j][j] == useful) && robot == 0 && role == 0)
             {
                 end = 0;
             }
@@ -228,7 +228,7 @@ int board_scores(int **board, int user)
                 role = 0;
                 robot++;
             }
-            else if (board[k - j][j] == empty)
+            else if (board[k - j][j] == empty || board[k - j][j] == useful)
             {
                 sum = sum + scores(role, end);
                 sum = sum - scores(robot, end) * 1.1;
@@ -246,7 +246,7 @@ int board_scores(int **board, int user)
     {
         for (int j = 1; j <= 15 - k; j++)
         {
-            if (board[k + j][j] == empty && robot == 0 && role == 0)
+            if ((board[k + j][j] == empty || board[k + j][j] == useful) && robot == 0 && role == 0)
             {
                 end = 0;
             }
@@ -274,7 +274,7 @@ int board_scores(int **board, int user)
                 role = 0;
                 robot++;
             }
-            else if (board[k + j][j] == empty)
+            else if (board[k + j][j] == empty || board[k + j][j] == useful)
             {
                 sum = sum + scores(role, end);
                 sum = sum - scores(robot, end) * 1.1;
@@ -291,7 +291,7 @@ int board_scores(int **board, int user)
     {
         for (int j = -k; j <= 15; j++)
         {
-            if (board[k + j][j] == empty && robot == 0 && role == 0)
+            if ((board[k + j][j] == empty || board[k + j][j] == useful) && robot == 0 && role == 0)
             {
                 end = 0;
             }
@@ -319,7 +319,7 @@ int board_scores(int **board, int user)
                 role = 0;
                 robot++;
             }
-            else if (board[k + j][j] == empty)
+            else if (board[k + j][j] == empty || board[k + j][j] == useful)
             {
                 sum = sum + scores(role, end);
                 sum = sum - scores(robot, end) * 1.1;
@@ -334,7 +334,7 @@ int board_scores(int **board, int user)
     }
     return sum;
 }
-int scores(int chesses, int ends)
+int scores(int chesses, int ends) //估值函数
 {
     int sum = 0;
     if (chesses == 0)
