@@ -25,44 +25,47 @@ vector<pos> getvaild(){
                             mark[x][y] = 1;
                         }
     if (result.empty())result.emplace_back(8, 8);
+    random_shuffle(result.begin(), result.end());
     return result;
 }
-const int mx[] = { 1,0,-1,1 };
-const int my[] = { 0,1,1,1 };
+const int movex[] = { 1,0,-1,1 };
+const int movey[] = { 0,1,1,1 };
 inline bool isvaild(const int &x){
     return 1 <= x && x <= 15;
 }
-int sc(const int &cnt, const int &blk){
+int score(const int &cnt, const int &block){
     if (cnt >= 5)return 1e8;
-    if (blk >= 2)return 0;
+    if (block >= 2)return 0;
     switch (cnt){
         case 4:
-            return blk ? 1e5 : 1e6;
+            return block ? 1e5 : 1e6;
         case 3:
-            return blk ? 1e3 : 1e4;
+            return block ? 1e3 : 1e4;
         case 2:
-            return blk ? 1e2 : 1e3;
+            return block ? 1e2 : 1e3;
         case 1:
-            return blk ? 0 : 10;
+            return block ? 0 : 10;
     }
     return 0;
 }
 int assess_one(bool color, const int &x, const int &y){
-    int tx, ty, cnt, blk, result = 0;
+    int tox, toy, cnt, block, result = 0;
     for (int i = 0;i < 4;++i){
-        tx = x;ty = y;cnt = blk = 0;
-        while (isvaild(tx) && isvaild(ty) && board[color][tx][ty]){
+        tox = x;toy = y;cnt = block = 0;
+        while (isvaild(tox) && isvaild(toy) && board[color][tox][toy]){
             ++cnt;
-            tx += mx[i];ty += my[i];
+            mark[tox][toy] = 1;
+            tox += movex[i];toy += movey[i];
         }
-        if (!isvaild(tx) || !isvaild(ty) || board[!color][tx][ty])++blk;
-        tx = x;ty = y;
-        while (isvaild(tx) && isvaild(ty) && board[color][tx][ty]){
+        if (!isvaild(tox) || !isvaild(toy) || board[!color][tox][toy])++block;
+        tox = x;toy = y;
+        while (isvaild(tox) && isvaild(toy) && board[color][tox][toy]){
             ++cnt;
-            tx -= mx[i];ty -= my[i];
+            mark[tox][toy] = 1;
+            tox -= movex[i];toy -= movey[i];
         }
-        if (!isvaild(tx) || !isvaild(ty) || board[!color][tx][ty])++blk;
-        result += sc(cnt - 1, blk);
+        if (!isvaild(tox) || !isvaild(toy) || board[!color][tox][toy])++block;
+        result += score(cnt - 1, block);
     }
     return result;
 }
@@ -80,6 +83,7 @@ int checkwin(){
     int color;
     for (int i = 1;i <= 15;++i)
         for (int j = 1;j <= 15;++j){
+            if (mark[i][j])continue;
             if (board[0][i][j])color = 0;
             else if (board[1][i][j])color = 1;
             else continue;
