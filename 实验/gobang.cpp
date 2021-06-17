@@ -75,6 +75,18 @@ int assess(bool color){
                 result += assess_one(color, i, j);
     return color == computer ? result : -result;
 }
+int checkwin(){
+    memset(mark, 0, sizeof mark);
+    int color;
+    for (int i = 1;i <= 15;++i)
+        for (int j = 1;j <= 15;++j){
+            if (board[0][i][j])color = 0;
+            else if (board[1][i][j])color = 1;
+            else continue;
+            if (assess_one(color, i, j) > 1e7)return color;
+        }
+    return 233;
+}
 topos minmaxdfs(int depth, bool color, int alpha, int beta){
     if (!depth)return { assess(color) + assess(!color),{0,0} };
     topos score = { (depth & 1) ? INT_MAX : INT_MIN,{0,0} }, temp;
@@ -97,7 +109,6 @@ topos minmaxdfs(int depth, bool color, int alpha, int beta){
     }
     return score;
 }
-int px, py;
 void showboard(){
     printf("   1 2 3 4 5 6 7 8 9 0 1 2 3 4 5\n");
     for (int i = 1;i <= 15;++i){
@@ -121,25 +132,27 @@ void showboard(){
 }
 int main(){
     system("chcp 65001");
+    system("cls");
     computer = !(player = 1);
-    int round = 0;
+    int round = 0, scnow, px, py;
     memset(board, 0, sizeof board);
     for (bool now = 0;;now = !now){
         if (round)showboard();
         if (++round == 225){//平局
-            printf("draw");
+            printf("平局");
             exit(0);
         }
-        int scnow = assess(0) + assess(1);
-        if (scnow > 1e7){//黑棋胜利
-            printf("Black Win\n");
+        scnow = checkwin();
+        if (scnow == player){//黑棋胜利
+            printf("你胜利了!\n");
             exit(0);
         }
-        else if (scnow < -1e7){//白棋胜利
-            printf("White Win\n");
+        else if (scnow == computer){//白棋胜利
+            printf("AI胜利了!\n");
             exit(0);
         }
         if (now == player){
+            printf("输入落子坐标(-1 -1 退出)\n");
         playerinput:;
             scanf("%d%d", &px, &py);
             if (px == -1 && py == -1)
@@ -152,8 +165,8 @@ int main(){
         else if (now == computer){
             clock_t start = clock();
             topos result = minmaxdfs(4, now, INT_MAX, INT_MIN);
-            printf("used time:%.2lfs\n", 1.0 * (clock() - start) / CLOCKS_PER_SEC);
-            printf("computer(%d,%d)\n", result.second.first, result.second.second);
+            printf("计算用时:%.2lfs\n", 1.0 * (clock() - start) / CLOCKS_PER_SEC);//计算用时
+            printf("AI落子于(%d,%d)\n", result.second.first, result.second.second);//输出AI落子位置
             board[now][result.second.first][result.second.second] = 1;
         }
     }
