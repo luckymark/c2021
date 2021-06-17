@@ -1,8 +1,6 @@
-
 #include <stdio.h>
 #include <windows.h>
 #include "def.h"
-
 int main()
 {
     //创建一个棋盘

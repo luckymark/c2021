@@ -2,24 +2,6 @@
 #include "def.h"
 #include <windows.h>
 #include <stdlib.h>
-int cmp1(const void *a, const void *b)
-{
-    each *da = (each *)a;
-    each *db = (each *)b;
-    if (da->scores > db->scores)
-        return 1;
-    else
-        return 0;
-}
-int cmp2(const void *a, const void *b)
-{
-    each *da = (each *)a;
-    each *db = (each *)b;
-    if (da->scores < db->scores)
-        return 1;
-    else
-        return 0;
-}
 void tree(int **board, int user, steps *current, int deep, int *a, int *b, int x, int y)
 {
     int num = 0;
@@ -28,6 +10,7 @@ void tree(int **board, int user, steps *current, int deep, int *a, int *b, int x
         current->scores = board_scores(board, abs(1 - user));
         return;
     } //深搜到最底层
+
     //启发式搜索
     each cell[225];
     for (int i = 1; i <= 15; i++)
@@ -47,7 +30,7 @@ void tree(int **board, int user, steps *current, int deep, int *a, int *b, int x
                 num++;
             }
         }
-    /*if (deep % 2 == 1)
+    /*if (deep % 2 == 0)
         qsort(cell, num, sizeof(each), cmp1);
     else
         qsort(cell, num, sizeof(each), cmp2);*/
@@ -168,15 +151,4 @@ void tree_search(steps *current, int position, int deep)
         }
         return;
     }
-}
-steps *head_creat(void)
-{
-    steps *head = (steps *)malloc(sizeof(steps));
-    head->nextstep = NULL;
-    head->num = 0;
-    head->scores = 0;
-    head->win = 0;
-    head->x = 0;
-    head->y = 0;
-    return head;
 }

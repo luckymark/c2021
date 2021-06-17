@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include "def.h"
 #include <windows.h>
+#include <time.h>
 void Roleplay(int **board, int choose)
 {
-
     int x, y;
     int ok = 1;
     while (ok)
@@ -36,8 +36,11 @@ void Roleplay(int **board, int choose)
 }
 void Robotplay(int **board, int choose, int x, int y)
 {
-    int max = 10000000;
-    int min = -10000000;
+    clock_t t1;
+    clock_t t2;
+    t1 = clock();
+    int max = Maxnn;
+    int min = Minn;
     int *a = &min;
     int *b = &max;
     steps *head = head_creat();
@@ -46,10 +49,11 @@ void Robotplay(int **board, int choose, int x, int y)
     int dy = find_steps(head)->y;
     mark(board, dx, dy);
     board[dx][dy] = abs(1 - choose);
+    t2 = clock();
     system("cls");
     printf_board(board);
-    printf("%d\n", board_scores(board, choose));
-    printf("%d", head->win);
+    printf("%d", t2 - t1);
+    system("pause");
     if (win(board, dx, dy))
     {
         puts("you lose");

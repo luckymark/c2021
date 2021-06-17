@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "def.h"
 #include <windows.h>
-void printf_board(int **board)
+void printf_board(int **board) //棋盘打印
 {
     printf("〇①②③④⑤⑥⑦⑧⑨⑩1112131415\n");
     for (int i = 0; i < 17; i++)
@@ -14,10 +14,10 @@ void printf_board(int **board)
 
             {
                 SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY |
-                                                                             FOREGROUND_RED);
+                                                                             FOREGROUND_RED); //将输出颜色改为红色
                 printf("○");
                 SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY |
-                                                                             FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                                                                             FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE); //输出后将输出颜色改回白色
             }
             else if (board[i][j] == white)
                 printf("●");
@@ -45,6 +45,6 @@ int **creatboard(void) //棋盘创建函数
         board[0][i] = wall;
         board[i][0] = wall;
         board[i][16] = wall;
-    }
+    } //建围墙
     return board;
 }
