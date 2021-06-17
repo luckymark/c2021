@@ -96,14 +96,14 @@ int heuristic_search(Point empty_point[200], int empty_cnt, int me, int now_boar
         empty_point[i].value = me_value + others_value;
 
         //≈–∂œ «≤ª «…±∆Â
-        //is_killer(&empty_point[i], me_value, others_value);
-        //if (empty_point[i].is_killer)
-            //kill_cnt++;        
+        is_killer(&empty_point[i], me_value, others_value);
+        if (empty_point[i].is_killer)
+            kill_cnt++;        
     }
     
-   // if(!kill_cnt)
-        //qsort(empty_point, empty_cnt, sizeof(empty_point[0]), comp1);
-    //else
+   if(!kill_cnt)
+        qsort(empty_point, empty_cnt, sizeof(empty_point[0]), comp1);
+    else
         qsort(empty_point, kill_cnt, sizeof(empty_point[0]), comp2);
     return kill_cnt;
 }
