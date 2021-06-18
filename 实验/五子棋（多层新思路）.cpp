@@ -7,6 +7,8 @@ using namespace std;
 int qipan[15][15]={0};
 int fuzhi[15][15];
 int c_x,c_y;
+int maxmax=9999999;
+int minmax=999999;
 
 int value_player(int now[15][15]);
 int value_com(int now[15][15]); 
@@ -46,20 +48,18 @@ int main(){
 			cout<<"You lose!"<<endl;
 			break;
 		}
-		//qipan[7][9]=-1;
-		//cout<<value_player(fuzhi,0);
 	}
 } 
 
 int nearb(int i,int j){
     int n=0;
 	for(int t=-2;t<=2;t++){
-		if(qipan[i+t][j]!=0&&i+t>=0&&i+t<15)n=1;
-		if(qipan[i][j+t]!=0&&j+t>=0&&j+t<15)n=1;
-		if(qipan[i+t][j+t]!=0&&i+t>=0&&i+t<15&&j+t>=0&&j+t<15)n=1;
-		if(qipan[i+t][j-t]!=0&&i+t>=0&&i+t<15&&j-t>=0&&j-t<15)n=1;
+		if(qipan[i+t][j]!=0&&i+t>=0&&i+t<15) return 1;
+		if(qipan[i][j+t]!=0&&j+t>=0&&j+t<15) return 1;
+		if(qipan[i+t][j+t]!=0&&i+t>=0&&i+t<15&&j+t>=0&&j+t<15) return 1;
+		if(qipan[i+t][j-t]!=0&&i+t>=0&&i+t<15&&j-t>=0&&j-t<15) return 1;
 	}
-	return n;	
+	return 0;	
 }
 
 int max_v(int now[15][15],int depth,int a,int b){
@@ -74,10 +74,10 @@ int max_v(int now[15][15],int depth,int a,int b){
 	if(depth<=0||win(copy)!=0){
 		int v_f;
 		if(win(copy)==1){
-			v_f=-9999999;
+			v_f=-minmax;
 		}
 		else if(win(copy)==-1){
-			v_f=9999999;
+			v_f=minmax;
 		}
 		else{
 			v_f=value_com(copy)-value_player(copy);
@@ -85,11 +85,11 @@ int max_v(int now[15][15],int depth,int a,int b){
 		return v_f;
 	}
 	for(int i=0;i<5;i++){
-		vl[i]=-999999;
+		vl[i]=-maxmax;
 		x[i]=15;
 		y[i]=15;
 	}
-	int best=-999999;
+	int best=-maxmax;
 	for(int i=0;i<15;i++){
 		for(int j=0;j<15;j++){
 			if(now[i][j]==0&&nearb(i,j)==1){
@@ -143,7 +143,7 @@ int max_v(int now[15][15],int depth,int a,int b){
 
 int min_v(int now[15][15],int depth,int a,int b){
     int v;
-    int vl[5],x[5],y[5];
+    int vl[5],x1[5],y1[5];
 	int copy[15][15];
 	for(int t=0;t<15;t++){
 		for(int k=0;k<15;k++){
@@ -153,10 +153,10 @@ int min_v(int now[15][15],int depth,int a,int b){
 	if(depth<=0||win(copy)!=0){
 		int v_f;
 		if(win(copy)==1){
-			v_f=-9999999;
+			v_f=-minmax;
 		}
 		else if(win(copy)==-1){
-			v_f=9999999;
+			v_f=minmax;
 		}
 		else{
 			v_f=value_com(copy)-value_player(copy);
@@ -164,11 +164,11 @@ int min_v(int now[15][15],int depth,int a,int b){
 		return v_f;
 	}
 	for(int i=0;i<5;i++){
-		vl[i]=999999;
-		x[i]=15;
-		y[i]=15;
+		vl[i]=maxmax;
+		x1[i]=15;
+		y1[i]=15;
 	}
-	int best=999999;
+	int best=maxmax; 
 	for(int i=0;i<15;i++){
 		for(int j=0;j<15;j++){
 			if(now[i][j]==0&&nearb(i,j)==1){
@@ -180,15 +180,15 @@ int min_v(int now[15][15],int depth,int a,int b){
 		        }
 				v=value_com(copy)-value_player(copy);
 				for(int t=0;t<5;t++){
-					if(vl[t]>v||(vl[t]==v&&abs(i-7)+abs(j-7)<abs(x[t]-7)+abs(y[t]-7))){
+					if(vl[t]>v||(vl[t]==v&&abs(i-7)+abs(j-7)<abs(x1[t]-7)+abs(y1[t]-7))){
 						for(int k=4;k>t;k--){
 							vl[k]=vl[k-1];
-							x[k]=x[k-1];
-							y[k]=y[k-1];
+							x1[k]=x1[k-1];
+							y1[k]=y1[k-1];
 						}
 						vl[t]=v;
-						x[t]=i;
-						y[t]=j;
+						x1[t]=i;
+						y1[t]=j;
 					}
 				}
 				now[i][j]=0;
@@ -196,8 +196,8 @@ int min_v(int now[15][15],int depth,int a,int b){
 		}
 	} 
 	for(int i=0;i<5;i++){
-		if(x[i]<15){
-		now[x[i]][y[i]]=1;
+		if(x1[i]<15){
+		now[x1[i]][y1[i]]=1;
 		for(int t=0;t<15;t++){
 			for(int k=0;k<15;k++){
 				copy[t][k]=now[t][k];
@@ -207,10 +207,10 @@ int min_v(int now[15][15],int depth,int a,int b){
 		if(vl[i]>b){
 			b=vl[i];
 		}
-		now[x[i]][y[i]]=0;
+		now[x1[i]][y1[i]]=0;
 		if(vl[i]<best){
 			best=vl[i];
-			if(depth==2)cout<<x[i]<<" "<<y[i]<<" value:"<<vl[i]<<endl;
+			//if(depth==2)cout<<x1[i]<<" "<<y1[i]<<" value:"<<vl[i]<<endl;
 		}
 		if(vl[i]<a){
 			return best;
@@ -226,7 +226,7 @@ void com_play(int now[15][15]){
 	int x[5],y[5],vl[5]; 
 	int v;
 	int copy[15][15];
-	max=-999999;
+	max=-maxmax;
 	for(int i=0;i<5;i++){
 		vl[i]=max;
 		x[i]=15;
@@ -266,7 +266,7 @@ void com_play(int now[15][15]){
 				copy[t][k]=now[t][k];
 			}
 		}
-		vl[i]=min_v(copy,6,99999,-99999);
+		vl[i]=min_v(copy,6,maxmax,-maxmax);
 		//cout<<vl[i]<<endl;
 		now[x[i]][y[i]]=0;
 		if(vl[i]>max){
@@ -435,7 +435,7 @@ int value_com(int now[15][15]){
 	//cout<<"xr: "<<i<<" "<<j<<" "<<valuep<<endl;
 	valuep=valuep+search_xsleft(now,-1);
 	//cout<<"xl: "<<i<<" "<<j<<" "<<valuep<<endl;
-	return valuep;
+	return valuep/2;
 }
 
 int search_l(int now[15][15],int k){
@@ -456,7 +456,7 @@ int search_l(int now[15][15],int k){
 	            }
 	            num=0;
 	            j++;
-	            while((now[i][j]==k||(now[i][j]==0&&now[i][j+1]==k&&num==0))&&j<15){
+	            while((now[i][j]==k||(now[i][j]==0&&now[i][j+1]==k&&num==0&&j<14))&&j<15){
 	                if(now[i][j]==k){
 	                    value_i=value_i*10;
 	                }
@@ -478,7 +478,7 @@ int search_l(int now[15][15],int k){
 	            	break;
 				}
 	        }
-	        //if(value_i>=1000&&k==1)value_i=value_i*2;
+	        if(value_i>=1000&&num==0)value_i=value_i*2;
 	        value+=value_i;
 	        j++;
 	    }
@@ -504,7 +504,7 @@ int search_r(int now[15][15],int k){
 	            }
 	            num=0;
 	            i++;
-	            while((now[i][j]==k||(now[i][j]==0&&now[i+1][j]==k&&num==0))&&i<15){
+	            while((now[i][j]==k||(now[i][j]==0&&now[i+1][j]==k&&num==0&&i<14))&&i<15){
 	                if(now[i][j]==k){
 	                    value_i=value_i*10;
 	                }
@@ -526,7 +526,7 @@ int search_r(int now[15][15],int k){
 	            	break;
 				}
 	        }
-	        //if(value_i>=1000&&k==1)value_i=value_i*2;
+	        if(value_i>=1000&&num==0)value_i=value_i*2;
 	        value+=value_i;
 	        i++;
 	    }
@@ -558,7 +558,7 @@ int search_xsright(int now[15][15],int p_c){
 	            }
 	            num=0;
 	            k++;
-	            while((now[i+k][j+k]==p_c||(now[i+k][j+k]==0&&now[i+k+1][j+k+1]==p_c&&num==0))&&k<15-abs(t)){
+	            while((now[i+k][j+k]==p_c||(now[i+k][j+k]==0&&now[i+k+1][j+k+1]==p_c&&num==0&&(k<14-abs(t))))&&k<15-abs(t)){
 	                if(now[i+k][j+k]==p_c){
 	                    value_i=value_i*10;
 	                }
@@ -580,7 +580,7 @@ int search_xsright(int now[15][15],int p_c){
 	            	break;
 				}
 	        }
-	        //if(value_i>=1000&&k==1)value_i=value_i*2;
+	        if(value_i>=1000&&num==0)value_i=value_i*2;
 	        value+=value_i;
 	        k++;
 	    }
@@ -612,7 +612,7 @@ int search_xsleft(int now[15][15],int p_c){
 	            }
 	            num=0;
 	            k++;
-	            while((now[i-k][j+k]==p_c||(now[i-k][j+k]==0&&now[i-k-1][j+k+1]==p_c&&num==0))&&k<15-abs(14-t)){
+	            while((now[i-k][j+k]==p_c||(now[i-k][j+k]==0&&now[i-k-1][j+k+1]==p_c&&num==0&&k<14-abs(14-t)))&&k<15-abs(14-t)){
 	                if(now[i-k][j+k]==p_c){
 	                    value_i=value_i*10;
 	                }
@@ -634,7 +634,7 @@ int search_xsleft(int now[15][15],int p_c){
 	            	break;
 				}
 	        }
-	        //if(value_i>=1000&&k==1)value_i=value_i*2;
+	        if(value_i>=1000&&num==0)value_i=value_i*2;
 	        value+=value_i;
 	        k++;
 	    }
