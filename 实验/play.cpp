@@ -52,7 +52,7 @@ void Robotplay(int **board, int choose, int x, int y)
     t2 = clock();
     system("cls");
     printf_board(board);
-    printf("%d", t2 - t1);
+    printf("%d\n", t2 - t1);
     system("pause");
     if (win(board, dx, dy))
     {

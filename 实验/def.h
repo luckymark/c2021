@@ -4,7 +4,7 @@
 #define black 1          //黑棋
 #define white 0          //白棋
 #define wall -1          //围墙
-#define deepth 4         //搜索深度
+#define deepth 6         //搜索深度
 #define Maxnn 1000000000 //无穷大
 #define Minn -1000000000 //无穷小
 

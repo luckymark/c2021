@@ -48,119 +48,288 @@ int win(int **board, int x, int y) //胜利判断函数
     }
     return 0;
 }
-void line_search(int **board, int i, int j, seek *inf, int user)
-{
-    if ((board[i][j] == empty || board[i][j] == useful) && inf->robot == 0 && inf->role == 0)
-    {
-        inf->end = 0;
-    }
-    else if (board[i][j] == user && inf->robot == 0)
-    {
-        inf->role++;
-    }
-    else if (board[i][j] == abs(1 - user) && inf->role == 0)
-    {
-        inf->robot++;
-    }
-    else if (board[i][j] == user)
-    {
-        inf->end++;
-        inf->sum = inf->sum - scores(inf->robot, inf->end) * 1.1;
-        inf->end = 1;
-        inf->robot = 0;
-        inf->role++;
-    }
-    else if (board[i][j] == abs(1 - user))
-    {
-        inf->end++;
-        inf->sum = inf->sum + scores(inf->role, inf->end);
-        inf->end = 1;
-        inf->role = 0;
-        inf->robot++;
-    }
-    else if (board[i][j] == empty || board[i][j] == useful)
-    {
-        inf->sum = inf->sum + scores(inf->role, inf->end);
-        inf->sum = inf->sum - scores(inf->robot, inf->end) * 1.1;
-        inf->end = 0;
-        inf->role = 0;
-        inf->robot = 0;
-    }
-}
-
 int board_scores(int **board, int user) //对棋盘进行全局打分判断
 {
-    seek s;
-    s.sum = 0;
-    s.role = 0;
-    s.robot = 0;
-    s.end = 1;
-    seek *inf = &s;
+
+    int sum = 0;
+    int role = 0;
+    int robot = 0;
+    int end = 1;
     //横着搜
     for (int i = 1; i <= 15; i++)
     {
         for (int j = 1; j <= 15; j++)
         {
-            line_search(board, i, j, inf, user);
+            if ((board[i][j] == empty || board[i][j] == useful) && robot == 0 && role == 0)
+            {
+                end = 0;
+            }
+            else if (board[i][j] == user && robot == 0)
+            {
+                role++;
+            }
+            else if (board[i][j] == abs(1 - user) && role == 0)
+            {
+                robot++;
+            }
+            else if (board[i][j] == user)
+            {
+                end++;
+                sum = sum + scores(robot, end);
+                end = 1;
+                robot = 0;
+                role++;
+            }
+            else if (board[i][j] == abs(1 - user))
+            {
+                end++;
+                sum = sum - scores(role, end) * 1.1;
+                end = 1;
+                role = 0;
+                robot++;
+            }
+            else if (board[i][j] == empty || board[i][j] == useful)
+            {
+                sum = sum - scores(role, end) * 1.1;
+                sum = sum + scores(robot, end);
+                end = 0;
+                role = 0;
+                robot = 0;
+            }
         }
-        inf->end = 1;
-        inf->role = 0;
-        inf->robot = 0;
+        end = 1;
+        role = 0;
+        robot = 0;
     }
     //竖着搜
     for (int j = 1; j <= 15; j++)
     {
         for (int i = 1; i <= 15; i++)
         {
-            line_search(board, i, j, inf, user);
+            if ((board[i][j] == empty || board[i][j] == useful) && robot == 0 && role == 0)
+            {
+                end = 0;
+            }
+            else if (board[i][j] == user && robot == 0)
+            {
+                role++;
+            }
+            else if (board[i][j] == abs(1 - user) && role == 0)
+            {
+                robot++;
+            }
+            else if (board[i][j] == user)
+            {
+                end++;
+                sum = sum + scores(robot, end);
+                end = 1;
+                robot = 0;
+                role++;
+            }
+            else if (board[i][j] == abs(1 - user))
+            {
+                end++;
+                sum = sum - scores(role, end) * 1.1;
+                end = 1;
+                role = 0;
+                robot++;
+            }
+            else if (board[i][j] == empty || board[i][j] == useful)
+            {
+                sum = sum - scores(role, end) * 1.1;
+                sum = sum + scores(robot, end);
+                end = 0;
+                role = 0;
+                robot = 0;
+            }
         }
-        inf->end = 1;
-        inf->role = 0;
-        inf->robot = 0;
+        end = 1;
+        role = 0;
+        robot = 0;
     }
     //斜着搜
     for (int k = 2; k <= 16; k++)
     {
         for (int j = 1; j <= k - 1; j++)
         {
-            line_search(board, k - j, j, inf, user);
+            if ((board[k - j][j] == empty || board[k - j][j] == useful) && robot == 0 && role == 0)
+            {
+                end = 0;
+            }
+            else if (board[k - j][j] == user && robot == 0)
+            {
+                role++;
+            }
+            else if (board[k - j][j] == abs(1 - user) && role == 0)
+            {
+                robot++;
+            }
+            else if (board[k - j][j] == user)
+            {
+                end++;
+                sum = sum + scores(robot, end);
+                end = 1;
+                robot = 0;
+                role++;
+            }
+            else if (board[k - j][j] == abs(1 - user))
+            {
+                end++;
+                sum = sum - scores(role, end) * 1.1;
+                end = 1;
+                role = 0;
+                robot++;
+            }
+            else if (board[k - j][j] == empty || board[k - j][j] == useful)
+            {
+                sum = sum - scores(role, end) * 1.1;
+                sum = sum + scores(robot, end);
+                end = 0;
+                role = 0;
+                robot = 0;
+            }
         }
-        inf->end = 1;
-        inf->role = 0;
-        inf->robot = 0;
+        end = 1;
+        role = 0;
+        robot = 0;
     }
     for (int k = 17; k <= 30; k++)
     {
         for (int j = 15; j >= k - 15; j--)
         {
-            line_search(board, k - j, j, inf, user);
+            if ((board[k - j][j] == empty || board[k - j][j] == useful) && robot == 0 && role == 0)
+            {
+                end = 0;
+            }
+            else if (board[k - j][j] == user && robot == 0)
+            {
+                role++;
+            }
+            else if (board[k - j][j] == abs(1 - user) && role == 0)
+            {
+                robot++;
+            }
+            else if (board[k - j][j] == user)
+            {
+                end++;
+                sum = sum + scores(robot, end);
+                end = 1;
+                robot = 0;
+                role++;
+            }
+            else if (board[k - j][j] == abs(1 - user))
+            {
+                end++;
+                sum = sum - scores(role, end) * 1.1;
+                end = 1;
+                role = 0;
+                robot++;
+            }
+            else if (board[k - j][j] == empty || board[k - j][j] == useful)
+            {
+                sum = sum - scores(role, end) * 1.1;
+                sum = sum + scores(robot, end);
+                end = 0;
+                role = 0;
+                robot = 0;
+            }
         }
-        inf->end = 1;
-        inf->role = 0;
-        inf->robot = 0;
+        end = 1;
+        role = 0;
+        robot = 0;
     }
     //再斜着搜
     for (int k = 14; k >= 0; k--)
     {
         for (int j = 1; j <= 15 - k; j++)
         {
-            line_search(board, k + j, j, inf, user);
+            if ((board[k + j][j] == empty || board[k + j][j] == useful) && robot == 0 && role == 0)
+            {
+                end = 0;
+            }
+            else if (board[k + j][j] == user && robot == 0)
+            {
+                role++;
+            }
+            else if (board[k + j][j] == abs(1 - user) && role == 0)
+            {
+                robot++;
+            }
+            else if (board[k + j][j] == user)
+            {
+                end++;
+                sum = sum + scores(robot, end);
+                end = 1;
+                robot = 0;
+                role++;
+            }
+            else if (board[k + j][j] == abs(1 - user))
+            {
+                end++;
+                sum = sum - scores(role, end) * 1.1;
+                end = 1;
+                role = 0;
+                robot++;
+            }
+            else if (board[k + j][j] == empty || board[k + j][j] == useful)
+            {
+                sum = sum - scores(role, end) * 1.1;
+                sum = sum + scores(robot, end);
+                end = 0;
+                role = 0;
+                robot = 0;
+            }
         }
-        inf->end = 1;
-        inf->role = 0;
-        inf->robot = 0;
+        end = 1;
+        role = 0;
+        robot = 0;
     }
     for (int k = -1; k >= -14; k--)
     {
         for (int j = -k; j <= 15; j++)
         {
-            line_search(board, k + j, j, inf, user);
+            if ((board[k + j][j] == empty || board[k + j][j] == useful) && robot == 0 && role == 0)
+            {
+                end = 0;
+            }
+            else if (board[k + j][j] == user && robot == 0)
+            {
+                role++;
+            }
+            else if (board[k + j][j] == abs(1 - user) && role == 0)
+            {
+                robot++;
+            }
+            else if (board[k + j][j] == user)
+            {
+                end++;
+                sum = sum + scores(robot, end);
+                end = 1;
+                robot = 0;
+                role++;
+            }
+            else if (board[k + j][j] == abs(1 - user))
+            {
+                end++;
+                sum = sum - scores(role, end) * 1.1;
+                end = 1;
+                role = 0;
+                robot++;
+            }
+            else if (board[k + j][j] == empty || board[k + j][j] == useful)
+            {
+                sum = sum - scores(role, end) * 1.1;
+                sum = sum + scores(robot, end);
+                end = 0;
+                role = 0;
+                robot = 0;
+            }
         }
-        inf->end = 1;
-        inf->role = 0;
-        inf->robot = 0;
+        end = 1;
+        role = 0;
+        robot = 0;
     }
-    return inf->sum;
+    return sum;
 }
 int scores(int chesses, int ends) //估值函数
 {

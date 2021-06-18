@@ -7,7 +7,7 @@ void tree(int **board, int user, steps *current, int deep, int *a, int *b, int x
     int num = 0;
     if (deep == 0)
     {
-        current->scores = board_scores(board, abs(1 - user));
+        current->scores = board_scores(board, user);
         return;
     } //深搜到最底层
 
@@ -25,15 +25,15 @@ void tree(int **board, int user, steps *current, int deep, int *a, int *b, int x
                     board[i][j] = abs(1 - user);
                 else
                     board[i][j] = user;
-                //cell[num].scores = steps_scores(board, i, j);
+                cell[num].scores = steps_scores(board, i, j);
                 board[i][j] = useful;
                 num++;
             }
         }
-    /*if (deep % 2 == 0)
+    if (deep % 2 == 1)
         qsort(cell, num, sizeof(each), cmp1);
     else
-        qsort(cell, num, sizeof(each), cmp2);*/
+        qsort(cell, num, sizeof(each), cmp2);
 
     current->nextstep = (steps *)malloc(num * sizeof(steps)); //分配子节点
     current->nextstep[0].num = num;                           //第一个节点记录该层总节点数
@@ -85,7 +85,6 @@ void tree(int **board, int user, steps *current, int deep, int *a, int *b, int x
         //深搜
         tree(board, user, &current->nextstep[i], deep - 1, a, b, x, y);
         tree_search(current, i + 1, deep);
-
         //剪枝
         if (deep % 2 == 0)
         {
