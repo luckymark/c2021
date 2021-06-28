@@ -1,0 +1,13 @@
+﻿  shiyan.cpp
+D:\others\homework\code\shiyan\shiyan\shiyan.cpp(107,40): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\others\homework\code\shiyan\shiyan\shiyan.cpp(107,23): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\others\homework\code\shiyan\shiyan\shiyan.cpp(111,46): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\others\homework\code\shiyan\shiyan\shiyan.cpp(111,29): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\others\homework\code\shiyan\shiyan\shiyan.cpp(148,71): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\others\homework\code\shiyan\shiyan\shiyan.cpp(148,49): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\others\homework\code\shiyan\shiyan\shiyan.cpp(247,38): warning C4244: “参数”: 从“int”转换到“T”，可能丢失数据
+          with
+          [
+              T=float
+          ]
+  shiyan.vcxproj -> D:\others\homework\code\shiyan\shiyan\x64\Debug\shiyan.exe

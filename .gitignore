@@ -52,3 +52,7 @@ Generated\ Files/
 *.pidb
 *.svclog
 *.scc
+*.sln
+*.vcxproj
+*.filters
+*.user
