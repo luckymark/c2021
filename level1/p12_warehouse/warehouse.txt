@@ -1,0 +1,6 @@
+name	type	number
+A	5	8
+B	3	2
+C	4	0
+D	1	19
+E	17	6
